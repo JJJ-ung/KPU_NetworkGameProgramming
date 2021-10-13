@@ -1,0 +1,44 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31321.278
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Client", "Client\Client.vcxproj", "{085F6A3D-20FB-4222-B26A-3DF7C9062383}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Headers", "Headers", "{B84DA60A-B699-48CE-92C6-E410A6EC00FE}"
+	ProjectSection(SolutionItems) = preProject
+		Bin\Include\Define.h = Bin\Include\Define.h
+		Bin\Include\Enum.h = Bin\Include\Enum.h
+		Bin\Include\Function.h = Bin\Include\Function.h
+		Bin\Include\Struct.h = Bin\Include\Struct.h
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Client", "Client", "{9DF073CF-A255-4E29-BFAA-A4030F9D8B4D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{085F6A3D-20FB-4222-B26A-3DF7C9062383}.Debug|x64.ActiveCfg = Debug|x64
+		{085F6A3D-20FB-4222-B26A-3DF7C9062383}.Debug|x64.Build.0 = Debug|x64
+		{085F6A3D-20FB-4222-B26A-3DF7C9062383}.Debug|x86.ActiveCfg = Debug|Win32
+		{085F6A3D-20FB-4222-B26A-3DF7C9062383}.Debug|x86.Build.0 = Debug|Win32
+		{085F6A3D-20FB-4222-B26A-3DF7C9062383}.Release|x64.ActiveCfg = Release|x64
+		{085F6A3D-20FB-4222-B26A-3DF7C9062383}.Release|x64.Build.0 = Release|x64
+		{085F6A3D-20FB-4222-B26A-3DF7C9062383}.Release|x86.ActiveCfg = Release|Win32
+		{085F6A3D-20FB-4222-B26A-3DF7C9062383}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{085F6A3D-20FB-4222-B26A-3DF7C9062383} = {9DF073CF-A255-4E29-BFAA-A4030F9D8B4D}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DA4E7A74-A374-4485-98CC-BD0382E3CA9E}
+	EndGlobalSection
+EndGlobal

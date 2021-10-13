@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="99 Default">
+      <UniqueIdentifier>{3503ebfd-e50a-4c62-a5b3-5c1ce252905c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="99 Default\리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="98 Managers">
+      <UniqueIdentifier>{37c7ba4c-0997-405b-912c-1ba541deaf91}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98 Managers\00 DeviceMgr">
+      <UniqueIdentifier>{34118b30-1d97-46bd-9acb-801dc7b18897}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00 MainApp">
+      <UniqueIdentifier>{4da7850c-b7c2-43b4-9c76-a58ba0c100cd}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Client.h">
+      <Filter>99 Default</Filter>
+    </ClInclude>
+    <ClInclude Include="framework.h">
+      <Filter>99 Default</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>99 Default</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>99 Default</Filter>
+    </ClInclude>
+    <ClInclude Include="DeviceMgr.h">
+      <Filter>98 Managers\00 DeviceMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="MainApp.h">
+      <Filter>00 MainApp</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Client.rc">
+      <Filter>99 Default\리소스 파일</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="small.ico">
+      <Filter>99 Default\리소스 파일</Filter>
+    </Image>
+    <Image Include="Client.ico">
+      <Filter>99 Default\리소스 파일</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Client.cpp">
+      <Filter>99 Default</Filter>
+    </ClCompile>
+    <ClCompile Include="DeviceMgr.cpp">
+      <Filter>98 Managers\00 DeviceMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="MainApp.cpp">
+      <Filter>00 MainApp</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
