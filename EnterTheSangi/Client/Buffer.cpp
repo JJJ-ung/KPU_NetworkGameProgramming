@@ -22,7 +22,10 @@ HRESULT Buffer::Ready_Component()
 
 	m_dwIdxSize = sizeof(INDEX16);
 
-	if (FAILED(Component::Ready_Component()))
+	if (FAILED(m_pGraphic_Device->CreateVertexBuffer(m_dwVtxSize * m_dwVtxCnt, 0, m_dwVtxFVF, D3DPOOL_MANAGED, &m_pVB, NULL)))
+		return E_FAIL;
+
+	if (FAILED(m_pGraphic_Device->CreateIndexBuffer(m_dwIdxSize * m_dwTriCnt, 0, m_IdxFmt, D3DPOOL_MANAGED, &m_pIB, NULL)))
 		return E_FAIL;
 
 	VTXTEX* pVertex = nullptr;

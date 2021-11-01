@@ -2,7 +2,7 @@
 #include "GameObject.h"
 
 GameObject::GameObject(LPDIRECT3DDEVICE9 pGraphic_Device)
-	: m_pGraphic_Device(pGraphic_Device)
+	: m_pDevice(pGraphic_Device)
 {
 }
 
@@ -13,6 +13,8 @@ GameObject::~GameObject()
 
 HRESULT GameObject::Ready_GameObject()
 {
+
+
 	return NOERROR;
 }
 

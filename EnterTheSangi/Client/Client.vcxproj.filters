@@ -133,6 +133,9 @@
     <ClInclude Include="Texture.h">
       <Filter>02 Components\00 Texture</Filter>
     </ClInclude>
+    <ClInclude Include="ShaderMgr.h">
+      <Filter>98 Managers\99 ShaderMgr</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">
@@ -189,6 +192,9 @@
     </ClCompile>
     <ClCompile Include="Texture.cpp">
       <Filter>02 Components\00 Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderMgr.cpp">
+      <Filter>98 Managers\99 ShaderMgr</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

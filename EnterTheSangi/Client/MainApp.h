@@ -1,5 +1,6 @@
 #pragma once
 #include "DeviceMgr.h"
+#include "Player.h"
 
 class Renderer;
 class DeviceMgr;
@@ -16,9 +17,11 @@ public:
 
 public:
 	HRESULT Ready_Default(DeviceMgr::WINMODE eMode, const UINT& iSizeX, const UINT& iSizeY);
+	HRESULT Ready_Shader();
 
 private:
 	Renderer* m_pRenderer = nullptr;
+	Player* m_pPlayer = nullptr;
 
 private:
 	LPDIRECT3DDEVICE9 m_pGraphic_Device = nullptr;

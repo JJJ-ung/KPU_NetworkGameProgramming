@@ -1,7 +1,6 @@
 matrix		g_matWorld, g_matView, g_matProj;
 
 texture		g_BaseTexture;
-
 sampler BaseSampler = sampler_state
 {
 	AddressU = wrap;
@@ -48,37 +47,43 @@ struct PS_OUT
 	vector	vColor : COLOR0;
 };
 
-// 픽셀 셰이더
-// 1.픽셀의 색을 채운다.(결정한다)
-// vector PS_MAIN(PS_IN In) : COLOR0
+float BlendMode_Overlay(float base, float blend)
+{
+	return (base <= 0.5) ? 2 * base * blend : 1 - 2 * (1 - base) * (1 - blend);
+}
+
+float3 BlendMode_Overlay(float3 base, float3 blend)
+{
+	return float3(BlendMode_Overlay(base.r, blend.r),
+		BlendMode_Overlay(base.g, blend.g),
+		BlendMode_Overlay(base.b, blend.b));
+}
+
 PS_OUT PS_MAIN(PS_IN In)
 {
 	PS_OUT		Out = (PS_OUT)0;
 
-	// tex2D(색이들어있는 샘플러, 샘플러를 참조할 텍스쳐uv좌표);
+	float4 vColor = tex2D(BaseSampler, In.vTexUV);
 
-	Out.vColor = tex2D(BaseSampler, In.vTexUV);
+	float3 vBase = float3(vColor.r, vColor.r, vColor.r) * vColor.a;
 
-	/*if (Out.vColor.r < 0.5f &&
-		Out.vColor.g < 0.5f &&
-		Out.vColor.b < 0.5f)
-	{
-		Out.vColor = (vector)0.f;
-		Out.vColor.a = 1.f;
-	}*/
+	float3 vCloth = float3(vColor.g, vColor.g, vColor.g) * vColor.g * float3(1.f, 0.f, 0.f);
 
+	float3 vBody = float3(vColor.b, vColor.b, vColor.b) * vColor.b * float3(1.f, 0.839215f, 0.317647f);
 
+	vCloth = BlendMode_Overlay(vBase, vCloth) * vColor.g;
+
+	vBody = BlendMode_Overlay(vBase, vBody) * vColor.b;
+
+	float3 vResult = vBase * (1 - vColor.g) * (1 - vColor.b) + vCloth + vBody;
+
+	Out.vColor = vector(vResult.r, vResult.g, vResult.b, vColor.a);
 
 	return Out;
 }
 
-
-// technique : 기본 디바이스에서 빌드가 가능한 셰이더 버젼을 선택해주는 기능.
-// : 사용하고자하는 패스의 지정.
-// : 빌드하고자하는 셰이더의 버젼을 지정.
 technique	Default_Device
 {
-	// 기능의 캡슐화.(명암 + 림라이트 + 그림자)
 	pass Default_Rendering
 	{
 		AlphaBlendEnable = true;

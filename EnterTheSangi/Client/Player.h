@@ -14,6 +14,7 @@ public:
 	virtual HRESULT Render_GameObject();
 
 public:
+	static Player* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
 	virtual void Free();
 };
 

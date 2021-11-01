@@ -6,15 +6,17 @@ class TargetMgr;
 class GameObject;
 class Renderer
 {
+	DECLARE_SINGLETON(Renderer)
+	
+private:
+	Renderer();
+	~Renderer();
+
 public:
 	enum RENDERGROUP { RENDER_PRIORITY, RENDER_NONALPHA, RENDER_ALPHA, RENDER_UI, RENDER_END };
 
 public:
-	explicit Renderer(LPDIRECT3DDEVICE9 pDevice);
-	virtual ~Renderer();
-
-public:
-	HRESULT Ready_Renderer();
+	HRESULT Ready_Renderer(LPDIRECT3DDEVICE9 pDevice);
 	HRESULT Add_RenderList(RENDERGROUP eGroup, GameObject* pObj);
 	HRESULT Render_Objects();
 

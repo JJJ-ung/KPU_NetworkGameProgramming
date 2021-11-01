@@ -4,10 +4,10 @@
 #include "Shader.h"
 #include "GameObject.h"
 
-Renderer::Renderer(LPDIRECT3DDEVICE9 pDevice)
-	:m_pDevice(pDevice)
+IMPLEMENT_SINGLETON(Renderer)
+
+Renderer::Renderer()
 {
-	m_pTarget_Manager = TargetMgr::GetInstance();
 }
 
 Renderer::~Renderer()
@@ -15,8 +15,11 @@ Renderer::~Renderer()
 	Free();
 }
 
-HRESULT Renderer::Ready_Renderer()
+HRESULT Renderer::Ready_Renderer(LPDIRECT3DDEVICE9 pDevice)
 {
+	m_pDevice = pDevice;
+	m_pTarget_Manager = TargetMgr::GetInstance();
+
 	if (nullptr == m_pTarget_Manager)
 		return E_FAIL;
 
@@ -156,19 +159,6 @@ HRESULT Renderer::Render_UI()
 HRESULT Renderer::Render_Test()
 {
 	return NOERROR;
-}
-
-Renderer* Renderer::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
-{
-	Renderer* pInstance = new Renderer(pGraphic_Device);
-
-	if (FAILED(pInstance->Ready_Renderer()))
-	{
-		MSG_BOX("Failed To Create CRenderer Instance");
-		SafeDelete(pInstance);
-	}
-
-	return pInstance;
 }
 
 void Renderer::Free()

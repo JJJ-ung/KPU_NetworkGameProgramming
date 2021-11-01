@@ -2,6 +2,7 @@
 #include "MainApp.h"
 
 #include "Renderer.h"
+#include "ShaderMgr.h"
 
 MainApp::MainApp()
 {
@@ -16,13 +17,22 @@ HRESULT MainApp::Ready_MainApp()
 	if (FAILED(Ready_Default(DeviceMgr::MODE_WIN, g_nWinCX, g_nWinCY)))
 		return E_FAIL;
 
+	if (FAILED(Ready_Shader()))
+		return E_FAIL;
+
 	//ShowCursor(false);
+
+	m_pPlayer = Player::Create(m_pGraphic_Device);
+	if (!m_pPlayer)
+		return E_FAIL;
 
 	return NOERROR;
 }
 
 int MainApp::Update_MainApp(float TimeDelta)
 {
+	m_pPlayer->Update_GameObject(TimeDelta);
+	m_pPlayer->LateUpdate_GameObject(TimeDelta);
 	return 0;
 }
 
@@ -48,8 +58,16 @@ HRESULT MainApp::Ready_Default(DeviceMgr::WINMODE eMode, const UINT& iSizeX, con
 	if (FAILED(DeviceMgr::GetInstance()->Ready_GraphicDev(g_hWnd, eMode, iSizeX, iSizeY, &m_pGraphic_Device)))
 		return E_FAIL;
 
-	m_pRenderer = Renderer::Create(m_pGraphic_Device);
-	if (!m_pRenderer)
+	m_pRenderer = Renderer::GetInstance();
+	if (FAILED(m_pRenderer->Ready_Renderer(m_pGraphic_Device)))
+		return E_FAIL;
+
+	return NOERROR;
+}
+
+HRESULT MainApp::Ready_Shader()
+{
+	if (FAILED(ShaderMgr::GetInstance()->Add_Shader(m_pGraphic_Device, L"Default", L"../Binary/Shaders/Default.hlsl")))
 		return E_FAIL;
 
 	return NOERROR;

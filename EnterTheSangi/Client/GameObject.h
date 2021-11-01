@@ -1,6 +1,10 @@
 #pragma once
+#include "Component.h"
+#include "Renderer.h"
+#include "ShaderMgr.h"
 
-class Component;
+class Buffer;
+class Texture;
 class GameObject
 {
 public:
@@ -14,7 +18,11 @@ public:
 	virtual HRESULT Render_GameObject();
 
 protected:
-	LPDIRECT3DDEVICE9		m_pGraphic_Device = nullptr;
+	LPDIRECT3DDEVICE9		m_pDevice = nullptr;
+	Renderer*							m_pRenderer = nullptr;
+	Shader*								m_pShader = nullptr;
+	Texture*								m_pTexture = nullptr;
+	Buffer*								m_pBuffer = nullptr;
 
 protected:
 	unordered_map<const TCHAR*, Component*>			m_Components;
