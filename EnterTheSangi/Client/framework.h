@@ -20,12 +20,14 @@
 #pragma comment(lib, "d3d9.lib")
 #pragma comment(lib, "d3dx9.lib")
 
+#include <stdio.h>
 #include <iostream>
 #include <fstream>
 #include <string.h>
 #include <list>
 #include <vector>
 #include <map>
+#include <unordered_map>
 #include <algorithm>
 #include <functional>
 #include <process.h>
@@ -53,6 +55,5 @@ using namespace chrono;
 #include "Enum.h"
 #include "Function.h"
 #include "Struct.h"
-
 
 #pragma warning(disable: 26495)

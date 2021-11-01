@@ -4,10 +4,6 @@
     <Filter Include="99 Default">
       <UniqueIdentifier>{3503ebfd-e50a-4c62-a5b3-5c1ce252905c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="99 Default\리소스 파일">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
     <Filter Include="98 Managers">
       <UniqueIdentifier>{37c7ba4c-0997-405b-912c-1ba541deaf91}</UniqueIdentifier>
     </Filter>
@@ -17,18 +13,76 @@
     <Filter Include="00 MainApp">
       <UniqueIdentifier>{4da7850c-b7c2-43b4-9c76-a58ba0c100cd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="98 Managers\01 InputMgr">
+      <UniqueIdentifier>{87929799-197d-4a7f-a253-14a386998cac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98 Managers\02 SceneMgr">
+      <UniqueIdentifier>{95715aa8-0342-4fae-893c-4982b7ec9522}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98 Managers\04 ResourceMgr">
+      <UniqueIdentifier>{584ca09a-8f45-47d7-8a08-d5f5ab581f86}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98 Managers\05 GameMgr">
+      <UniqueIdentifier>{356de997-ab8a-4efa-95cc-a4b58f6544bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="97 Renderer">
+      <UniqueIdentifier>{f5141887-5232-4440-b9c0-b71863c05f8e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="97 Renderer\00 Renderer">
+      <UniqueIdentifier>{b63ef892-9bf6-45ab-8ac7-5770b74e96c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="97 Renderer\01 TextRenderer">
+      <UniqueIdentifier>{9e65f6a1-b9e8-46ba-aa50-89370d4bc825}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="97 Renderer\99 TargetMgr">
+      <UniqueIdentifier>{79eee9f3-5fc2-4708-af89-a34ba20b8f4c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01 GameObject">
+      <UniqueIdentifier>{dd083948-925e-4923-84da-84cb0859f592}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98 Managers\03 FrameMgr">
+      <UniqueIdentifier>{bbff3baf-a41b-476d-aeb0-e3dddc3c8287}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98 Managers\07 NetworkMgr">
+      <UniqueIdentifier>{7f44d47f-f69b-47ec-9c62-7a6ee45b058f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98 Managers\06 DataMgr">
+      <UniqueIdentifier>{8327e2d0-aa9e-40d0-99b0-87a76182f307}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="99 Default\Resources">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="01 GameObject\00 Player">
+      <UniqueIdentifier>{8fb457ed-f004-408b-a87d-e57bb96e9df6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02 Components">
+      <UniqueIdentifier>{55fede82-b3a8-4877-8aec-7e6a9974fb8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02 Components\00 Texture">
+      <UniqueIdentifier>{0614a5df-9ee3-4fce-9b48-6259b83eee96}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="97 Renderer\99 TargetMgr\RenderTarget">
+      <UniqueIdentifier>{e3e89ace-928c-437f-a608-d050024bdbe3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01 GameObject\99 Camera">
+      <UniqueIdentifier>{5293512d-f09b-4605-8e95-6fc214d8726a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01 GameObject\98 Mouse">
+      <UniqueIdentifier>{889ed7fa-ccfa-4bb0-823d-e0ec488339bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02 Components\02 Shader">
+      <UniqueIdentifier>{42e9a4dc-5c99-47af-83ec-599fa082e135}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02 Components\01 Buffer">
+      <UniqueIdentifier>{4f2969e4-775a-4129-9b24-f2b4a651775f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98 Managers\99 ShaderMgr">
+      <UniqueIdentifier>{b444acb3-cdc5-4b82-8b3c-166e75607001}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Client.h">
-      <Filter>99 Default</Filter>
-    </ClInclude>
     <ClInclude Include="framework.h">
-      <Filter>99 Default</Filter>
-    </ClInclude>
-    <ClInclude Include="Resource.h">
-      <Filter>99 Default</Filter>
-    </ClInclude>
-    <ClInclude Include="targetver.h">
       <Filter>99 Default</Filter>
     </ClInclude>
     <ClInclude Include="DeviceMgr.h">
@@ -37,18 +91,60 @@
     <ClInclude Include="MainApp.h">
       <Filter>00 MainApp</Filter>
     </ClInclude>
+    <ClInclude Include="InputMgr.h">
+      <Filter>98 Managers\01 InputMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>01 GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="FrameMgr.h">
+      <Filter>98 Managers\03 FrameMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="Client.h">
+      <Filter>99 Default\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>99 Default\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>99 Default\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="Component.h">
+      <Filter>02 Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Target.h">
+      <Filter>97 Renderer\99 TargetMgr\RenderTarget</Filter>
+    </ClInclude>
+    <ClInclude Include="TargetMgr.h">
+      <Filter>97 Renderer\99 TargetMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>02 Components\02 Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>97 Renderer\00 Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>01 GameObject\00 Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Buffer.h">
+      <Filter>02 Components\01 Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>02 Components\00 Texture</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">
-      <Filter>99 Default\리소스 파일</Filter>
+      <Filter>99 Default\Resources</Filter>
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="small.ico">
-      <Filter>99 Default\리소스 파일</Filter>
+      <Filter>99 Default\Resources</Filter>
     </Image>
     <Image Include="Client.ico">
-      <Filter>99 Default\리소스 파일</Filter>
+      <Filter>99 Default\Resources</Filter>
     </Image>
   </ItemGroup>
   <ItemGroup>
@@ -60,6 +156,39 @@
     </ClCompile>
     <ClCompile Include="MainApp.cpp">
       <Filter>00 MainApp</Filter>
+    </ClCompile>
+    <ClCompile Include="InputMgr.cpp">
+      <Filter>98 Managers\01 InputMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>01 GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="FrameMgr.cpp">
+      <Filter>98 Managers\03 FrameMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="Component.cpp">
+      <Filter>02 Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Target.cpp">
+      <Filter>97 Renderer\99 TargetMgr\RenderTarget</Filter>
+    </ClCompile>
+    <ClCompile Include="TargetMgr.cpp">
+      <Filter>97 Renderer\99 TargetMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader.cpp">
+      <Filter>02 Components\02 Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer.cpp">
+      <Filter>97 Renderer\00 Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>01 GameObject\00 Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Buffer.cpp">
+      <Filter>02 Components\01 Buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>02 Components\00 Texture</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

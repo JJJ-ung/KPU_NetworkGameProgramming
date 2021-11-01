@@ -7,10 +7,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Client", "Client\Client.vcx
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Headers", "Headers", "{B84DA60A-B699-48CE-92C6-E410A6EC00FE}"
 	ProjectSection(SolutionItems) = preProject
-		Bin\Include\Define.h = Bin\Include\Define.h
-		Bin\Include\Enum.h = Bin\Include\Enum.h
-		Bin\Include\Function.h = Bin\Include\Function.h
-		Bin\Include\Struct.h = Bin\Include\Struct.h
+		Binary\Include\Define.h = Binary\Include\Define.h
+		Binary\Include\Enum.h = Binary\Include\Enum.h
+		Binary\Include\Function.h = Binary\Include\Function.h
+		Binary\Include\Struct.h = Binary\Include\Struct.h
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Client", "Client", "{9DF073CF-A255-4E29-BFAA-A4030F9D8B4D}"
@@ -18,6 +18,11 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Server", "Server", "{9C86B249-6489-4341-87D4-3F552EBDF1F4}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Server", "Server\Server.vcxproj", "{6086BB0B-E977-4F54-8019-134A3AA397FE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shaders", "Shaders", "{D9BCB46C-603B-4C3B-A73C-CD3B206D0861}"
+	ProjectSection(SolutionItems) = preProject
+		Binary\Shaders\Default.hlsl = Binary\Shaders\Default.hlsl
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

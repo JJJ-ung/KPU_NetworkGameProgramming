@@ -48,3 +48,24 @@ private:
 	const TCHAR* m_pString = nullptr;
 };
 
+class TagFinder
+{
+public:
+	explicit TagFinder(const TCHAR* pTag)
+		: m_pTargetTag(pTag) {		}
+	~TagFinder() {		}
+public:
+	template<typename T>
+	bool operator()(const T& pair)
+	{
+		if (0 == lstrcmpW(m_pTargetTag, pair.first))
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+private:
+	const TCHAR* m_pTargetTag = nullptr;
+};

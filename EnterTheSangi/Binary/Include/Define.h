@@ -44,3 +44,18 @@ private:									\
 ClassName* ClassName::m_pInstance = nullptr;
 
 #define MSG_BOX(MESSAGE) MessageBox(0, TEXT(MESSAGE), TEXT("System Message"), MB_OK)
+
+#ifdef _DEBUG
+
+#define _CRTDBG_MAP_ALLOC
+#include <stdlib.h>
+#include <crtdbg.h>
+
+#ifndef DBG_NEW 
+#define DBG_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ ) 
+#define new DBG_NEW 
+#endif  // _DEBUG  
+
+#include <dxgidebug.h>
+
+#endif

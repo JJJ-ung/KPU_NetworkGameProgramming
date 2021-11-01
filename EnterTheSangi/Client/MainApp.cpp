@@ -1,6 +1,8 @@
 #include "framework.h"
 #include "MainApp.h"
 
+#include "Renderer.h"
+
 MainApp::MainApp()
 {
 }
@@ -32,10 +34,8 @@ HRESULT MainApp::Render_MainApp()
 	m_pGraphic_Device->Clear(0, nullptr, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER | D3DCLEAR_STENCIL, D3DXCOLOR(0.f, 0.f, 1.f, 1.f), 1.f, 0);
 	m_pGraphic_Device->BeginScene();
 
-	//if (FAILED(m_pRenderer->Render_ObjectList()))
-	//	return E_FAIL;
-
-	//m_pManagement->Render_Management();
+	if (FAILED(m_pRenderer->Render_Objects()))
+		return E_FAIL;
 
 	m_pGraphic_Device->EndScene();
 	m_pGraphic_Device->Present(nullptr, nullptr, 0, nullptr);
@@ -46,6 +46,10 @@ HRESULT MainApp::Render_MainApp()
 HRESULT MainApp::Ready_Default(DeviceMgr::WINMODE eMode, const UINT& iSizeX, const UINT& iSizeY)
 {
 	if (FAILED(DeviceMgr::GetInstance()->Ready_GraphicDev(g_hWnd, eMode, iSizeX, iSizeY, &m_pGraphic_Device)))
+		return E_FAIL;
+
+	m_pRenderer = Renderer::Create(m_pGraphic_Device);
+	if (!m_pRenderer)
 		return E_FAIL;
 
 	return NOERROR;

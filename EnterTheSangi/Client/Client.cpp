@@ -4,6 +4,7 @@
 #include "framework.h"
 #include "Client.h"
 #include "MainApp.h"
+#include "FrameMgr.h"
 
 #define MAX_LOADSTRING 100
 
@@ -23,6 +24,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_ LPWSTR    lpCmdLine,
                      _In_ int       nCmdShow)
 {
+#ifdef _DEBUG
+    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+#endif
+
     UNREFERENCED_PARAMETER(hPrevInstance);
     UNREFERENCED_PARAMETER(lpCmdLine);
 
@@ -39,13 +44,17 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         return FALSE;
     }
 
+    HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_CLIENT));
+
+    MSG msg{};
+
     MainApp* pMainApp = MainApp::Create();
     if (!pMainApp) return FALSE;
 	srand(unsigned(time(NULL)));
 
-    HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_CLIENT));
+    FrameMgr* pFrameMgr = FrameMgr::GetInstance();
+    if (!pFrameMgr) return FALSE;
 
-    MSG msg{};
 
 	// 기본 메시지 루프입니다.
 	while (WM_QUIT != msg.message)
@@ -57,10 +66,18 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		}
 		else
 		{
-            pMainApp->Update_MainApp(0.f);
-            pMainApp->Render_MainApp();
+            if(pFrameMgr->FrameLimit(60.f))
+            {
+	            pMainApp->Update_MainApp(pFrameMgr->UpdateTime());
+	            pMainApp->Render_MainApp();
+            }
 		}
 	}
+
+    SafeDelete(pMainApp);
+    pFrameMgr->DestroyInstance();
+
+    _CrtDumpMemoryLeaks();
 
     return (int) msg.wParam;
 }
