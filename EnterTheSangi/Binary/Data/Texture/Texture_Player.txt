@@ -1,0 +1,16 @@
+Dead ../Binary/Resources/Player/Dead/Dead_%d.png 7
+Dodge_Back ../Binary/Resources/Player/Dodge_Back/Dodge_Back_%d.png 9
+Dodge_BackSide ../Binary/Resources/Player/Dodge_BackSide/Dodge_BackSide_%d.png 9
+Dodge_Front ../Binary/Resources/Player/Dodge_Front/Dodge_Front_%d.png 9
+Dodge_Side ../Binary/Resources/Player/Dodge_Side/Dodge_Side_%d.png 9
+Happy ../Binary/Resources/Player/Happy/Happy_%d.png 5
+Idle_Back ../Binary/Resources/Player/Idle_Back/Idle_Back_%d.png 3
+Idle_BackSide ../Binary/Resources/Player/Idle_BackSide/Idle_BackSide_%d.png 3
+Idle_Front ../Binary/Resources/Player/Idle_Front/Idle_Front_%d.png 3
+Idle_Side ../Binary/Resources/Player/Idle_Side/Idle_Side_%d.png 3
+Jump ../Binary/Resources/Player/Jump/Jump_%d.png 3
+Run_Back ../Binary/Resources/Player/Run_Back/Run_Back_%d.png 6
+Run_BackSide ../Binary/Resources/Player/Run_BackSide/Run_BackSide_%d.png 6
+Run_Front ../Binary/Resources/Player/Run_Front/Run_Front_%d.png 6
+Run_Side ../Binary/Resources/Player/Run_Side/Run_Side_%d.png 6
+Turn ../Binary/Resources/Player/Turn/Turn_%d.png 6

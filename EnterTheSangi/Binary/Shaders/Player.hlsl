@@ -46,11 +46,37 @@ struct PS_OUT
 	vector	vColor : COLOR0;
 };
 
+float BlendMode_Overlay(float base, float blend)
+{
+	return (base <= 0.5) ? 2 * base * blend : 1 - 2 * (1 - base) * (1 - blend);
+}
+
+float3 BlendMode_Overlay(float3 base, float3 blend)
+{
+	return float3(BlendMode_Overlay(base.r, blend.r),
+		BlendMode_Overlay(base.g, blend.g),
+		BlendMode_Overlay(base.b, blend.b));
+}
+
 PS_OUT PS_MAIN(PS_IN In)
 {
 	PS_OUT		Out = (PS_OUT)0;
 
-	Out.vColor = tex2D(BaseSampler, In.vTexUV);
+	float4 vColor = tex2D(BaseSampler, In.vTexUV);
+
+	float3 vBase = float3(vColor.r, vColor.r, vColor.r) * vColor.a;
+
+	float3 vCloth = float3(vColor.g, vColor.g, vColor.g) * vColor.g * float3(1.f, 0.f, 0.f);
+
+	float3 vBody = float3(vColor.b, vColor.b, vColor.b) * vColor.b * float3(1.f, 0.839215f, 0.317647f);
+
+	vCloth = BlendMode_Overlay(vBase, vCloth) * vColor.g;
+
+	vBody = BlendMode_Overlay(vBase, vBody) * vColor.b;
+
+	float3 vResult = vBase * (1 - vColor.g) * (1 - vColor.b) + vCloth + vBody;
+
+	Out.vColor = vector(vResult.r, vResult.g, vResult.b, vColor.a);
 
 	return Out;
 }

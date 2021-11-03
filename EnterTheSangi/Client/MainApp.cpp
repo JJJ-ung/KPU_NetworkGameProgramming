@@ -5,6 +5,7 @@
 #include "DeviceMgr.h"
 #include "ShaderMgr.h"
 #include "GameMgr.h"
+#include "ResourceMgr.h"
 
 #include "Player.h"
 #include "Camera.h"
@@ -22,7 +23,7 @@ HRESULT MainApp::Ready_MainApp()
 	if (FAILED(Ready_Default(DeviceMgr::MODE_WIN, g_nWinCX, g_nWinCY)))
 		return E_FAIL;
 
-	if (FAILED(Ready_Shader()))
+	if (FAILED(Ready_Resource()))
 		return E_FAIL;
 
 	//ShowCursor(false);
@@ -70,6 +71,9 @@ HRESULT MainApp::Ready_Default(DeviceMgr::WINMODE eMode, const UINT& iSizeX, con
 	if (FAILED(DeviceMgr::GetInstance()->Ready_GraphicDev(g_hWnd, eMode, iSizeX, iSizeY, &m_pGraphic_Device)))
 		return E_FAIL;
 
+	if (FAILED(Ready_Shader()))
+		return E_FAIL;
+
 	m_pRenderer = Renderer::GetInstance();
 	if (FAILED(m_pRenderer->Ready_Renderer(m_pGraphic_Device)))
 		return E_FAIL;
@@ -77,12 +81,30 @@ HRESULT MainApp::Ready_Default(DeviceMgr::WINMODE eMode, const UINT& iSizeX, con
 	m_pGameMgr = GameMgr::GetInstance();
 	if (!m_pGameMgr) return E_FAIL;
 
+	ResourceMgr::GetInstance()->Ready_ResourceMgr(m_pGraphic_Device);
+
 	return NOERROR;
 }
 
 HRESULT MainApp::Ready_Shader()
 {
 	if (FAILED(ShaderMgr::GetInstance()->Add_Shader(m_pGraphic_Device, L"Default", L"../Binary/Shaders/Default.hlsl")))
+		return E_FAIL;
+
+	if (FAILED(ShaderMgr::GetInstance()->Add_Shader(m_pGraphic_Device, L"Player", L"../Binary/Shaders/Player.hlsl")))
+		return E_FAIL;
+
+	if (FAILED(ShaderMgr::GetInstance()->Add_Shader(m_pGraphic_Device, L"Blend", L"../Binary/Shaders/Blend.hlsl")))
+		return E_FAIL;
+
+	return NOERROR;
+}
+
+HRESULT MainApp::Ready_Resource()
+{
+	ResourceMgr* pResourceMgr = ResourceMgr::GetInstance();
+
+	if (FAILED(pResourceMgr->Add_TexturesFromFile(OBJECT::PLAYER, L"../Binary/Data/Texture/Texture_Player.txt")))
 		return E_FAIL;
 
 	return NOERROR;

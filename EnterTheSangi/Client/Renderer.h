@@ -26,6 +26,13 @@ private:
 	HRESULT Render_Alpha();
 	HRESULT Render_UI();
 
+private:
+	HRESULT Render_Blend();
+
+private:
+	HRESULT Setup_Buffer(D3DVIEWPORT9		ViewPort);
+	HRESULT Setup_Target(D3DVIEWPORT9		ViewPort);
+
 	//ForTest ************************************************************************************************
 private:
 	HRESULT Render_Test();
@@ -40,10 +47,7 @@ private:
 
 private:
 	TargetMgr* m_pTarget_Manager = nullptr;
-	Shader* m_pTest = nullptr;
-	//CShader* m_pShader_LightAcc = nullptr;
-	//CShader* m_pShader_Blend = nullptr;
-	//CShader* m_pShader_Blur = nullptr;
+	Shader* m_pShader_Blend = nullptr;
 
 private:
 	LPDIRECT3DVERTEXBUFFER9		m_pVB = nullptr;

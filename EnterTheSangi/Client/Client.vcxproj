@@ -147,6 +147,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Animation.h" />
     <ClInclude Include="Buffer.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Client.h" />
@@ -162,6 +163,9 @@
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="ResourceMgr.h" />
+    <ClInclude Include="Scene.h" />
+    <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="Scene_Test.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderMgr.h" />
     <ClInclude Include="Target.h" />
@@ -170,6 +174,7 @@
     <ClInclude Include="Texture.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Animation.cpp" />
     <ClCompile Include="Buffer.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Client.cpp" />
@@ -183,6 +188,9 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="ResourceMgr.cpp" />
+    <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="SceneManager.cpp" />
+    <ClCompile Include="Scene_Test.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShaderMgr.cpp" />
     <ClCompile Include="Target.cpp" />

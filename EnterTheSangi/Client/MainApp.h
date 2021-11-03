@@ -17,6 +17,7 @@ public:
 public:
 	HRESULT Ready_Default(DeviceMgr::WINMODE eMode, const UINT& iSizeX, const UINT& iSizeY);
 	HRESULT Ready_Shader();
+	HRESULT Ready_Resource();
 
 private:
 	Renderer* m_pRenderer = nullptr;

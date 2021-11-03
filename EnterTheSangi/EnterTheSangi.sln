@@ -21,7 +21,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Server", "Server\Server.vcx
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shaders", "Shaders", "{D9BCB46C-603B-4C3B-A73C-CD3B206D0861}"
 	ProjectSection(SolutionItems) = preProject
+		Binary\Shaders\Blend.hlsl = Binary\Shaders\Blend.hlsl
 		Binary\Shaders\Default.hlsl = Binary\Shaders\Default.hlsl
+		Binary\Shaders\Player.hlsl = Binary\Shaders\Player.hlsl
 	EndProjectSection
 EndProject
 Global

@@ -20,7 +20,7 @@ HRESULT Player::Ready_GameObject()
 	m_pRenderer = Renderer::GetInstance();
 	if (!m_pRenderer) return E_FAIL;
 
-	m_pShader = ShaderMgr::GetInstance()->Get_ShaderReference(L"Default");
+	m_pShader = ShaderMgr::GetInstance()->Get_ShaderReference(L"Player");
 	if (!m_pShader) return E_FAIL;
 
 	m_pTexture = Texture::Create(m_pDevice, L"../Binary/Resources/Player/Idle_Front/Idle_Front_%d.png", 3);
@@ -39,7 +39,7 @@ INT Player::Update_GameObject(float TimeDelta)
 
 INT Player::LateUpdate_GameObject(float TimeDelta)
 {
-	m_pRenderer->Add_RenderList(Renderer::RENDER_PRIORITY, this);
+	m_pRenderer->Add_RenderList(Renderer::RENDER_NONALPHA, this);
 
 	return 0;
 }

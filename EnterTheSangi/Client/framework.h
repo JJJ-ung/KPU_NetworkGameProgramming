@@ -57,3 +57,5 @@ using namespace chrono;
 #include "Struct.h"
 
 #pragma warning(disable: 26495)
+
+#pragma comment(linker,"/entry:wWinMainCRTStartup /subsystem:console")

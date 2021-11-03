@@ -80,6 +80,15 @@
     <Filter Include="98 Managers\99 ShaderMgr">
       <UniqueIdentifier>{b444acb3-cdc5-4b82-8b3c-166e75607001}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03 Scene">
+      <UniqueIdentifier>{70a006f8-446b-42ab-b5a0-89b16fe3792d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03 Scene\99 Test">
+      <UniqueIdentifier>{fcb7bd72-0ce8-4a68-b3f6-48731a9e596f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02 Components\03 Animation">
+      <UniqueIdentifier>{8560faa2-c15d-4a31-b5ec-0947eb89dbbc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -130,9 +139,6 @@
     <ClInclude Include="Buffer.h">
       <Filter>02 Components\01 Buffer</Filter>
     </ClInclude>
-    <ClInclude Include="Texture.h">
-      <Filter>02 Components\00 Texture</Filter>
-    </ClInclude>
     <ClInclude Include="ShaderMgr.h">
       <Filter>98 Managers\99 ShaderMgr</Filter>
     </ClInclude>
@@ -144,6 +150,21 @@
     </ClInclude>
     <ClInclude Include="GameMgr.h">
       <Filter>98 Managers\05 GameMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneManager.h">
+      <Filter>98 Managers\02 SceneMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>03 Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene_Test.h">
+      <Filter>03 Scene\99 Test</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>02 Components\00 Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation.h">
+      <Filter>02 Components\03 Animation</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -199,9 +220,6 @@
     <ClCompile Include="Buffer.cpp">
       <Filter>02 Components\01 Buffer</Filter>
     </ClCompile>
-    <ClCompile Include="Texture.cpp">
-      <Filter>02 Components\00 Texture</Filter>
-    </ClCompile>
     <ClCompile Include="ShaderMgr.cpp">
       <Filter>98 Managers\99 ShaderMgr</Filter>
     </ClCompile>
@@ -213,6 +231,21 @@
     </ClCompile>
     <ClCompile Include="GameMgr.cpp">
       <Filter>98 Managers\05 GameMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneManager.cpp">
+      <Filter>98 Managers\02 SceneMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>03 Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene_Test.cpp">
+      <Filter>03 Scene\99 Test</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>02 Components\00 Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="Animation.cpp">
+      <Filter>02 Components\03 Animation</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
