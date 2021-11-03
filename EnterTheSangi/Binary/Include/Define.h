@@ -6,10 +6,6 @@ const unsigned short	g_nWinCY = 720;
 extern HWND g_hWnd;
 extern HINSTANCE g_hInst;
 
-class GameObj;
-typedef list<GameObj*>			OBJLIST;
-typedef OBJLIST::iterator			OBJITER;
-
 #define  NOEVENT 0
 #define  OBJDEAD 1 
 

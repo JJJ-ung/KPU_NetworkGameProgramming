@@ -136,6 +136,15 @@
     <ClInclude Include="ShaderMgr.h">
       <Filter>98 Managers\99 ShaderMgr</Filter>
     </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>01 GameObject\99 Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceMgr.h">
+      <Filter>98 Managers\04 ResourceMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="GameMgr.h">
+      <Filter>98 Managers\05 GameMgr</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">
@@ -195,6 +204,15 @@
     </ClCompile>
     <ClCompile Include="ShaderMgr.cpp">
       <Filter>98 Managers\99 ShaderMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>01 GameObject\99 Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceMgr.cpp">
+      <Filter>98 Managers\04 ResourceMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="GameMgr.cpp">
+      <Filter>98 Managers\05 GameMgr</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

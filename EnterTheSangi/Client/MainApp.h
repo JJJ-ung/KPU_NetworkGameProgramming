@@ -1,9 +1,8 @@
 #pragma once
 #include "DeviceMgr.h"
-#include "Player.h"
 
 class Renderer;
-class DeviceMgr;
+class GameMgr;
 class MainApp
 {
 public:
@@ -21,7 +20,7 @@ public:
 
 private:
 	Renderer* m_pRenderer = nullptr;
-	Player* m_pPlayer = nullptr;
+	GameMgr* m_pGameMgr = nullptr;
 
 private:
 	LPDIRECT3DDEVICE9 m_pGraphic_Device = nullptr;

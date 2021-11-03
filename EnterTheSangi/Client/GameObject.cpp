@@ -33,6 +33,13 @@ HRESULT GameObject::Render_GameObject()
 	return NOERROR;
 }
 
+D3DXMATRIX GameObject::Get_Transform(_D3DTRANSFORMSTATETYPE eType)
+{
+	D3DXMATRIX mat;
+	m_pDevice->GetTransform(eType, &mat);
+	return mat;
+}
+
 HRESULT GameObject::Add_Component(const TCHAR* pComponentTag, Component* pCom)
 {
 	if (nullptr != Find_Component(pComponentTag))

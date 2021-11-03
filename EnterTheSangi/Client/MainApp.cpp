@@ -2,7 +2,12 @@
 #include "MainApp.h"
 
 #include "Renderer.h"
+#include "DeviceMgr.h"
 #include "ShaderMgr.h"
+#include "GameMgr.h"
+
+#include "Player.h"
+#include "Camera.h"
 
 MainApp::MainApp()
 {
@@ -22,8 +27,14 @@ HRESULT MainApp::Ready_MainApp()
 
 	//ShowCursor(false);
 
-	m_pPlayer = Player::Create(m_pGraphic_Device);
-	if (!m_pPlayer)
+	GameObject* pObj = nullptr;
+
+	pObj = Player::Create(m_pGraphic_Device);
+	if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::TYPE::PLAYER, pObj)))
+		return E_FAIL;
+
+	pObj = Camera::Create(m_pGraphic_Device);
+	if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::TYPE::CAMERA, pObj)))
 		return E_FAIL;
 
 	return NOERROR;
@@ -31,8 +42,9 @@ HRESULT MainApp::Ready_MainApp()
 
 int MainApp::Update_MainApp(float TimeDelta)
 {
-	m_pPlayer->Update_GameObject(TimeDelta);
-	m_pPlayer->LateUpdate_GameObject(TimeDelta);
+	m_pGameMgr->Update_GameObject(TimeDelta);
+	m_pGameMgr->LateUpdate_GameObject(TimeDelta);
+
 	return 0;
 }
 
@@ -61,6 +73,9 @@ HRESULT MainApp::Ready_Default(DeviceMgr::WINMODE eMode, const UINT& iSizeX, con
 	m_pRenderer = Renderer::GetInstance();
 	if (FAILED(m_pRenderer->Ready_Renderer(m_pGraphic_Device)))
 		return E_FAIL;
+
+	m_pGameMgr = GameMgr::GetInstance();
+	if (!m_pGameMgr) return E_FAIL;
 
 	return NOERROR;
 }

@@ -4,6 +4,8 @@
 #include "Texture.h"
 #include "Buffer.h"
 
+#include "DeviceMgr.h"
+
 Player::Player(LPDIRECT3DDEVICE9 pGraphic_Device)
 	:GameObject(pGraphic_Device)
 {
@@ -49,15 +51,24 @@ HRESULT Player::Render_GameObject()
 		return E_FAIL;
 
 	D3DXMATRIX		matTmp;
-	pEffect->SetMatrix("g_matWorld", D3DXMatrixIdentity(&matTmp));
-	pEffect->SetMatrix("g_matView", D3DXMatrixIdentity(&matTmp));
-	pEffect->SetMatrix("g_matProj", D3DXMatrixIdentity(&matTmp));
+
+	D3DXMATRIX		matScale;
+	D3DXMatrixScaling(&matScale, 1.f, 1.f, 1.f);
+	pEffect->SetMatrix("g_matWorld", &matScale);
+	//pEffect->SetMatrix("g_matWorld", D3DXMatrixIdentity(&matScale));
+
+	m_pDevice->GetTransform(D3DTS_VIEW, &matTmp);
+	//pEffect->SetMatrix("g_matView", D3DXMatrixIdentity(&matTmp));
+	pEffect->SetMatrix("g_matView", &matTmp);
+
+	m_pDevice->GetTransform(D3DTS_PROJECTION, &matTmp);
+	pEffect->SetMatrix("g_matProj", &matTmp);
+	//pEffect->SetMatrix("g_matProj", D3DXMatrixIdentity(&matTmp));
 
 	if (FAILED(m_pTexture->SetUp_OnShader(pEffect, "g_BaseTexture", 0)))
 		return E_FAIL;
 
 	pEffect->Begin(nullptr, 0);
-
 	pEffect->BeginPass(0);
 
 	m_pBuffer->Render_Buffer();

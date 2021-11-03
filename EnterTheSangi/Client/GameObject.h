@@ -18,6 +18,9 @@ public:
 	virtual HRESULT Render_GameObject();
 
 protected:
+	D3DXMATRIX Get_Transform(_D3DTRANSFORMSTATETYPE eType);
+
+protected:
 	LPDIRECT3DDEVICE9		m_pDevice = nullptr;
 	Renderer*							m_pRenderer = nullptr;
 	Shader*								m_pShader = nullptr;
