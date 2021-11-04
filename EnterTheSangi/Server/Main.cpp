@@ -57,5 +57,30 @@ int recvn(SOCKET s, char* buf, int len, int flags)
 
 int main()
 {
+	int retval;
+	WSADATA wsa;
+
+	if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0)
+		return 1;
+
+	// 소켓 부분!
+	SOCKET listen_sock = socket(AF_INET, SOCK_STREAM, 0);
+	if (listen_sock == INVALID_SOCKET)
+		err_quit("socket()");
+
+	SOCKADDR_IN serveraddr;
+	ZeroMemory(&serveraddr, sizeof(serveraddr));
+
+	serveraddr.sin_family = AF_INET;
+	serveraddr.sin_addr.s_addr = htonl(INADDR_ANY);
+	serveraddr.sin_port = htons(SERVERPORT);
+	retval = bind(listen_sock, (SOCKADDR*)&serveraddr, sizeof(serveraddr));
+	if (retval == SOCKET_ERROR)
+		err_quit("bind()");
+
+	retval = listen(listen_sock, SOMAXCONN);
+	if (retval == SOCKET_ERROR)
+		err_quit("listen()");
+
 	return 0;
 }
