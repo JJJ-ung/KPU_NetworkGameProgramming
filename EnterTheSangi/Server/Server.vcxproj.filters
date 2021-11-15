@@ -7,6 +7,9 @@
     <Filter Include="99 Protocol">
       <UniqueIdentifier>{ca03773c-f4fe-4556-b741-1392eefa08b8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="NewFilter1">
+      <UniqueIdentifier>{32e59dd1-6c27-4826-a7b0-2081727c28a3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Protocol.h">
