@@ -6,6 +6,7 @@
 
 #define SERVERPORT 9000
 #define BUFFERSIZE 512
+int g_client_count = 0;
 
 void err_quit(char* msg)
 {
@@ -16,7 +17,7 @@ void err_quit(char* msg)
 		NULL, WSAGetLastError(),
 		MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
 		(LPTSTR)&lpMsgBuf, 0, NULL);
-	MessageBox(NULL, (LPTSTR)lpMsgBuf, msg, MB_ICONERROR);
+	MessageBox(NULL, (LPTSTR)lpMsgBuf, (LPCWSTR)msg, MB_ICONERROR);
 	LocalFree(lpMsgBuf);
 
 	exit(1);
@@ -55,6 +56,15 @@ int recvn(SOCKET s, char* buf, int len, int flags)
 	return (len - left);
 }
 
+
+
+// 클라이언트 thread
+DWORD WINAPI ProcessClient(LPVOID arg)
+{
+	return 0;
+
+}
+
 int main()
 {
 	int retval;
@@ -81,6 +91,36 @@ int main()
 	retval = listen(listen_sock, SOMAXCONN);
 	if (retval == SOCKET_ERROR)
 		err_quit("listen()");
+
+	HANDLE client_thread[3];
+
+
+	int addrlen;
+	char buf[BUFFERSIZE + 1];
+	int len = BUFFERSIZE;
+
+	SOCKET client_sock;
+	SOCKADDR_IN clientaddr;
+
+	while (1) {
+		addrlen = sizeof(clientaddr);
+		client_sock = accept(listen_sock, (SOCKADDR*)&clientaddr, &addrlen);
+
+		if (client_sock == INVALID_SOCKET) {
+			err_display("accept()");
+			break;
+		}
+		g_client_count++;
+		client_thread[g_client_count - 1] = CreateThread(NULL, 0, ProcessClient, (LPVOID)client_sock, 0, NULL);
+
+
+		for (int i = 0; i < 3; ++i) {
+			if (client_thread[i] == NULL)
+				closesocket(client_sock);
+			else
+				CloseHandle(client_thread[i]);
+		}
+	}
 
 	return 0;
 }
