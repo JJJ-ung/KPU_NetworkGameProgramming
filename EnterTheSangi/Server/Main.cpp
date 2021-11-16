@@ -1,6 +1,11 @@
-#include <stdio.h>
+#include "MainServer.h"
+#include "Protocol.h"
 
 int main()
 {
-	return 0;
+	MainServer* main_server=new MainServer;
+
+	main_server->Init(SERVER_PORT);
+	main_server->Activate();
+
 }
