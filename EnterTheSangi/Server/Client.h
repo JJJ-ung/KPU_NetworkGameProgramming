@@ -13,13 +13,16 @@ public:
 	~CClient();
 
 	void SetID(const int client_id);
+	void SetState(CLIENT_STATE state);
+	void SetSocket(SOCKET socket);
+
 
 	char GetID();
+	CLIENT_STATE GetState();
 
 	void StateLock();
 	void StateUnlock();
 
-	void Set_state(CLIENT_STATE state);
 
 private:
 	SOCKET         m_socket;

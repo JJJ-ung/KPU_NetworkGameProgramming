@@ -10,15 +10,27 @@ void CClient::SetID(const int client_id)
 {
 	m_ID = client_id;
 };
+
+void CClient::SetState(CLIENT_STATE state)
+{
+	m_state = state;
+}
+
+void CClient::SetSocket(SOCKET socket)
+{
+	m_socket = socket;
+};
+
 char CClient::GetID()
 {
 	return m_ID;
 };
 
-void CClient::Set_state(CLIENT_STATE state)
+CLIENT_STATE CClient::GetState()
 {
-	m_state = state;
-}
+	return m_state;
+};
+
 
 void CClient::StateLock()
 {
