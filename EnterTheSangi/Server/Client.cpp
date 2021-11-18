@@ -10,6 +10,10 @@ void CClient::SetID(const int client_id)
 {
 	m_ID = client_id;
 };
+char CClient::GetID()
+{
+	return m_ID;
+};
 
 char CClient::GetID()
 {
@@ -25,4 +29,3 @@ void CClient::StateUnlock()
 {
 	m_state_lock.unlock();
 };
-
