@@ -81,14 +81,13 @@ enum BULLET
 };
 struct Bullet
 {
-
 	//클라 화이팅
 
 };
 
 enum DIR { DIR_LT, DIR_L, DIR_LB, DIR_CT, DIR_C, DIR_CB, DIR_RT, DIR_R, DIR_RB };
 enum STATE { IDLE, RUN, DODGE, DEAD, HAPPY };
-
+enum OBJECT_CODE {E_PLAYER, E_ITEM}; // 오브젝트 번호들. 충돌체크시 어떤 오브젝트인지 확인하기 위함 이후 총알 
 struct Item
 {
 	//id 필요한가?
