@@ -11,11 +11,14 @@ public:
 
 	D3DXVECTOR4 GetBodyColor();
 	D3DXVECTOR4 GetClothColor();
+	char        GetHealth();
 
-	void SetBodyColor(D3DXVECTOR4 body_color);
-	void SetClothColor(D3DXVECTOR4 cloth_color);
+	void        SetBodyColor(D3DXVECTOR4 body_color);
+	void        SetClothColor(D3DXVECTOR4 cloth_color);
+	void        SetHealth(char health);
 
-	void ChangeInvincibleMode();
+	void        ChangeInvincibleMode();
+	bool        IsInvincibleMode();
 
 private:
 	STATE         m_e_state;

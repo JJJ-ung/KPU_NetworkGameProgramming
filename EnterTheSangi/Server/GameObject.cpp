@@ -14,6 +14,11 @@ void CGameObject::SetLook(D3DXVECTOR2 look)
 	m_look = look;
 };
 
+OBJECT_CODE  CGameObject::GetObjectCode()
+{
+	return m_object_code;
+}
+
 D3DXVECTOR2 CGameObject::GetPosition()
 {
 	return m_position;
