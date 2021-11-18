@@ -9,17 +9,21 @@ private:
 	SOCKET			m_socket;
 	SOCKADDR_IN		m_addr;
 	WSADATA			m_wsa;
+	GameStatePlayer m_playerPacket;
 	int				retval;
-	char			m_buf[BUF_SIZE];
 
 public:
 	NetworkMGR() {};
 	~NetworkMGR() {};
 
-	void Activate();
-	
-	// 수신, 전송
-	void do_send();
-	void do_recv();
+	void			err_quit(const char *msg);
+	void			err_display(const char* msg);
+	void			Activate();
 
+	// 수신, 전송
+	void			do_send();
+	void			do_recv();
+
+	// 수신
+	int				recvn(SOCKET s, char* buf, int len, int flags);
 };
