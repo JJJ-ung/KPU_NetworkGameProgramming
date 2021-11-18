@@ -23,8 +23,10 @@ public:
 
 	void DoSend();
 	void DoRecv();
-	void DoAccept();
+	int DoAccept();
 
+
+	char GetNewID();
 
 private:
 	SOCKET m_listen_socket;
