@@ -19,6 +19,8 @@ public:
 	void StateLock();
 	void StateUnlock();
 
+	void Set_state(CLIENT_STATE state);
+
 private:
 	SOCKET m_socket;
 	SOCKADDR_IN m_addr;

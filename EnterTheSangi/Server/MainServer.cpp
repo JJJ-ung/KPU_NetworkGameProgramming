@@ -103,6 +103,16 @@ void CMainServer::AccpetThread()
             //해당 클라이언트의 state를 업데이트한다
             //m_can_connect를 업데이트한다
         }
+        
+        for (int i = 0; i < 3; ++i) {
+            if (m_clients[i].GetID() == NULL) {
+                // 여기서 아이디, state = ST_ACCEPT
+                m_clients[i].SetID(i);
+                m_clients[i].StateLock();
+                m_clients[i].Set_state(ST_ACCEPT);
+                m_clients[i].StateUnlock();
+            }
+        }
     }
 };
 

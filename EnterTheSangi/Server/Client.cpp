@@ -16,3 +16,7 @@ char CClient::GetID()
 	return m_ID;
 };
 
+void CClient::Set_state(CLIENT_STATE state)
+{
+	m_state = state;
+}
