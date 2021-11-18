@@ -87,33 +87,12 @@ void CMainServer::ClientThread()
 
 void CMainServer::AccpetThread()
 {
-    for (;;)
-    {
-        if (m_can_connect == false) //data race 발생가능 -> 추후 보완 필요
-            continue;
-        //accpet()
-        SOCKET client_socket;
-        SOCKADDR_IN client_addr;
-        int addr_len=sizeof(client_addr);
-        client_socket = accept(m_listen_socket, (SOCKADDR*)&client_addr, &addr_len);
-        if (client_socket == INVALID_SOCKET)
-        {
-            //free인 클라이언트의 id를 찾는다
-            //해당 클라이언트에 소켓 정보, 소켓 주소 구조체 정보를 넘긴다
-            //해당 클라이언트의 state를 업데이트한다
-            //m_can_connect를 업데이트한다
-        }
-        
-        for (int i = 0; i < 3; ++i) {
-            if (m_clients[i].GetID() == NULL) {
-                // 여기서 아이디, state = ST_ACCEPT
-                m_clients[i].SetID(i);
-                m_clients[i].StateLock();
-                m_clients[i].Set_state(ST_ACCEPT);
-                m_clients[i].StateUnlock();
-            }
-        }
-    }
+	for (;;)
+	{
+
+        DoAccept();
+		
+	}
 };
 
 void CMainServer::DoSend()
@@ -126,8 +105,43 @@ void CMainServer::DoRecv()
 
 };
 
-void CMainServer::DoAccept()
+int CMainServer::DoAccept()
 {
+    //accpet()
+    SOCKET client_socket;
+    SOCKADDR_IN client_addr;
+    int addr_len = sizeof(client_addr);
+    client_socket = accept(m_listen_socket, (SOCKADDR*)&client_addr, &addr_len);
+    if (client_socket == INVALID_SOCKET) return -1;
 
+    char new_id = GetNewID();
+    if (new_id != -1)
+    {   
+        m_clients[new_id].SetSocket(client_socket);
+        //플레이어 초기 정보 세팅
+        //login_ok패킷 전송
+    }
+    else
+    {
+        // clients full
+    }
 };
 
+char CMainServer::GetNewID()
+{
+    for (int i = 0; i < MAX_CLIENTS; ++i) {
+        m_clients[i].StateLock();
+        if (m_clients[i].GetState() == ST_FREE)
+        {
+            m_clients[i].SetState(ST_ACCEPT);
+            m_clients[i].StateUnlock();
+            return i;
+        }
+        m_clients[i].StateUnlock();
+    }
+    cout << "Maximum Number of Clients Overflow!!\n";
+   
+    return -1;
+
+
+};
