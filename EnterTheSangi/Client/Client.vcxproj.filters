@@ -166,6 +166,9 @@
     <ClInclude Include="Animation.h">
       <Filter>02 Components\03 Animation</Filter>
     </ClInclude>
+    <ClInclude Include="NetworkManager.h">
+      <Filter>98 Managers\07 NetworkMgr</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">
@@ -246,6 +249,9 @@
     </ClCompile>
     <ClCompile Include="Animation.cpp">
       <Filter>02 Components\03 Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="NetworkManager.cpp">
+      <Filter>98 Managers\07 NetworkMgr</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

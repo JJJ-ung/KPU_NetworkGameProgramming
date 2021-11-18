@@ -2,7 +2,7 @@
 
 NetworkMGR::NetworkMGR()
 {
-
+	
 }
 
 NetworkMGR::~NetworkMGR()
@@ -14,3 +14,14 @@ void NetworkMGR::Activate()
 {
 
 }
+
+void NetworkMGR::do_send()
+{
+
+}
+
+void NetworkMGR::do_recv()
+{
+
+}
+

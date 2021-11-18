@@ -9,6 +9,7 @@ constexpr int SERVER_PORT = 5000;
 constexpr int MAX_CLIENTS = 3;
 
 #define  MAX_NAME_SIZE 16
+#define	 BUF_SIZE 512
 
 struct sc_other_client_info //로그인시 혹은 타 플레이어 로그인시 다른 클라이언트 접속 정보
 {
