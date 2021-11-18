@@ -1,5 +1,6 @@
 #pragma once
 class Texture;
+class Animation;
 class ResourceMgr
 {
 	DECLARE_SINGLETON(ResourceMgr)

@@ -41,6 +41,11 @@ HRESULT Texture::SetUp_OnShader(LPD3DXEFFECT pEffect, const char* pConstantName,
 	return pEffect->SetTexture(pConstantName, m_vecTexture[iIndex]);
 }
 
+UINT Texture::Get_FrameCount()
+{
+	return (UINT)m_vecTexture.size();
+}
+
 Texture* Texture::Create(LPDIRECT3DDEVICE9 pGraphicDev, const TCHAR* pPath, const UINT& iCnt)
 {
 	Texture* pInstance = new Texture(pGraphicDev);

@@ -155,6 +155,7 @@
     <ClInclude Include="Client.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="DeviceMgr.h" />
+    <ClInclude Include="Frame.h" />
     <ClInclude Include="FrameMgr.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="GameMgr.h" />
@@ -182,6 +183,7 @@
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="DeviceMgr.cpp" />
+    <ClCompile Include="Frame.cpp" />
     <ClCompile Include="FrameMgr.cpp" />
     <ClCompile Include="GameMgr.cpp" />
     <ClCompile Include="GameObject.cpp" />

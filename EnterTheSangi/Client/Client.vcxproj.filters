@@ -89,6 +89,9 @@
     <Filter Include="02 Components\03 Animation">
       <UniqueIdentifier>{8560faa2-c15d-4a31-b5ec-0947eb89dbbc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02 Components\03 Animation\Frame">
+      <UniqueIdentifier>{e19a6d37-8c93-4ea3-b337-4e96741298b2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -165,6 +168,9 @@
     </ClInclude>
     <ClInclude Include="Animation.h">
       <Filter>02 Components\03 Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Frame.h">
+      <Filter>02 Components\03 Animation\Frame</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -246,6 +252,9 @@
     </ClCompile>
     <ClCompile Include="Animation.cpp">
       <Filter>02 Components\03 Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="Frame.cpp">
+      <Filter>02 Components\03 Animation\Frame</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

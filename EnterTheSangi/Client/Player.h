@@ -1,6 +1,7 @@
 #pragma once
 #include "GameObject.h"
 
+class Animation;
 class Player : public GameObject
 {
 public:

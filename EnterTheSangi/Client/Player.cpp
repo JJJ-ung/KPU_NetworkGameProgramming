@@ -71,7 +71,11 @@ HRESULT Player::Render_GameObject()
 	pEffect->Begin(nullptr, 0);
 	pEffect->BeginPass(0);
 
-	m_pBuffer->Render_Buffer();
+	//m_pBuffer->Render_Buffer();
+
+	auto p = m_pTexture->Get_Texture(0);
+
+	DeviceMgr::GetInstance()->Get_Sprite()->Draw()
 
 	pEffect->EndPass();
 	pEffect->End();
