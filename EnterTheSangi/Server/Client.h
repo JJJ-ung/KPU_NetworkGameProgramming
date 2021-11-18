@@ -20,11 +20,11 @@ public:
 	void StateUnlock();
 
 private:
-	SOCKET m_socket;
-	SOCKADDR_IN m_addr;
-	char m_ID;
-	CLIENT_STATE m_state;
-	std::mutex m_state_lock;
+	SOCKET         m_socket;
+	SOCKADDR_IN    m_addr;
+	char           m_ID;
+	CLIENT_STATE   m_state;
+	std::mutex     m_state_lock;
 
-	CPlayer m_player;
+	CPlayer        m_player;
 };

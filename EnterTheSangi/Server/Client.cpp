@@ -16,3 +16,13 @@ char CClient::GetID()
 	return m_ID;
 };
 
+void CClient::StateLock()
+{
+	m_state_lock.lock();
+};
+
+void CClient::StateUnlock()
+{
+	m_state_lock.unlock();
+};
+

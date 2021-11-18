@@ -16,8 +16,11 @@
     <Filter Include="99 Protocol">
       <UniqueIdentifier>{ca03773c-f4fe-4556-b741-1392eefa08b8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03 GameObject\00 Player">
+    <Filter Include="03 GameObject\01 Player">
       <UniqueIdentifier>{7ad9e03f-49f3-4947-bca1-ba456c1ef176}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03 GameObject\00 GameObject">
+      <UniqueIdentifier>{1e9b0876-02fd-4451-b0e5-7bc7a8643088}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -31,7 +34,10 @@
       <Filter>02 Client</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
-      <Filter>03 GameObject\00 Player</Filter>
+      <Filter>03 GameObject\01 Player</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>03 GameObject\00 GameObject</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -45,7 +51,10 @@
       <Filter>02 Client</Filter>
     </ClCompile>
     <ClCompile Include="Player.cpp">
-      <Filter>03 GameObject\00 Player</Filter>
+      <Filter>03 GameObject\01 Player</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>03 GameObject\00 GameObject</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
