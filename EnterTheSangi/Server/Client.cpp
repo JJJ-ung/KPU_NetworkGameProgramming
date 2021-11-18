@@ -15,10 +15,10 @@ char CClient::GetID()
 	return m_ID;
 };
 
-char CClient::GetID()
+void CClient::Set_state(CLIENT_STATE state)
 {
-	return m_ID;
-};
+	m_state = state;
+}
 
 void CClient::StateLock()
 {
