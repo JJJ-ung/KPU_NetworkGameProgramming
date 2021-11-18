@@ -3,7 +3,7 @@
 
 int main()
 {
-	MainServer* main_server=new MainServer;
+	CMainServer* main_server=new CMainServer;
 
 	main_server->Init(SERVER_PORT);
 	main_server->Activate();

@@ -6,16 +6,16 @@
 
 #include "DeviceMgr.h"
 
-Player::Player(LPDIRECT3DDEVICE9 pGraphic_Device)
+CPlayer::CPlayer(LPDIRECT3DDEVICE9 pGraphic_Device)
 	:GameObject(pGraphic_Device)
 {
 }
 
-Player::~Player()
+CPlayer::~CPlayer()
 {
 }
 
-HRESULT Player::Ready_GameObject()
+HRESULT CPlayer::Ready_GameObject()
 {
 	m_pRenderer = Renderer::GetInstance();
 	if (!m_pRenderer) return E_FAIL;
@@ -32,19 +32,19 @@ HRESULT Player::Ready_GameObject()
 	return NOERROR;
 }
 
-INT Player::Update_GameObject(float TimeDelta)
+INT CPlayer::Update_GameObject(float TimeDelta)
 {
 	return 0;
 }
 
-INT Player::LateUpdate_GameObject(float TimeDelta)
+INT CPlayer::LateUpdate_GameObject(float TimeDelta)
 {
 	m_pRenderer->Add_RenderList(Renderer::RENDER_NONALPHA, this);
 
 	return 0;
 }
 
-HRESULT Player::Render_GameObject()
+HRESULT CPlayer::Render_GameObject()
 {
 	LPD3DXEFFECT	pEffect = m_pShader->Get_EffectHandle();
 	if (nullptr == pEffect)
@@ -79,14 +79,14 @@ HRESULT Player::Render_GameObject()
 	return NOERROR;
 }
 
-Player* Player::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
+CPlayer* CPlayer::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
 {
-	Player* pInstance = new Player(pGraphic_Device);
+	CPlayer* pInstance = new CPlayer(pGraphic_Device);
 	if (FAILED(pInstance->Ready_GameObject()))
 		SafeDelete(pInstance);
 	return pInstance;
 }
 
-void Player::Free()
+void CPlayer::Free()
 {
 }

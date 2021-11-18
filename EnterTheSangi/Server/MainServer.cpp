@@ -1,9 +1,10 @@
+#pragma once
 #include "MainServer.h"
 
-explicit MainServer::MainServer() {};
-MainServer::~MainServer() {};
+CMainServer::CMainServer() {};
+CMainServer::~CMainServer() {};
 
-void MainServer::Init(const int server_port)
+void CMainServer::Init(const int server_port)
 {
     int rt;
 
@@ -34,7 +35,7 @@ void MainServer::Init(const int server_port)
     m_can_connect = true;
 };
 
-void MainServer::Activate()
+void CMainServer::Activate()
 {
     int rt;
 
@@ -46,13 +47,13 @@ void MainServer::Activate()
 
     //클라이언트별로 하나씩 할당되는 스레드.
     for (int i = 0; i < MAX_CLIENTS; ++i)
-        m_client_threads.emplace_back(&MainServer::ClientThread,this);
+        m_client_threads.emplace_back(&CMainServer::ClientThread,this);
     for (auto& th : m_client_threads)
         th.join();
 
     //accept만을 위한 스레드. 주스레드에서 accpet 상관 없이 서버 연산을 돌리기 위함.
     for (int i = 0; i < 1; ++i)
-        m_accpet_threads.emplace_back(&MainServer::AccpetThread, this);
+        m_accpet_threads.emplace_back(&CMainServer::AccpetThread, this);
     for (auto& th : m_accpet_threads)
         th.join();
 
@@ -60,7 +61,7 @@ void MainServer::Activate()
 
 };
 
-void MainServer::ClientThread() 
+void CMainServer::ClientThread() 
 {
     for (;;)
     {
@@ -84,7 +85,7 @@ void MainServer::ClientThread()
     }
 };
 
-void MainServer::AccpetThread()
+void CMainServer::AccpetThread()
 {
     for (;;)
     {
@@ -105,17 +106,17 @@ void MainServer::AccpetThread()
     }
 };
 
-void MainServer::DoSend()
+void CMainServer::DoSend()
 {
 
 };
 
-void MainServer::DoRecv()
+void CMainServer::DoRecv()
 {
 
 };
 
-void MainServer::DoAccept()
+void CMainServer::DoAccept()
 {
 
 };

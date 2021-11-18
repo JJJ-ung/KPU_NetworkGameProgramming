@@ -1,11 +1,11 @@
 #pragma once
 #include "GameObject.h"
 
-class Player : public GameObject
+class CPlayer : public GameObject
 {
 public:
-	explicit Player(LPDIRECT3DDEVICE9 pGraphic_Device);
-	virtual ~Player();
+	explicit CPlayer(LPDIRECT3DDEVICE9 pGraphic_Device);
+	virtual ~CPlayer();
 
 public:
 	virtual HRESULT Ready_GameObject();
@@ -14,7 +14,7 @@ public:
 	virtual HRESULT Render_GameObject();
 
 public:
-	static Player* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
+	static CPlayer* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
 	virtual void Free();
 };
 

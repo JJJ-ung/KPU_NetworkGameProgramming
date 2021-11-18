@@ -9,11 +9,11 @@
 #include "Client.h"
 #include "Protocol.h"
 
-class MainServer
+class CMainServer
 {
 public:
-	explicit MainServer();
-	~MainServer();
+	CMainServer();
+	~CMainServer();
 
 	void Init(const int server_port);
 	void Activate();
@@ -28,7 +28,7 @@ public:
 
 private:
 	SOCKET m_listen_socket;
-	std::array<Client, 3> m_clients;
+	std::array<CClient, 3> m_clients;
 	std::vector<std::thread> m_client_threads;
 	std::vector<std::thread> m_accpet_threads;
 

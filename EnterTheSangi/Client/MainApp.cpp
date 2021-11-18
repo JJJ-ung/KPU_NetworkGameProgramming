@@ -30,7 +30,7 @@ HRESULT MainApp::Ready_MainApp()
 
 	GameObject* pObj = nullptr;
 
-	pObj = Player::Create(m_pGraphic_Device);
+	pObj = CPlayer::Create(m_pGraphic_Device);
 	if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::TYPE::PLAYER, pObj)))
 		return E_FAIL;
 

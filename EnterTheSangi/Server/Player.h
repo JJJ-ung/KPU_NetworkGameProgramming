@@ -1,9 +1,9 @@
 
-class Player
+class CPlayer
 {
 public:
-	explicit Player();
-	~Player();
+	explicit CPlayer();
+	~CPlayer();
 
 private:
 };

@@ -1,16 +1,17 @@
+#pragma once
 #include "Client.h"
 
 
-explicit Client::Client() {};
+CClient::CClient() {};
 
-Client::~Client() {};
+CClient::~CClient() {};
 
-void Client::SetID(const int client_id)
+void CClient::SetID(const int client_id)
 {
 	m_ID = client_id;
 };
 
-char Client::GetID()
+char CClient::GetID()
 {
 	return m_ID;
 };

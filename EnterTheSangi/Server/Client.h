@@ -4,13 +4,13 @@
 #include "Player.h"
 
 //client state
-enum STATE { ST_FREE, ST_ACCEPT, ST_INROBBY,ST_READY,ST_INGAME };
+enum CLIENT_STATE { ST_FREE, ST_ACCEPT, ST_INROBBY,ST_READY,ST_INGAME };
 
-class Client
+class CClient
 {
 public:
-	explicit Client();
-	~Client();
+	CClient();
+	~CClient();
 
 	void SetID(const int client_id);
 
@@ -23,8 +23,8 @@ private:
 	SOCKET m_socket;
 	SOCKADDR_IN m_addr;
 	char m_ID;
-	STATE m_state;
+	CLIENT_STATE m_state;
 	std::mutex m_state_lock;
 
-	Player m_player;
+	CPlayer m_player;
 };

@@ -1,6 +1,7 @@
+#pragma once
 #include "Player.h"
 
 
-explicit Player::Player() {};
+CPlayer::CPlayer() {};
 
-Player::~Player() {};
+CPlayer::~CPlayer() {};
