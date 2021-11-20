@@ -4,7 +4,7 @@
 #include "..\Server\Protocol.h"
 #include <winsock2.h>
 
-class NetworkMGR {
+class NetworkMgr {
 private:
 	SOCKET			m_socket;
 	SOCKADDR_IN		m_addr;
@@ -13,8 +13,8 @@ private:
 	int				retval;
 
 public:
-	NetworkMGR() {};
-	~NetworkMGR() {};
+	NetworkMgr() {};
+	~NetworkMgr() {};
 
 	void			err_quit(const char *msg);
 	void			err_display(const char* msg);

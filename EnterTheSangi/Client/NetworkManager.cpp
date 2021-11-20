@@ -1,6 +1,6 @@
 #include "NetworkManager.h"
 
-NetworkMGR::NetworkMGR()
+NetworkMgr::NetworkMgr()
 {
 	WSAStartup(MAKEWORD(2, 2), &m_wsa);
 	m_socket = socket(AF_INET, SOCK_STREAM, 0);
@@ -13,13 +13,13 @@ NetworkMGR::NetworkMGR()
 	retval = connect(m_socket, (SOCKADDR*)&m_addr, sizeof(m_addr));
 }
 
-NetworkMGR::~NetworkMGR()
+NetworkMgr::~NetworkMgr()
 {
 	closesocket(m_socket);
 	WSACleanup();
 }
 
-void NetworkMGR::err_display(const char* msg)
+void NetworkMgr::err_display(const char* msg)
 {
 	LPVOID lpMsgBuf;
 
@@ -32,7 +32,7 @@ void NetworkMGR::err_display(const char* msg)
 	LocalFree(lpMsgBuf);
 }
 
-void NetworkMGR::err_quit(const char* msg)
+void NetworkMgr::err_quit(const char* msg)
 {
 	LPVOID lpMsgBuf;
 
@@ -47,12 +47,12 @@ void NetworkMGR::err_quit(const char* msg)
 	exit(1);
 }
 
-void NetworkMGR::Activate()
+void NetworkMgr::Activate()
 {
 
 }
 
-void NetworkMGR::do_send()
+void NetworkMgr::do_send()
 {
 	// 앞에서 처리할거 다 처리한 후
 
@@ -62,7 +62,7 @@ void NetworkMGR::do_send()
 		err_display("send()");
 }
 
-void NetworkMGR::do_recv()
+void NetworkMgr::do_recv()
 {
 	char buf[BUF_SIZE];
 
@@ -87,7 +87,7 @@ void NetworkMGR::do_recv()
 
 }
 
-int NetworkMGR::recvn(SOCKET s, char* buf, int len, int flags)
+int NetworkMgr::recvn(SOCKET s, char* buf, int len, int flags)
 {
 	int received;
 	char* ptr = buf;
