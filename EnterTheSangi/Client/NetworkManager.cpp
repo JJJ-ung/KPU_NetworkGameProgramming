@@ -62,6 +62,14 @@ void NetworkMgr::do_send()
 		err_display("send()");
 }
 
+void NetworkMgr::do_send_customizing() //커스터마이징 정보 수신
+{
+	retval = send(m_socket, (char*)&m_player_color_pakcet, sizeof(cs_change_color), 0);
+	
+	if (retval == SOCKET_ERROR)
+		err_display("send()");
+}
+
 void NetworkMgr::do_recv()
 {
 	char buf[BUF_SIZE];
@@ -80,11 +88,15 @@ void NetworkMgr::do_recv()
 		return;
 	}
 
-	if (buf[0] == '0'){ // 다른 캐릭터 이동
+	if (buf[1] == '0'){ // 다른 캐릭터 이동
 		GameStatePlayer rp;
 		memcpy(&rp, &buf, sizeof(GameStatePlayer));
 	}
-
+	
+	else if (buf[1] == '1') { // 커스터마이징 정보 수신
+		sc_change_color rp;
+		memcpy(&rp, &buf, sizeof(sc_change_color));
+	}
 }
 
 int NetworkMgr::recvn(SOCKET s, char* buf, int len, int flags)

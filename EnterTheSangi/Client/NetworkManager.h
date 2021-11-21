@@ -10,6 +10,7 @@ private:
 	SOCKADDR_IN		m_addr;
 	WSADATA			m_wsa;
 	GameStatePlayer m_playerPacket;
+	cs_change_color	m_player_color_pakcet;
 	int				retval;
 
 public:
@@ -22,6 +23,7 @@ public:
 
 	// 수신, 전송
 	void			do_send();
+	void			do_send_customizing();
 	void			do_recv();
 
 	// 수신
