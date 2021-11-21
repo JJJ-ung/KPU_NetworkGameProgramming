@@ -4,7 +4,7 @@
 #include "framework.h"
 #include "Client.h"
 #include "MainApp.h"
-#include "FrameMgr.h"
+#include "TimerMgr.h"
 
 #define MAX_LOADSTRING 100
 
@@ -24,9 +24,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_ LPWSTR    lpCmdLine,
                      _In_ int       nCmdShow)
 {
-//#ifdef _DEBUG
-//    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-//#endif
+#ifdef _DEBUG
+    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+#endif
 
     UNREFERENCED_PARAMETER(hPrevInstance);
     UNREFERENCED_PARAMETER(lpCmdLine);
@@ -48,13 +48,13 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
     MSG msg{};
 
-    MainApp* pMainApp = MainApp::Create();
-    if (!pMainApp) return FALSE;
 	srand(unsigned(time(NULL)));
 
-    FrameMgr* pFrameMgr = FrameMgr::GetInstance();
-    if (!pFrameMgr) return FALSE;
+	MainApp* pMainApp = MainApp::Create();
+    if (!pMainApp) return FALSE;
 
+    TimerMgr* pTimerMgr = TimerMgr::GetInstance();
+    if (!pTimerMgr) return FALSE;
 
 	// 기본 메시지 루프입니다.
 	while (WM_QUIT != msg.message)
@@ -66,16 +66,22 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		}
 		else
 		{
-            if(pFrameMgr->FrameLimit(60.f))
+            if(pTimerMgr->Frame_Limit(TimerMgr::CLIENT, 60.f))
             {
-	            pMainApp->Update_MainApp(pFrameMgr->UpdateTime());
+	            pMainApp->Update_MainApp(pTimerMgr->Update_Timer(TimerMgr::CLINET_DEFAULT));
 	            pMainApp->Render_MainApp();
+                pTimerMgr->Print_FrameRate();
+	        }
+            if (pTimerMgr->Frame_Limit(TimerMgr::NETWORKING, 30.f))
+            {
+                // 네트워크 업데이트 사항
+                pTimerMgr->Update_Timer(TimerMgr::NETWORK_DEFAULT);
             }
-		}
+        }
 	}
 
     SafeDelete(pMainApp);
-    pFrameMgr->DestroyInstance();
+    pTimerMgr->DestroyInstance();
 
     _CrtDumpMemoryLeaks();
 

@@ -1,8 +1,14 @@
 matrix		g_matWorld, g_matView, g_matProj;
 
+float3		g_vCloth, g_vBody;
+
 texture		g_BaseTexture;
 sampler BaseSampler = sampler_state
 {
+	minfilter = none;
+	magfilter = none;
+	mipfilter = none;
+
 	AddressU = wrap;
 	AddressV = wrap;
 	texture = g_BaseTexture;
@@ -66,9 +72,9 @@ PS_OUT PS_MAIN(PS_IN In)
 
 	float3 vBase = float3(vColor.r, vColor.r, vColor.r) * vColor.a;
 
-	float3 vCloth = float3(vColor.g, vColor.g, vColor.g) * vColor.g * float3(1.f, 0.f, 0.f);
+	float3 vCloth = float3(vColor.g, vColor.g, vColor.g) * vColor.g * g_vCloth;
 
-	float3 vBody = float3(vColor.b, vColor.b, vColor.b) * vColor.b * float3(1.f, 0.839215f, 0.317647f);
+	float3 vBody = float3(vColor.b, vColor.b, vColor.b) * vColor.b * g_vBody;
 
 	vCloth = BlendMode_Overlay(vBase, vCloth) * vColor.g;
 

@@ -44,8 +44,8 @@ Shader* Shader::Create(LPDIRECT3DDEVICE9 pGraphic_Device, const TCHAR* pShaderFi
 
 void Shader::Free()
 {
-	SafeDelete(m_pErrBuffer);
-	SafeDelete(m_pEffect);
+	SafeRelease(m_pErrBuffer);
+	SafeRelease(m_pEffect);
 
 	Component::Free();
 }

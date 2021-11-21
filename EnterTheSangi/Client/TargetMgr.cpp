@@ -120,9 +120,6 @@ HRESULT TargetMgr::Ready_Debug_Buffer(const TCHAR* pTargetTag, float fX, float f
 
 HRESULT TargetMgr::Render_Debug_Buffer(const TCHAR* pMRTTag)
 {
-	if (!m_bRenderDebugBuff)
-		return NOERROR;
-
 	list<Target*>* pMRTList = Find_MRT(pMRTTag);
 	if (nullptr == pMRTList)
 		return E_FAIL;
@@ -160,10 +157,5 @@ void TargetMgr::Free()
 		Pair.second.clear();
 	}
 	m_MRTs.clear();
-
-	for (auto& Pair : m_Targets)
-	{
-		SafeDelete(Pair.second);
-	}
 	m_Targets.clear();
 }

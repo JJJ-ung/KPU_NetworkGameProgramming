@@ -3,6 +3,10 @@ matrix		g_matWorld, g_matView, g_matProj;
 texture		g_BaseTexture;
 sampler BaseSampler = sampler_state
 {
+	minfilter = none;
+	magfilter = none;
+	mipfilter = none;
+
 	AddressU = wrap;
 	AddressV = wrap;
 	texture = g_BaseTexture;

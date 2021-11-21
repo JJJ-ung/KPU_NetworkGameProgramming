@@ -13,56 +13,77 @@ ResourceMgr::~ResourceMgr()
 	Free();
 }
 
-HRESULT ResourceMgr::Ready_ResourceMgr(LPDIRECT3DDEVICE9 pDevice)
+HRESULT ResourceMgr::Ready_ResourceMgr(LPDIRECT3DDEVICE9 pDevice, LPD3DXSPRITE pSprite)
 {
 	if (!pDevice) return E_FAIL;
 	m_pDevice = pDevice;
+
+	if (!pSprite) return E_FAIL;
+	m_pSprite = pSprite;
+
 	return NOERROR;
 }
 
-HRESULT ResourceMgr::Add_TexturesFromFile(OBJECT::TYPE eObjType, const TCHAR* pPath)
+HRESULT ResourceMgr::Add_TexturesFromFile(const TCHAR* pTexSetTag, const TCHAR* pPath)
 {
 	wifstream fin;
 
 	fin.open(pPath);
-	if (fin.fail()) return E_FAIL;
+	if (fin.fail())
+		return E_FAIL;
 
 	UINT cnt;
 	wstring tag, path;
-	while(true)
+	while (true)
 	{
 		fin >> tag >> path >> cnt;
 
 		if (fin.eof()) break;
 
-		if (FAILED(Add_Texture(eObjType, tag.c_str(), path.c_str(), cnt)))
+		if (FAILED(Add_Texture(pTexSetTag, tag.c_str(), path.c_str(), cnt)))
 			return E_FAIL;
 	}
 
 	return NOERROR;
 }
 
-HRESULT ResourceMgr::Add_Texture(OBJECT::TYPE eObjType, const TCHAR* pState, const TCHAR* pPath, UINT iCnt)
+HRESULT ResourceMgr::Add_Texture(const TCHAR* pTexSetTag, const TCHAR* pState, const TCHAR* pPath, UINT iCnt)
 {
-	if (Find_Texture(eObjType, pState)) return E_FAIL;
+	auto iter_texset = m_mapTexSets.find(pTexSetTag);
+	if (iter_texset == m_mapTexSets.end())
+	{
+		MAPTEX mapTmp;
+		m_mapTexSets.insert(TEXSETS::value_type(pTexSetTag, mapTmp));
+	}
 
-	Texture* pTex = Texture::Create(m_pDevice, pPath, iCnt);
-	if (!pTex)
-		return E_FAIL;
-	m_mapTextures[eObjType].insert(MAPTEX::value_type(pState, pTex));
+	Texture* pTex = Texture::Create(m_pDevice, m_pSprite, pPath, iCnt);
+	if (!pTex) return E_FAIL;
+
+	m_mapTexSets[pTexSetTag].insert(MAPTEX::value_type(pState, pTex));
 
 	return NOERROR;
 }
 
-Texture* ResourceMgr::Find_Texture(OBJECT::TYPE eObjType, const TCHAR* pState)
+Texture* ResourceMgr::Find_Texture(const TCHAR* pTexSetTag, const TCHAR* pState)
 {
-	auto iter = m_mapTextures[eObjType].find(pState);
-	if (iter == m_mapTextures[eObjType].end()) return nullptr;
-	return iter->second;
-}
+	auto iter = m_mapTexSets.find(pTexSetTag);
+	if (iter == m_mapTexSets.end())
+		return nullptr;
 
+	auto iter2 = iter->second.find(pState);
+	if (iter2 == iter->second.end())
+		return nullptr;
+
+	return iter2->second;
+}
 
 void ResourceMgr::Free()
 {
-
+	for(auto iter_texset : m_mapTexSets)
+	{
+		for(auto iter_tex : iter_texset.second)
+			SafeDelete(iter_tex.second);
+		iter_texset.second.clear();
+	}
+	m_mapTexSets.clear();
 }

@@ -70,7 +70,7 @@ HRESULT Renderer::Render_Objects()
 		return E_FAIL;
 
 #ifdef _DEBUG
-	m_pTarget_Manager->Render_Debug_Buffer(L"MRT_Deferred");
+	//m_pTarget_Manager->Render_Debug_Buffer(L"MRT_Deferred");
 #endif
 
 	return NOERROR;
@@ -194,8 +194,6 @@ HRESULT Renderer::Setup_Target(D3DVIEWPORT9		ViewPort)
 	if (FAILED(m_pTarget_Manager->Add_MRT(L"MRT_Deferred", L"Target_Diffuse")))
 		return E_FAIL;
 
-
-
 	m_pShader_Blend = ShaderMgr::GetInstance()->Get_ShaderReference(L"Blend");
 	if (!m_pShader_Blend)
 		return E_FAIL;
@@ -213,8 +211,8 @@ void Renderer::Free()
 	for (size_t i = 0; i < RENDER_END; ++i)
 		m_RenderList[i].clear();
 
-	SafeDelete(m_pVB);
-	SafeDelete(m_pIB);
+	SafeRelease(m_pVB);
+	SafeRelease(m_pIB);
 
-	SafeDelete(m_pShader_Blend);
+	TargetMgr::GetInstance()->DestroyInstance();
 }

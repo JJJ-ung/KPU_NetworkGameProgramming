@@ -23,3 +23,14 @@ typedef struct tagIndex32
 {
 	unsigned long	_0, _1, _2;
 }INDEX32;
+
+
+
+// For Client
+
+typedef struct tagCustomInfo
+{
+	D3DXVECTOR3 vCloth{};
+	D3DXVECTOR3 vBody{};
+}CUSTOMIZE;
+

@@ -2,6 +2,7 @@
 #include "Component.h"
 #include "Renderer.h"
 #include "ShaderMgr.h"
+#include "ResourceMgr.h"
 
 class Buffer;
 class Texture;
@@ -25,7 +26,7 @@ protected:
 	Renderer*							m_pRenderer = nullptr;
 	Shader*								m_pShader = nullptr;
 	Texture*								m_pTexture = nullptr;
-	Buffer*								m_pBuffer = nullptr;
+	ResourceMgr*					m_pResourceMgr = nullptr;
 
 protected:
 	unordered_map<const TCHAR*, Component*>			m_Components;

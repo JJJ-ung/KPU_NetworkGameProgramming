@@ -1,8 +1,7 @@
 #pragma once
 #include "Component.h"
 
-class Frame;
-class ResourceMgr;
+class Texture;
 class Animation : public Component
 {
 public:
@@ -10,19 +9,28 @@ public:
 	virtual ~Animation();
 
 public:
-	virtual HRESULT Ready_Component(const TCHAR* pPath, OBJECT::TYPE eType);
+	virtual HRESULT Ready_Component(Texture* pTexture, float fSpeed, bool bSetCenter, float fStartFrame);
 	virtual INT Update_Component(float TimeDelta);
 	virtual INT LateUpdate_Component(float TimeDelta);
 
-private:
-	Frame* m_pCurrFrame = nullptr;
-	map<wstring, Frame*> m_mapFrame;
-	typedef map<wstring, Frame*> MAPFRAME;
-
-private:
-	ResourceMgr* m_pResourceMgr = nullptr;
+public:
+	HRESULT Set_Texture(LPD3DXEFFECT pEffect, const char* pConstantName);
+	HRESULT Draw_Sprite();
 
 public:
-	static Animation* Create(LPDIRECT3DDEVICE9 pGraphic_Device, const TCHAR* pPath, OBJECT::TYPE eType);
-	virtual void Free();
+	void Reset_Animation();
+
+private:
+	Texture* m_pTexture = nullptr;
+
+private:
+	float m_fFrame = 0.f;
+	float m_fMaxFrame = 0.f;
+	float m_fFrameSpeed = 1.f;
+	D3DXVECTOR3 m_vCenter = {};
+
+public:
+	static Animation* Create(LPDIRECT3DDEVICE9 pGraphicDev, Texture* pTexture, float fSpeed, bool bSetCenter = true, float fStartFrame = 0.f);
+	virtual void Free(void);
 };
+

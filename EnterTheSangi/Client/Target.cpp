@@ -146,11 +146,10 @@ Target* Target::Create(LPDIRECT3DDEVICE9 pGraphic_Device, UINT iSizeX, UINT iSiz
 void Target::Free()
 {
 #ifdef _DEBUG
-	SafeDelete(m_pVB);
-	SafeDelete(m_pIB);
+	SafeRelease(m_pVB);
+	SafeRelease(m_pIB);
 #endif
 
-	SafeDelete(m_pSurface);
-	SafeDelete(m_pTexture);
-	SafeDelete(m_pGraphic_Device);
+	SafeRelease(m_pSurface);
+	SafeRelease(m_pTexture);
 }

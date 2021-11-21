@@ -3,16 +3,17 @@
 
 IMPLEMENT_SINGLETON(DeviceMgr)
 
-DeviceMgr::DeviceMgr(void)
+DeviceMgr::DeviceMgr()
 {
 }
 
-DeviceMgr::~DeviceMgr(void)
+DeviceMgr::~DeviceMgr()
 {
 	Free();
 }
 
-HRESULT DeviceMgr::Ready_GraphicDev(HWND hWnd, WINMODE eMode, const UINT& iSizeX, const UINT& iSizeY, LPDIRECT3DDEVICE9* ppGraphicDev)
+HRESULT DeviceMgr::Ready_GraphicDev(HWND hWnd, OPTION::WINMODE eMode,
+	const UINT& iSizeX, const UINT& iSizeY, LPDIRECT3DDEVICE9* ppGraphicDev)
 {
 	m_pSDK = Direct3DCreate9(D3D_SDK_VERSION);
 
@@ -69,23 +70,24 @@ HRESULT DeviceMgr::Ready_GraphicDev(HWND hWnd, WINMODE eMode, const UINT& iSizeX
 
 void DeviceMgr::Render_Begin(D3DXCOLOR Color)
 {
-	m_pGraphicDev->Clear(0,
-		nullptr,
-		D3DCLEAR_STENCIL | D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER,
-		Color,
-		1.f,
-		0);
+	m_pGraphicDev->Clear(0, nullptr, 	D3DCLEAR_STENCIL | D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER,
+		Color, 1.f, 0);
 
 	m_pGraphicDev->BeginScene();
+
+	//m_pSprite->Begin(D3DXSPRITE_ALPHABLEND);
 }
 
-void DeviceMgr::Render_End(void)
+void DeviceMgr::Render_End()
 {
+	//m_pSprite->End();
+
 	m_pGraphicDev->EndScene();
+
 	m_pGraphicDev->Present(NULL, NULL, NULL, NULL);
 }
 
-void DeviceMgr::Free(void)
+void DeviceMgr::Free()
 {
 	SafeRelease(m_pGraphicDev);
 	SafeRelease(m_pSDK);

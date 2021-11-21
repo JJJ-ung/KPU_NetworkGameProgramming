@@ -1,14 +1,15 @@
 #include "framework.h"
 #include "MainApp.h"
 
-#include "Renderer.h"
 #include "DeviceMgr.h"
-#include "ShaderMgr.h"
 #include "GameMgr.h"
+#include "Renderer.h"
+#include "ShaderMgr.h"
 #include "ResourceMgr.h"
 
-#include "Player.h"
-#include "Camera.h"
+#include "Scene_Loading.h"
+
+#include "Texture.h"
 
 MainApp::MainApp()
 {
@@ -16,37 +17,55 @@ MainApp::MainApp()
 
 MainApp::~MainApp()
 {
+	Free();
 }
 
 HRESULT MainApp::Ready_MainApp()
 {
-	if (FAILED(Ready_Default(DeviceMgr::MODE_WIN, g_nWinCX, g_nWinCY)))
+	// 장치 초기화
+	if (FAILED(DeviceMgr::GetInstance()->Ready_GraphicDev(g_hWnd, OPTION::MODE_WIN, g_nWinCX, g_nWinCY, &m_pGraphic_Device)))
 		return E_FAIL;
 
-	if (FAILED(Ready_Resource()))
+	// 쉐이더 로드
+	m_pShaderMgr = ShaderMgr::GetInstance();
+	if (!m_pShaderMgr) return E_FAIL;
+
+	if (FAILED(m_pShaderMgr->Add_Shader(m_pGraphic_Device, L"Player", L"../Binary/Shaders/Player.hlsl")))
 		return E_FAIL;
 
-	//ShowCursor(false);
-
-	GameObject* pObj = nullptr;
-
-	pObj = Player::Create(m_pGraphic_Device);
-	if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::TYPE::PLAYER, pObj)))
+	if (FAILED(m_pShaderMgr->Add_Shader(m_pGraphic_Device, L"Blend", L"../Binary/Shaders/Blend.hlsl")))
 		return E_FAIL;
 
-	pObj = Camera::Create(m_pGraphic_Device);
-	if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::TYPE::CAMERA, pObj)))
+	if (FAILED(m_pShaderMgr->Add_Shader(m_pGraphic_Device, L"Default", L"../Binary/Shaders/Default.hlsl")))
+		return E_FAIL;
+
+	// 매니저 초기화
+	m_pGameMgr = GameMgr::GetInstance();
+	if (!m_pGameMgr) return E_FAIL;
+
+	m_pRenderer = Renderer::GetInstance();
+	if (FAILED(m_pRenderer->Ready_Renderer(m_pGraphic_Device)))
+		return E_FAIL;
+
+	m_pResourceMgr = ResourceMgr::GetInstance();
+	if (FAILED(m_pResourceMgr->Ready_ResourceMgr(m_pGraphic_Device, DeviceMgr::GetInstance()->Get_Sprite())))
+		return E_FAIL;
+
+	// 로딩용 이미지 로드
+	if (FAILED(m_pResourceMgr->Add_Texture(L"Loading", L"image", L"../Binary/Resources/Loading/Loading_%d.png", 17)))
+		return E_FAIL;
+
+	// 씬 세팅
+	Scene_Loading* pScene = Scene_Loading::Create(m_pGraphic_Device);
+	if (FAILED(m_pGameMgr->Set_CurrScene(pScene)))
 		return E_FAIL;
 
 	return NOERROR;
 }
 
-int MainApp::Update_MainApp(float TimeDelta)
+int MainApp::Update_MainApp(const float TimeDelta)
 {
-	m_pGameMgr->Update_GameObject(TimeDelta);
-	m_pGameMgr->LateUpdate_GameObject(TimeDelta);
-
-	return 0;
+	return m_pGameMgr->Update_GameMgr(TimeDelta);
 }
 
 HRESULT MainApp::Render_MainApp()
@@ -54,7 +73,7 @@ HRESULT MainApp::Render_MainApp()
 	if (!m_pGraphic_Device)
 		return E_FAIL;
 
-	m_pGraphic_Device->Clear(0, nullptr, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER | D3DCLEAR_STENCIL, D3DXCOLOR(0.f, 0.f, 1.f, 1.f), 1.f, 0);
+	m_pGraphic_Device->Clear(0, nullptr, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER | D3DCLEAR_STENCIL, D3DXCOLOR(0.f, 0.f, 0.f, 1.f), 1.f, 0);
 	m_pGraphic_Device->BeginScene();
 
 	if (FAILED(m_pRenderer->Render_Objects()))
@@ -62,50 +81,6 @@ HRESULT MainApp::Render_MainApp()
 
 	m_pGraphic_Device->EndScene();
 	m_pGraphic_Device->Present(nullptr, nullptr, 0, nullptr);
-
-	return NOERROR;
-}
-
-HRESULT MainApp::Ready_Default(DeviceMgr::WINMODE eMode, const UINT& iSizeX, const UINT& iSizeY)
-{
-	if (FAILED(DeviceMgr::GetInstance()->Ready_GraphicDev(g_hWnd, eMode, iSizeX, iSizeY, &m_pGraphic_Device)))
-		return E_FAIL;
-
-	if (FAILED(Ready_Shader()))
-		return E_FAIL;
-
-	m_pRenderer = Renderer::GetInstance();
-	if (FAILED(m_pRenderer->Ready_Renderer(m_pGraphic_Device)))
-		return E_FAIL;
-
-	m_pGameMgr = GameMgr::GetInstance();
-	if (!m_pGameMgr) return E_FAIL;
-
-	ResourceMgr::GetInstance()->Ready_ResourceMgr(m_pGraphic_Device);
-
-	return NOERROR;
-}
-
-HRESULT MainApp::Ready_Shader()
-{
-	if (FAILED(ShaderMgr::GetInstance()->Add_Shader(m_pGraphic_Device, L"Default", L"../Binary/Shaders/Default.hlsl")))
-		return E_FAIL;
-
-	if (FAILED(ShaderMgr::GetInstance()->Add_Shader(m_pGraphic_Device, L"Player", L"../Binary/Shaders/Player.hlsl")))
-		return E_FAIL;
-
-	if (FAILED(ShaderMgr::GetInstance()->Add_Shader(m_pGraphic_Device, L"Blend", L"../Binary/Shaders/Blend.hlsl")))
-		return E_FAIL;
-
-	return NOERROR;
-}
-
-HRESULT MainApp::Ready_Resource()
-{
-	ResourceMgr* pResourceMgr = ResourceMgr::GetInstance();
-
-	if (FAILED(pResourceMgr->Add_TexturesFromFile(OBJECT::PLAYER, L"../Binary/Data/Texture/Texture_Player.txt")))
-		return E_FAIL;
 
 	return NOERROR;
 }
@@ -125,5 +100,9 @@ MainApp* MainApp::Create()
 
 void MainApp::Free()
 {
+	Renderer::GetInstance()->DestroyInstance();
+	ShaderMgr::GetInstance()->DestroyInstance();
+	GameMgr::GetInstance()->DestroyInstance();
+	ResourceMgr::GetInstance()->DestroyInstance();
 	DeviceMgr::GetInstance()->DestroyInstance();
 }
