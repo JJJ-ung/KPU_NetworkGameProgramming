@@ -22,7 +22,8 @@ HRESULT GameMgr::Set_CurrScene(Scene* pScene)
 
 	SafeDelete(m_pCurrScene);
 
-	m_pCurrScene = pScene;
+	if(!m_pCurrScene)
+		m_pCurrScene = pScene;
 
 	return NOERROR;
 }
@@ -113,6 +114,15 @@ HRESULT GameMgr::LateUpdate_GameObject(float TimeDelta)
 				++iter;
 		}
 	}
+
+	return NOERROR;
+}
+
+HRESULT GameMgr::Clear_Scene()
+{
+	cout << "Clear" << endl;
+	for (int i = 0; i < OBJECT::TYPE::END; ++i)
+		Clear_ObjectList((OBJECT::TYPE)i);
 
 	return NOERROR;
 }

@@ -1,11 +1,11 @@
 matrix		g_matWorld, g_matView, g_matProj;
-
+float		g_fAlpha;
 texture		g_BaseTexture;
 sampler BaseSampler = sampler_state
 {
-	minfilter = none;
-	magfilter = none;
-	mipfilter = none;
+	minfilter = point;
+	magfilter = point;
+	mipfilter = point;
 
 	AddressU = wrap;
 	AddressV = wrap;
@@ -54,7 +54,7 @@ PS_OUT PS_MAIN(PS_IN In)
 {
 	PS_OUT		Out = (PS_OUT)0;
 
-	Out.vColor = tex2D(BaseSampler, In.vTexUV);
+	Out.vColor = tex2D(BaseSampler, In.vTexUV) * g_fAlpha;
 
 	return Out;
 }

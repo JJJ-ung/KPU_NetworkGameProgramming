@@ -2,6 +2,7 @@
 #include "Scene.h"
 
 class Loading;
+class AnimatedSprite;
 class Scene_Loading : public Scene
 {
 public:
@@ -14,7 +15,9 @@ public:
 	virtual HRESULT Render_Scene();
 
 private:
+	float m_fTime = 0.f;
 	Loading* m_pLoading = nullptr;
+	AnimatedSprite* m_pAnimation = nullptr;
 
 public:
 	static Scene_Loading* Create(LPDIRECT3DDEVICE9 pGraphic_Device);

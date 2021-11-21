@@ -36,7 +36,7 @@ INT TestMap::Update_GameObject(float time_delta)
 
 INT TestMap::LateUpdate_GameObject(float time_delta)
 {
-	m_pRenderer->Add_RenderList(Renderer::RENDER_NONALPHA, this);
+	m_pRenderer->Add_RenderList(Renderer::RENDER_PRIORITY, this);
 
 	return GameObject::LateUpdate_GameObject(time_delta);
 }
@@ -50,7 +50,7 @@ HRESULT TestMap::Render_GameObject()
 		return E_FAIL;
 
 	D3DXMATRIX		matScale;
-	D3DXMatrixScaling(&matScale, 3.f, 3.f, 3.f);
+	D3DXMatrixScaling(&matScale, 4.f, 4.f, 4.f);
 	pEffect->SetMatrix("g_matWorld", &matScale);
 
 	D3DXMATRIX		matTmp;

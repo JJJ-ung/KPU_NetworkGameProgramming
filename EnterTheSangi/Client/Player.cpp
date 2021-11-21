@@ -3,8 +3,6 @@
 
 #include "Animation.h"
 #include "ResourceMgr.h"
-
-
 #include "Texture.h"
 #include "DeviceMgr.h"
 
@@ -29,6 +27,12 @@ HRESULT Player::Ready_GameObject()
 	m_pShader = ShaderMgr::GetInstance()->Get_ShaderReference(L"Player");
 	if (!m_pShader) return E_FAIL;
 
+	m_pInputMgr = InputMgr::GetInstance();
+	if (!m_pInputMgr) return E_FAIL;
+
+	m_pGameMgr = GameMgr::GetInstance();
+	if (!m_pGameMgr) return E_FAIL;
+
 	if (FAILED(Ready_AnimationInfo()))
 		return E_FAIL;
 
@@ -42,6 +46,17 @@ HRESULT Player::Ready_GameObject()
 
 INT Player::Update_GameObject(float time_delta)
 {
+	if (m_pInputMgr->KeyPressing(KEY_W))
+		m_vPosition += D3DXVECTOR3(0.f, time_delta * -200.f, 0.f);
+	if (m_pInputMgr->KeyPressing(KEY_S))
+		m_vPosition += D3DXVECTOR3(0.f, time_delta * 200.f, 0.f);
+	if (m_pInputMgr->KeyPressing(KEY_A))
+		m_vPosition += D3DXVECTOR3(time_delta * -200.f, 0.f, 0.f);
+	if (m_pInputMgr->KeyPressing(KEY_D))
+		m_vPosition += D3DXVECTOR3(time_delta * 200.f, 0.f, 0.f);
+
+	m_pGameMgr->Get_PlayerPos() = m_vPosition;
+
 	m_pCurrAnimation->Update_Component(time_delta);
 
 	return GameObject::Update_GameObject(time_delta);
@@ -62,9 +77,11 @@ HRESULT Player::Render_GameObject()
 	if (FAILED(m_pCurrAnimation->Set_Texture(pEffect, "g_BaseTexture")))
 		return E_FAIL;
 
-	D3DXMATRIX		matScale;
+	D3DXMATRIX		matScale, matTrans, matWorld;
 	D3DXMatrixScaling(&matScale, 3.f, 3.f, 3.f);
-	pEffect->SetMatrix("g_matWorld", &matScale);
+	D3DXMatrixTranslation(&matTrans, m_vPosition.x, m_vPosition.y, m_vPosition.z);
+	matWorld = matScale * matTrans;
+	pEffect->SetMatrix("g_matWorld", &matWorld);
 
 	D3DXMATRIX		matTmp;
 	m_pDevice->GetTransform(D3DTS_TEXTURE0, &matTmp);

@@ -2,7 +2,7 @@
 
 namespace OBJECT
 {
-	enum TYPE { MAP, PLAYER, BULLET, CHEST, DOOR, CAMERA, END };
+	enum TYPE { MAP, PLAYER, BULLET, CHEST, DOOR, CAMERA, UI, END };
 }
 
 namespace SCENE

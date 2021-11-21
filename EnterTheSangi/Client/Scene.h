@@ -13,6 +13,9 @@ public:
 	virtual HRESULT Render_Scene();
 
 protected:
+	bool m_bChangeScene = false;
+
+protected:
 	GameMgr*							m_pGameMgr = nullptr;
 	LPDIRECT3DDEVICE9		m_pGraphic_Device = nullptr;
 

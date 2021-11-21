@@ -6,7 +6,7 @@ Dodge_Side 2 1 0
 Happy 2 1 0
 Idle_Back 2 1 0
 Idle_BackSide 2 1 0
-Idle_Front 2 1 0
+Idle_Front 5 1 0
 Idle_Side 2 1 0
 Jump 2 1 0
 Run_Back 2 1 0

@@ -11,6 +11,9 @@ private:
 	~GameMgr();
 
 public:
+	D3DXVECTOR3& Get_PlayerPos() { return m_vPlayerPos; }
+
+public:
 	HRESULT Set_CurrScene(Scene* pScene);
 	HRESULT Add_GameObject(OBJECT::TYPE eType, GameObject* pObj);
 
@@ -27,6 +30,7 @@ public:
 	HRESULT LateUpdate_GameObject(float TimeDelta);
 
 public:
+	HRESULT Clear_Scene();
 	HRESULT Clear_ObjectList(OBJECT::TYPE eType);
 
 private:
@@ -36,6 +40,9 @@ private:
 	typedef list<GameObject*> OBJLST;
 	OBJLST m_lstObj[OBJECT::END];
 	OBJLST m_lstPrototype[OBJECT::END];
+
+private:
+	D3DXVECTOR3 m_vPlayerPos{ 0.f, 0.f, 0.f };
 
 private:
 	void Free();

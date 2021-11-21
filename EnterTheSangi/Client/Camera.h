@@ -14,9 +14,9 @@ public:
 
 private:
 	D3DXMATRIX m_matView;
-	D3DXVECTOR3 vEye = D3DXVECTOR3(0.f, 0.f, -1.f);
-	D3DXVECTOR3 vAt = D3DXVECTOR3(0.f, 0.f, 0.f);
-	D3DXVECTOR3 vUP = D3DXVECTOR3(0.f, 1.f, 0.f);
+	D3DXVECTOR3 m_vEye = D3DXVECTOR3(0.f, 0.f, -1.f);
+	D3DXVECTOR3 m_vAt = D3DXVECTOR3(0.f, 0.f, 0.f);
+	D3DXVECTOR3 m_vUP = D3DXVECTOR3(0.f, 1.f, 0.f);
 
 public:
 	static Camera* Create(LPDIRECT3DDEVICE9 pGraphic_Device);

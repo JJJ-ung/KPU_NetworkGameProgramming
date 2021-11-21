@@ -1,7 +1,6 @@
 #pragma once
 #include "GameObject.h"
 
-class Texture;
 class Animation;
 class Player : public GameObject
 {
@@ -20,6 +19,9 @@ public:
 
 private:
 	HRESULT Ready_AnimationInfo();
+
+private:
+	D3DXVECTOR3 m_vPosition{0.f, 0.f, 0.f};
 
 private:
 	Animation* m_pCurrAnimation = nullptr;

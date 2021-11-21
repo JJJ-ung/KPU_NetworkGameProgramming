@@ -89,6 +89,18 @@
     <Filter Include="01 GameObject\99 TestMap">
       <UniqueIdentifier>{b97b8ec0-052a-4efa-97fc-b25b1d4c7dff}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01 GameObject\03 UI">
+      <UniqueIdentifier>{547d8434-8ce1-4170-9e82-980db35c54e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03 Scene\02 Test">
+      <UniqueIdentifier>{b21067e9-3732-4c0b-96e5-296ad1361f8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01 GameObject\03 UI\01 AnimatedSprite">
+      <UniqueIdentifier>{248911ff-2cc6-464a-b524-fa057f156229}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01 GameObject\03 UI\00 StaticSprite">
+      <UniqueIdentifier>{7f17eb75-e1aa-423f-8294-ed2c2c5daa74}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -165,6 +177,18 @@
     </ClInclude>
     <ClInclude Include="TestMap.h">
       <Filter>01 GameObject\99 TestMap</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimatedSprite.h">
+      <Filter>01 GameObject\03 UI\01 AnimatedSprite</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene_Test.h">
+      <Filter>03 Scene\02 Test</Filter>
+    </ClInclude>
+    <ClInclude Include="StaticSprite.h">
+      <Filter>01 GameObject\03 UI\00 StaticSprite</Filter>
+    </ClInclude>
+    <ClInclude Include="InputMgr.h">
+      <Filter>98 Managers\02 InputMgr</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -246,6 +270,18 @@
     </ClCompile>
     <ClCompile Include="TestMap.cpp">
       <Filter>01 GameObject\99 TestMap</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimatedSprite.cpp">
+      <Filter>01 GameObject\03 UI\01 AnimatedSprite</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene_Test.cpp">
+      <Filter>03 Scene\02 Test</Filter>
+    </ClCompile>
+    <ClCompile Include="StaticSprite.cpp">
+      <Filter>01 GameObject\03 UI\00 StaticSprite</Filter>
+    </ClCompile>
+    <ClCompile Include="InputMgr.cpp">
+      <Filter>98 Managers\02 InputMgr</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

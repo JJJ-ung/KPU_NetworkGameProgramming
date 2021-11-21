@@ -28,6 +28,8 @@ HRESULT Animation::Ready_Component(Texture* pTexture, float fSpeed, bool bSetCen
 		D3DXIMAGE_INFO tInfo = pTexture->Get_TextureInfo();
 		m_vCenter = D3DXVECTOR3(tInfo.Width * 0.5f, tInfo.Height * 0.5f, 0.f);
 	}
+	else
+		m_vCenter = D3DXVECTOR3(0.f, 0.f, 0.f);
 
 	return Component::Ready_Component();
 }

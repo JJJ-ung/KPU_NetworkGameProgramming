@@ -6,6 +6,9 @@ const unsigned short	g_nWinCY = 720;
 extern HWND g_hWnd;
 extern HINSTANCE g_hInst;
 
+typedef unsigned char		_ubyte;
+typedef signed char			_byte;
+
 #define  NOEVENT 0
 #define  OBJDEAD 1 
 

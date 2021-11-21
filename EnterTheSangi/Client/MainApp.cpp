@@ -52,7 +52,7 @@ HRESULT MainApp::Ready_MainApp()
 		return E_FAIL;
 
 	// 로딩용 이미지 로드
-	if (FAILED(m_pResourceMgr->Add_Texture(L"Loading", L"image", L"../Binary/Resources/Loading/Loading_%d.png", 17)))
+	if (FAILED(m_pResourceMgr->Add_Texture(L"UI", L"Loading", L"../Binary/Resources/Loading/Loading_%d.png", 17)))
 		return E_FAIL;
 
 	// 씬 세팅
@@ -77,6 +77,9 @@ HRESULT MainApp::Render_MainApp()
 	m_pGraphic_Device->BeginScene();
 
 	if (FAILED(m_pRenderer->Render_Objects()))
+		return E_FAIL;
+
+	if (FAILED(m_pGameMgr->Render_GameMgr()))
 		return E_FAIL;
 
 	m_pGraphic_Device->EndScene();
