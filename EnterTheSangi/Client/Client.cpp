@@ -89,6 +89,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
     SafeDelete(pMainApp);
     pTimerMgr->DestroyInstance();
+    pInputMgr->DestroyInstance();
 
     _CrtDumpMemoryLeaks();
 
