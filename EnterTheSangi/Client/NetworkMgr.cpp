@@ -70,18 +70,22 @@ HRESULT NetworkMgr::Recv_ServerInfo(void* tRecvInfo)
 	}
 
 	recv(m_socket, buf, BUF_SIZE, 0);
+
 	switch(buf[0])
 	{
 	case SC_PACKET_LOGIN_OK: // 서버에서 받아온 로그인 ok신호!!!
-		sc_packet_login_ok rp;
-		memcpy(&rp, &buf, sizeof(sc_packet_login_ok));
+	{
+		sc_packet_login_ok login;
+		memcpy(&login, &buf, sizeof(sc_packet_login_ok));
 		break;
+	}
 
 	case SC_PACKET_CHANGE_COLOR: // 서버에서 받아온 색깔!!!!
-		sc_packet_change_color rp;
-		memcpy(&rp, &buf, sizeof(sc_packet_change_color));
+	{
+		sc_packet_change_color color;
+		memcpy(&color, &buf, sizeof(sc_packet_change_color));
 		break;
-
+	}
 	default:
 		break;
 	}
