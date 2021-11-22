@@ -37,7 +37,10 @@ void CMainServer::Init(const int server_port)
         cl.SetState(ST_FREE);
     }
 
-    SCENE::ID m_game_state = SCENE::ID::CUSTOMIZE;
+    m_game_state = SCENE::ID::CUSTOMIZE;
+    for(int i=0;i<MAX_CLIENTS;++i)
+        m_client_event[i] = CreateEvent(NULL, true, true, NULL);
+    m_server_event= CreateEvent(NULL, true, false, NULL);
 };
 
 void CMainServer::Activate()
@@ -58,8 +61,8 @@ void CMainServer::Activate()
 
     //accept만을 위한 스레드. 주스레드에서 accpet 상관 없이 서버 연산을 돌리기 위함.
     for (int i = 0; i < 1; ++i)
-        m_accpet_threads.emplace_back(&CMainServer::AccpetThread, this);
-    for (auto& th : m_accpet_threads)
+        m_server_threads.emplace_back(&CMainServer::ServerThread, this);
+    for (auto& th : m_server_threads)
         th.join();
 
     //accept()
@@ -78,8 +81,16 @@ void CMainServer::ClientThread(char id)
 			m_state_lock.unlock();
 
 			ret = DoRecv(id);
-			if (ret == SOCKET_ERROR) continue;
-			else if (ret == 0) continue;
+            if (ret == SOCKET_ERROR)
+            {
+                m_state_lock.lock();
+                continue;
+            }
+            else if (ret == 0)
+            {
+                m_state_lock.lock();
+                continue;
+            }
 			ProcessPacket(id);
 
 			m_state_lock.lock();
@@ -96,13 +107,23 @@ void CMainServer::ClientThread(char id)
             //타이머 필요
             ret = DoRecv(id);
             if (ret == SOCKET_ERROR)
+            {
+                m_state_lock.lock();
                 continue;
+            }
             else if (ret == 0)
+            {
+                m_state_lock.lock();
                 continue;
+            }
             ProcessPacket(id);
-            //timeout 필요
 
+            SetEvent(m_client_event[id]);
+            WaitForSingleObject(m_server_event, INFINITE);//timeout 넣어야 하지 않을까 싶긴 한데 server_timer 동기화때문에 일단 둠
+            //m_server_event 다시 죽여야하는데 어디서?
+            // 전체 데이터 송신
             DoSend();
+
             m_state_lock.lock();
         }
         m_state_lock.unlock();
@@ -114,11 +135,42 @@ void CMainServer::ClientThread(char id)
     }
 };
 
-void CMainServer::AccpetThread()
+void CMainServer::ServerThread()
 {
+    int ret;
 	for (;;)
-	{
-        DoAccept();
+	{  //In Robby
+		m_state_lock.lock();
+		while (m_game_state == SCENE::ID::CUSTOMIZE)
+		{
+			m_state_lock.unlock();
+			DoAccept();
+			m_state_lock.lock();
+		}
+		m_state_lock.unlock();
+        
+        m_server_timer = chrono::high_resolution_clock::now() + 1s / 60 * 2;
+        //In Game
+        m_state_lock.lock();
+        while (m_game_state == SCENE::ID::STAGE)
+        {
+            m_state_lock.unlock();
+            WaitForMultipleObjects(MAX_CLIENTS, m_client_event, true, 1000 / 60 * 2);
+            for (int i = 0; i < MAX_CLIENTS; ++i)
+                ResetEvent(m_client_event[i]);
+            ServerProcess();
+            auto time_t = chrono::high_resolution_clock::now();
+            if (time_t > m_server_timer)
+                cout << "server process time over" << endl;
+            else
+                Sleep(chrono::duration_cast<chrono::milliseconds>(m_server_timer - time_t).count());
+            SetEvent(m_server_event);
+
+            m_server_timer += 1s / 60 * 2;
+
+            m_state_lock.lock();
+        }
+        m_state_lock.unlock();
 	}
 };
 
@@ -319,6 +371,12 @@ int CMainServer::DoAccept()
     }
 };
 
+void CMainServer::ServerProcess()
+{
+
+    //충돌체크 등 서버 로직 진행
+
+};
 
 char CMainServer::GetNewID()
 {
