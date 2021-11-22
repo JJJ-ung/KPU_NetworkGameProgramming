@@ -32,6 +32,11 @@ void CMainServer::Init(const int server_port)
     for (int i = 0; i < MAX_CLIENTS; ++i)
         m_clients[i].SetID(i);
 
+    for (auto& cl : m_clients)
+    {
+        cl.SetState(ST_FREE);
+    }
+
     SCENE::ID m_game_state = SCENE::ID::CUSTOMIZE;
 };
 
