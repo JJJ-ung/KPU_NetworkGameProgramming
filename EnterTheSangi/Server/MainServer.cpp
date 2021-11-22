@@ -180,12 +180,13 @@ void CMainServer::ProcessPacket(char client_id)
 
     if (packet_type == CS_PACKET_LOGIN)
     {
-        cout << "[" << atoi(&client_id) << "] : login packet recv \n";
+        cout << "Login Packet\n";
         cs_packet_login rp;
         memcpy(&rp, m_clients[client_id].GetBuf(), sizeof(cs_packet_login));
 
         m_clients[client_id].SetName(rp.name);
 
+        cout << m_clients[client_id].GetName()<< endl;
         sc_packet_login_ok sp;
         sp.size = sizeof(sc_packet_login_ok);
         sp.type = SC_PACKET_LOGIN_OK;
@@ -227,7 +228,7 @@ void CMainServer::ProcessPacket(char client_id)
 
     else if (packet_type == CS_PACKET_CHANGE_COLOR)
     {
-        cout << "[" << client_id + '0' << "] : CS_PACKET_CHANGE_COLOR recv \n";
+        cout << "CS_PACKET_CHANGE_COLOR Packet comein\n";
 
         cs_packet_change_color rp;
         memcpy(&rp, m_clients[client_id].GetBuf(), sizeof(cs_packet_change_color));
@@ -257,7 +258,7 @@ void CMainServer::ProcessPacket(char client_id)
 
     else if (packet_type == CS_PACKET_READY)
     {
-        cout << "[" << client_id + '0' << "] : CS_PACKET_READY recv \n";
+        cout << "CS_PACKET_READY Packet comein\n";
       
         cs_packet_ready rp;
         memcpy(&rp, m_clients[client_id].GetBuf(), sizeof(cs_packet_ready));
@@ -329,21 +330,10 @@ void CMainServer::DoSend()
 
 int CMainServer::DoRecv(char id)
 {
-    int received;
-    char* ptr = m_clients[id].GetBuf();
-    int left = BUF_SIZE;
-    while (left>0) 
-    {
-        received=recv(m_clients[id].GetSocket(), ptr, left, 0);
-        if (received == SOCKET_ERROR)
-            break;
-        else
-            if (received == 0)
-                break;
-        left -= received;
-        ptr += received;
-    }
-    return (BUF_SIZE - left); 
+    recv(m_clients[id].GetSocket(), m_clients[id].GetBuf(), BUF_SIZE, 0);
+    ProcessPacket(id);
+
+    return 0;
 };
 
 int CMainServer::DoAccept()
