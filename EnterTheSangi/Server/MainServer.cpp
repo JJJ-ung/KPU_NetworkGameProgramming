@@ -200,7 +200,7 @@ void CMainServer::ProcessPacket(char client_id)
 
     else if (packet_type == CS_PACKET_READY)
     {
-        cout << "[" << id + '0' << "] : CS_PACKET_READY recv \n";
+        cout << "[" << client_id + '0' << "] : CS_PACKET_READY recv \n";
       
         cs_packet_ready rp;
         memcpy(&rp, m_clients[client_id].GetBuf(), sizeof(cs_packet_ready));

@@ -95,6 +95,14 @@ HRESULT NetworkMgr::Recv_ServerInfo(void* tRecvInfo)
 		memcpy(&color, &buf, sizeof(sc_packet_change_color));
 		break;
 	}
+
+	case SC_PACKET_LOGIN_OTHER_CLIENT:  // 나 말고 다른 플레이어 정보 받아옴!!!
+	{
+		sc_packet_login_other_client other_client;
+		memcpy(&other_client, &buf, sizeof(sc_packet_login_other_client));
+		break;
+	}
+
 	default:
 		break;
 	}
