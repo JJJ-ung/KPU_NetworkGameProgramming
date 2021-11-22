@@ -97,6 +97,54 @@ void CMainServer::AccpetThread()
 	}
 };
 
+void CMainServer::ProcessPacket(char id)
+{
+    if (m_clients[id].GetBuf()[0] == CS_PACKET_LOGIN)
+    {
+        cs_packet_login rp;
+        memcpy(&rp, m_clients[id].GetBuf(), sizeof(cs_packet_login));
+
+        m_clients[id].SetName(rp.name);
+    }
+
+    else if (m_clients[id].GetBuf()[0] == CS_PACKET_CHANGE_COLOR)
+    {
+        cs_packet_change_color rp;
+        memcpy(&rp, m_clients[id].GetBuf(), sizeof(cs_packet_change_color));
+
+       // 여긴 서버에다가 저장할 무언가가 있을거임!
+
+        sc_packet_change_color sp;
+        sp.type = SC_PACKET_CHANGE_COLOR;
+        sp.id = id;
+        sp.body_color = rp.body_color;
+        sp.cloth_color = rp.cloth_color;
+       
+        for (auto& cl : m_clients) {
+            if (id == cl.GetID()) continue;
+            send(cl.GetSocket(), (char*)&sp, sizeof(sc_packet_change_color), 0);
+        }
+    }
+
+    else if (m_clients[id].GetBuf()[0] == CS_PACKET_READY)
+    {
+        cs_packet_ready rp;
+        memcpy(&rp, m_clients[id].GetBuf(), sizeof(cs_packet_ready));
+
+        m_clients[id].SetState(ST_READY);
+
+        sc_packet_ready sp;
+        sp.type = SC_PACKET_READY;
+        sp.size = sizeof(sc_packet_ready);
+        sp.id = id;
+        sp.is_ready = true;
+
+        for (auto& cl : m_clients) {
+            send(cl.GetSocket(), (char*)&sp, sizeof(sc_packet_ready), 0);
+        }
+    }
+}
+
 void CMainServer::DoSend()
 {
 
@@ -104,7 +152,9 @@ void CMainServer::DoSend()
 
 void CMainServer::DoRecv(char id)
 {
-    recv(m_clients[id].GetSocket(),)
+   
+    recv(m_clients[id].GetSocket(), m_clients[id].GetBuf(), BUF_SIZE, 0);
+    ProcessPacket(id);
 };
 
 int CMainServer::DoAccept()
@@ -120,7 +170,7 @@ int CMainServer::DoAccept()
     if (new_id != -1)
     {   
         m_clients[new_id].SetSocket(client_socket);
-        m_client_threads.emplace_back(&CMainServer::ClientThread, this);
+        m_client_threads.emplace_back(&CMainServer::ClientThread, this, new_id);
         //플레이어 초기 정보 세팅
         //login_ok패킷 전송
     }
