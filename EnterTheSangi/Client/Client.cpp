@@ -16,6 +16,8 @@ HINSTANCE hInst;                                // 현재 인스턴스입니다.
 WCHAR szTitle[MAX_LOADSTRING];                  // 제목 표시줄 텍스트입니다.
 WCHAR szWindowClass[MAX_LOADSTRING];            // 기본 창 클래스 이름입니다.
 
+InputMgr* g_pInputMgr = nullptr;
+
 // 이 코드 모듈에 포함된 함수의 선언을 전달합니다:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
@@ -58,8 +60,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     TimerMgr* pTimerMgr = TimerMgr::GetInstance();
     if (!pTimerMgr) return FALSE;
 
-    InputMgr* pInputMgr = InputMgr::GetInstance();
-    if (FAILED(pInputMgr->Init_InputDev()))
+    g_pInputMgr = InputMgr::GetInstance();
+    if (FAILED(g_pInputMgr->Init_InputDev()))
         return FALSE;
 
 	// 기본 메시지 루프입니다.
@@ -74,7 +76,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		{
             if(pTimerMgr->Frame_Limit(TimerMgr::CLIENT, 60.f))
             {
-				pInputMgr->Update_Key();
+                g_pInputMgr->Update_Key();
                 pMainApp->Update_MainApp(pTimerMgr->Update_Timer(TimerMgr::CLINET_DEFAULT));
 	            pMainApp->Render_MainApp();
                 pTimerMgr->Print_FrameRate();
@@ -89,7 +91,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
     SafeDelete(pMainApp);
     pTimerMgr->DestroyInstance();
-    pInputMgr->DestroyInstance();
+    g_pInputMgr->DestroyInstance();
 
     _CrtDumpMemoryLeaks();
 
@@ -178,6 +180,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		case VK_ESCAPE:
 			DestroyWindow(hWnd);
 			break;
+		default:
+            cout << wParam << endl;
+            g_pInputMgr->Get_Message() = wParam;
+            break;
 		}
 		break;
     case WM_DESTROY:
