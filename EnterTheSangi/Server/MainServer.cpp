@@ -92,7 +92,6 @@ void CMainServer::AccpetThread()
 {
 	for (;;)
 	{
-
         DoAccept();
 	}
 };
@@ -157,7 +156,16 @@ void CMainServer::ProcessPacket(char id)
 
 void CMainServer::DoSend()
 {
+    sc_packet_game_state sp;
+    
+    for (auto& cl : m_clients)
+    {
+        ;
+    }
 
+    // 여기서 플레이어들 정보 취합후 일괄 전송
+    for (auto& cl : m_clients)
+        send(cl.GetSocket(), (char*)&sp, sizeof(sc_packet_game_state), 0);
 };
 
 void CMainServer::DoRecv(char id)
