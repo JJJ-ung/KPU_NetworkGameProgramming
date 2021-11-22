@@ -31,6 +31,16 @@ CLIENT_STATE CClient::GetState()
 	return m_state;
 };
 
+SOCKET CClient::GetSocket()
+{
+	return m_socket;
+};
+
+unsigned char* CClient::GetBuf()
+{
+	return m_buff;
+}
+
 
 void CClient::StateLock()
 {

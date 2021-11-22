@@ -7,7 +7,7 @@ using namespace std;
 constexpr const char* SERVER_IP = "255.255.255.255";
 const int SERVER_PORT = 5000;
 const int MAX_CLIENTS = 3;
-
+constexpr unsigned int MAX_BUF_SIZE = 256;
 #define  MAX_NAME_SIZE 16
 #define	 BUF_SIZE 512
 

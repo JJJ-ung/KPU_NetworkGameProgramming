@@ -32,7 +32,7 @@ void CMainServer::Init(const int server_port)
     for (int i = 0; i < MAX_CLIENTS; ++i)
         m_clients[i].SetID(i);
 
-    m_can_connect = true;
+    SCENE::ID m_game_state = SCENE::ID::CUSTOMIZE;
 };
 
 void CMainServer::Activate()
@@ -46,10 +46,10 @@ void CMainServer::Activate()
     };
 
     //클라이언트별로 하나씩 할당되는 스레드.
-    for (int i = 0; i < MAX_CLIENTS; ++i)
-        m_client_threads.emplace_back(&CMainServer::ClientThread,this);
-    for (auto& th : m_client_threads)
-        th.join();
+    //for (int i = 0; i < MAX_CLIENTS; ++i)
+    //    
+    //for (auto& th : m_client_threads)
+    //    th.join();
 
     //accept만을 위한 스레드. 주스레드에서 accpet 상관 없이 서버 연산을 돌리기 위함.
     for (int i = 0; i < 1; ++i)
@@ -61,15 +61,14 @@ void CMainServer::Activate()
 
 };
 
-void CMainServer::ClientThread() 
+void CMainServer::ClientThread(char id) 
 {
-    int my_id = g_client_count;
-    g_client_count++;
     for (;;)
     {
         //In Robby
-        while (ST_READY != m_clients[my_id].GetState()) {
-            // 로비상태일때
+        while (m_game_state==SCENE::ID::CUSTOMIZE)
+        {
+            DoRecv(id);
         }
 
 
@@ -78,7 +77,7 @@ void CMainServer::ClientThread()
 
         while (true)
         {
-            DoRecv();
+            DoRecv(id);
             //timeout 필요
         }
         //수신 성공시 suspend thread
@@ -95,7 +94,6 @@ void CMainServer::AccpetThread()
 	{
 
         DoAccept();
-		
 	}
 };
 
@@ -104,9 +102,9 @@ void CMainServer::DoSend()
 
 };
 
-void CMainServer::DoRecv()
+void CMainServer::DoRecv(char id)
 {
-
+    recv(m_clients[id].GetSocket(),)
 };
 
 int CMainServer::DoAccept()
@@ -117,11 +115,12 @@ int CMainServer::DoAccept()
     int addr_len = sizeof(client_addr);
     client_socket = accept(m_listen_socket, (SOCKADDR*)&client_addr, &addr_len);
     if (client_socket == INVALID_SOCKET) return -1;
-
+ 
     char new_id = GetNewID();
     if (new_id != -1)
     {   
         m_clients[new_id].SetSocket(client_socket);
+        m_client_threads.emplace_back(&CMainServer::ClientThread, this);
         //플레이어 초기 정보 세팅
         //login_ok패킷 전송
     }
