@@ -23,7 +23,7 @@ HRESULT NetworkMgr::Ready_WinSock()
 	m_addr.sin_port = htons(SERVER_PORT);
 
 	retval = connect(m_socket, (SOCKADDR*)&m_addr, sizeof(m_addr));
-	if (retval == SOCKET_ERROR)
+	if (connect(m_socket, (SOCKADDR*)&m_addr, sizeof(m_addr)) == SOCKET_ERROR)
 		return E_FAIL;
 
 	cout << "Network Mgr Initailize Succeed!" << endl;
@@ -31,13 +31,62 @@ HRESULT NetworkMgr::Ready_WinSock()
 	return NOERROR;
 }
 
-void NetworkMgr::Free()
+HRESULT NetworkMgr::Setup_Networking()
 {
-	closesocket(m_socket);
-	WSACleanup();
+	// 기존 activate
+
+	return NOERROR;
 }
 
-void NetworkMgr::err_display(const char* msg)
+HRESULT NetworkMgr::Send_ClientInfo(GameStatePlayer& tPlayerPacket)
+{
+	if (FAILED(send(m_socket, (char*)&tPlayerPacket, sizeof(GameStatePlayer), 0)))
+	{
+		Render_Error("Failed To Send Client Info");
+		return E_FAIL;
+	}
+	return NOERROR;
+}
+
+HRESULT NetworkMgr::Send_CustomizeInfo(cs_packet_change_color& tColorPacket)
+{
+	tColorPacket.type = '1';
+	if (FAILED(send(m_socket, (char*)&tColorPacket, sizeof(cs_packet_change_color), 0)))
+	{
+		Render_Error("Failed To Send Customizing Info");
+		return E_FAIL;
+	}
+	return NOERROR;
+}
+
+HRESULT NetworkMgr::Recv_ServerInfo(void* tRecvInfo)
+{
+	char buf[BUF_SIZE];
+
+	if(FAILED(recv(m_socket, buf, BUF_SIZE, 0)))
+	{
+		Render_Error("Failed To Receive Info");
+		return E_FAIL;
+	}
+
+	switch(buf[1])
+	{
+	case '0':
+		// Player Info
+		memcpy(&tRecvInfo, &buf, sizeof(GameStatePlayer));
+		break;
+	case '1':
+		// Customizing Info
+		memcpy(&tRecvInfo, &buf, sizeof(cs_packet_change_color));
+		break;
+	default:
+		break;
+	}
+
+	return NOERROR;
+}
+
+void NetworkMgr::Render_Error(const char* msg)
 {
 	LPVOID lpMsgBuf;
 
@@ -48,73 +97,6 @@ void NetworkMgr::err_display(const char* msg)
 
 	cout << "[" << msg << "] : " << (char*)lpMsgBuf << endl;
 	LocalFree(lpMsgBuf);
-}
-
-void NetworkMgr::err_quit(const char* msg)
-{
-	LPVOID lpMsgBuf;
-
-	FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
-		NULL, WSAGetLastError(),
-		MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-		(LPTSTR)&lpMsgBuf, 0, NULL);
-
-	MessageBox(NULL, (LPCTSTR)lpMsgBuf, (LPCWSTR)msg, MB_ICONERROR);
-	LocalFree(lpMsgBuf);
-
-	exit(1);
-}
-
-void NetworkMgr::Activate()
-{
-
-}
-
-void NetworkMgr::do_send()
-{
-	// 앞에서 처리할거 다 처리한 후
-	retval = send(m_socket, (char*)&m_playerPacket, sizeof(GameStatePlayer), 0);
-
-	if (retval == SOCKET_ERROR)
-		err_display("send()");
-}
-
-void NetworkMgr::do_send_customizing() //커스터마이징 정보 수신
-{
-	m_player_color_packet.type = '1';
-	retval = send(m_socket, (char*)&m_player_color_packet, sizeof(cs_packet_change_color), 0);
-	
-	if (retval == SOCKET_ERROR)
-		err_display("send()");
-}
-
-void NetworkMgr::do_recv()
-{
-	char buf[BUF_SIZE];
-
-	retval = recv(m_socket, buf, BUF_SIZE, 0);
-
-	if (retval == SOCKET_ERROR) {
-		if (WSAGetLastError() == WSAEWOULDBLOCK)
-			return;
-		err_display("recv()");
-		return;
-	}
-
-	else if (retval == 0) {
-		std::cout << "recv == 0" << std::endl;
-		return;
-	}
-
-	if (buf[1] == '0'){ // 다른 캐릭터 이동
-		GameStatePlayer rp;
-		memcpy(&rp, &buf, sizeof(GameStatePlayer));
-	}
-	
-	else if (buf[1] == '1') { // 커스터마이징 정보 수신
-		cs_packet_change_color rp;
-		memcpy(&rp, &buf, sizeof(cs_packet_change_color));
-	}
 }
 
 int NetworkMgr::recvn(SOCKET s, char* buf, int len, int flags)
@@ -138,3 +120,8 @@ int NetworkMgr::recvn(SOCKET s, char* buf, int len, int flags)
 	return (len - left);
 }
 
+void NetworkMgr::Free()
+{
+	closesocket(m_socket);
+	WSACleanup();
+}
