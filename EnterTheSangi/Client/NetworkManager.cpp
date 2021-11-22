@@ -55,7 +55,6 @@ void NetworkMgr::Activate()
 void NetworkMgr::do_send()
 {
 	// 앞에서 처리할거 다 처리한 후
-
 	retval = send(m_socket, (char*)&m_playerPacket, sizeof(GameStatePlayer), 0);
 
 	if (retval == SOCKET_ERROR)
@@ -64,7 +63,8 @@ void NetworkMgr::do_send()
 
 void NetworkMgr::do_send_customizing() //커스터마이징 정보 수신
 {
-	retval = send(m_socket, (char*)&m_player_color_pakcet, sizeof(cs_change_color), 0);
+	m_player_color_packet.type = '1';
+	retval = send(m_socket, (char*)&m_player_color_packet, sizeof(cs_change_color), 0);
 	
 	if (retval == SOCKET_ERROR)
 		err_display("send()");
