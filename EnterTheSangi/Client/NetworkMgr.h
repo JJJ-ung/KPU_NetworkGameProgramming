@@ -10,19 +10,18 @@ private:
 
 public:
 	HRESULT Ready_WinSock();
+	HRESULT Setup_Networking();
 
 public:
-	void			err_quit(const char *msg);
-	void			err_display(const char* msg);
-	void			Activate();
+	HRESULT Send_ClientInfo(GameStatePlayer& tPlayerPacket);
+	HRESULT Send_CustomizeInfo(cs_packet_change_color& tColorPacket);
 
-	// 수신, 전송
-	void			do_send();
-	void			do_send_customizing();
-	void			do_recv();
-
-	// 수신
+public:
+	HRESULT Recv_ServerInfo(void* tRecvInfo);
 	int			recvn(SOCKET s, char* buf, int len, int flags);
+
+private:
+	void Render_Error(const char* msg);
 
 private:
 	SOCKET						m_socket;
