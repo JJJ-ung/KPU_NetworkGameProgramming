@@ -10,33 +10,33 @@ class CPlayer:CGameObject
 public:
 	CPlayer();
 	~CPlayer();
-		
-	D3DXVECTOR3        GetBodyColor();
-	D3DXVECTOR3        GetClothColor();
-	float              GetHealth();
+		 
+	D3DXVECTOR3         GetBodyColor();
+	D3DXVECTOR3         GetClothColor();
+	float               GetHealth();
 
-	float              vGetHeightHf();   //  return half height
-	float              vGetWidthHf();    //  return half width
-	OBJECT::TYPE       vGetObjectType(); // return object type
+	float               vGetHeightHf();   //  return half height
+	float               vGetWidthHf();    //  return half width
+	OBJECT::TYPE        vGetObjectType(); // return object type
 
-	void               SetBodyColor(D3DXVECTOR3 body_color);
-	void               SetClothColor(D3DXVECTOR3 cloth_color);
-	void               SetHealth(float health);         // set player.health to health
-	void               ChangeHealth(float delta_health); // add delta_health to player.health
-	void               ChangeInvincibleMode();
+	void                SetBodyColor(D3DXVECTOR3 body_color);
+	void                SetClothColor(D3DXVECTOR3 cloth_color);
+	void                SetHealth(float health);         // set player.health to health
+	void                ChangeHealth(float delta_health); // add delta_health to player.health
+	void                ChangeInvincibleMode();
 
 private:
-	STATE              m_e_state;
-	DIR                m_e_direction;
-	char               m_health;
-	bool               m_is_invincible;
-	WEAPON             m_e_weapon;
-	float              m_cool_time;
+	STATE::TYPE         m_state;
+	DIR::DIR            m_direction;
+	char                m_health;
+	bool                m_is_invincible;
+	WEAPON::TYPE        m_weapon;
+	float               m_cool_time;
 
-	D3DXVECTOR3        m_body_color;
-	D3DXVECTOR3        m_cloth_color;
+	D3DXVECTOR3         m_body_color;
+	D3DXVECTOR3         m_cloth_color;
 
-	static OBJECT::TYPE  m_object_type;
-	static float m_height_hf;
-	static float m_width_hf;
+	static OBJECT::TYPE m_object_type;
+	static float        m_height_hf;
+	static float        m_width_hf;
 };

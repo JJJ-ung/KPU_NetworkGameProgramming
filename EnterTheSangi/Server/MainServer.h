@@ -6,6 +6,7 @@
 #include <array>
 #include <thread>
 #include <chrono>
+#include <mutex>
 #include "Client.h"
 #include "Protocol.h"
 #include "Enum.h"
@@ -24,13 +25,13 @@ public:
 	void ClientThread(char id);
 	void AccpetThread();
 
-	void ProcessPacket(char id);
 	void DoSend();
 	int  DoRecv(char id);
 	int  DoAccept();
-
+	void ProcessPacket(char id);
 
 	char GetNewID();
+	bool IsAllClientsReady();
 
 private:
 	SOCKET                   m_listen_socket;
@@ -39,4 +40,5 @@ private:
 	std::vector<std::thread> m_accpet_threads;
 
 	SCENE::ID                m_game_state;
+	std::mutex               m_state_lock;
 };
