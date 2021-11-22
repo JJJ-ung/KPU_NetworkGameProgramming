@@ -47,9 +47,9 @@ HRESULT NetworkMgr::Send_LoginInfo(cs_packet_login& tLoginPacket)
 	return NOERROR;
 }
 
-HRESULT NetworkMgr::Send_ClientInfo(GameStatePlayer& tPlayerPacket)
+HRESULT NetworkMgr::Send_ClientInfo(sc_packet_game_state& tPlayerPacket)
 {
-	if (FAILED(send(m_socket, (char*)&tPlayerPacket, sizeof(GameStatePlayer), 0)))
+	if (FAILED(send(m_socket, (char*)&tPlayerPacket, sizeof(sc_packet_game_state), 0)))
 	{
 		Render_Error("Failed To Send Client Info");
 		return E_FAIL;
