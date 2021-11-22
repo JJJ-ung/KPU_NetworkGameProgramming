@@ -30,6 +30,9 @@ public:
 	enum MOUSEKEYSTATE { DIM_LB, DIM_RB, DIM_WHEEL, DIM_END };
 	enum MOUSEMOVESTATE { DIMS_X, DIMS_Y, DIMS_WHEEL, DIMS_END };
 
+public:
+	WPARAM& Get_Message() { return m_iMessage; }
+
 private:
 	InputMgr();
 	~InputMgr();
@@ -59,6 +62,9 @@ private:
 private:
 	_byte								m_byKeyState[256];
 	DIMOUSESTATE			m_tMouseState;
+
+private:
+	WPARAM						m_iMessage;
 
 public:
 	ULONG m_dwCurKey = 0;

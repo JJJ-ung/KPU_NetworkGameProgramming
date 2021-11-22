@@ -46,7 +46,7 @@ HRESULT Loading::Load_Resources()
 HRESULT Loading::Load_Objects()
 {
 	GameMgr* pGameMgr = GameMgr::GetInstance();
-	HRESULT hr = pGameMgr->Add_Prototype(OBJECT::PLAYER, Player::Create(m_pGraphicDev));
+	HRESULT hr = pGameMgr->Add_Prototype(OBJECT::PLAYER, Player::Create(m_pGraphicDev, L"Me"));
 	if (FAILED(hr)) return E_FAIL;
 
 	return NOERROR;

@@ -101,6 +101,15 @@
     <Filter Include="01 GameObject\03 UI\00 StaticSprite">
       <UniqueIdentifier>{7f17eb75-e1aa-423f-8294-ed2c2c5daa74}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01 GameObject\00 Player\NetworkPlayer">
+      <UniqueIdentifier>{0e8679a5-f719-4e3f-adbb-4ae691bc76f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01 GameObject\00 Player\CustomizePlayer">
+      <UniqueIdentifier>{e2e58640-3d01-4fea-b22a-cca1729de813}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02 Component\03 Font">
+      <UniqueIdentifier>{454b9047-4acc-4edb-b874-ca5e0e873a56}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -192,6 +201,12 @@
     </ClInclude>
     <ClInclude Include="NetworkMgr.h">
       <Filter>98 Managers\99 NetworkMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="NetworkPlayer.h">
+      <Filter>01 GameObject\00 Player\NetworkPlayer</Filter>
+    </ClInclude>
+    <ClInclude Include="Font.h">
+      <Filter>02 Component\03 Font</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -288,6 +303,12 @@
     </ClCompile>
     <ClCompile Include="NetworkMgr.cpp">
       <Filter>98 Managers\99 NetworkMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="NetworkPlayer.cpp">
+      <Filter>01 GameObject\00 Player\NetworkPlayer</Filter>
+    </ClCompile>
+    <ClCompile Include="Font.cpp">
+      <Filter>02 Component\03 Font</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
