@@ -15,5 +15,5 @@ public:
 private:
 	char          m_type; //ÃÑ¾Ë Á¾·ù
 
-	static const OBJECT::TYPE  m_object_type = OBJECT::BULLET;
+	static OBJECT::TYPE  m_object_type;
 };

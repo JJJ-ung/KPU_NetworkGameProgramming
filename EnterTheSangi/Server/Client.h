@@ -31,7 +31,7 @@ public:
 private:
 	SOCKET         m_socket;
 	SOCKADDR_IN    m_addr;
-	char  m_buff[MAX_BUF_SIZE];
+	char           m_buff[MAX_BUF_SIZE];
 	char           m_ID;
 	char*		   m_Name;
 	CLIENT_STATE   m_state;

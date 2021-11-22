@@ -1,6 +1,9 @@
 #pragma once
 #include "Player.h"
 
+OBJECT::TYPE CPlayer::m_object_type = OBJECT::PLAYER;
+float CPlayer::m_height_hf;
+float CPlayer::m_width_hf;
 
 CPlayer::CPlayer() {};
 

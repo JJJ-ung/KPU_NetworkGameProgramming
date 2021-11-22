@@ -14,7 +14,7 @@ public:
 	OBJECT::TYPE       vGetObjectType(); // return object type
 
 private:
-	static const OBJECT::TYPE  m_object_type = OBJECT::CHEST;
-	static const float m_height_hf;
-	static const float m_width_hf;
+	static OBJECT::TYPE  m_object_type;
+	static float m_height_hf;
+	static float m_width_hf;
 };

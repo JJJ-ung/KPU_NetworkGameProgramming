@@ -1,5 +1,9 @@
 #include "Chest.h"
 
+OBJECT::TYPE CChest::m_object_type = OBJECT::CHEST;
+float CChest::m_height_hf;
+float CChest::m_width_hf;
+
 CChest::CChest()
 {
 

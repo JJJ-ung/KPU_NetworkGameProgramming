@@ -1,5 +1,7 @@
 #include "Bullet.h"
 
+OBJECT::TYPE  CBullet::m_object_type = OBJECT::BULLET;
+
 CBullet::CBullet()
 {
 

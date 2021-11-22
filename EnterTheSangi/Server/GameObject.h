@@ -14,9 +14,9 @@ public:
 	D3DXVECTOR2          GetPosition();
 	D3DXVECTOR2          GetLook();
 
-	virtual float        vGetHeightHf();   // return half height
-	virtual float        vGetWidthHf();    // return half width
-	virtual OBJECT::TYPE vGetObjectType(); // return object type
+	virtual float        vGetHeightHf() =0;   // return half height
+	virtual float        vGetWidthHf() = 0;    // return half width
+	virtual OBJECT::TYPE vGetObjectType() = 0; // return object type
 
 protected:
 	D3DXVECTOR2          m_position;
