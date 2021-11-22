@@ -80,7 +80,7 @@ HRESULT NetworkMgr::Recv_ServerInfo(void* tRecvInfo)
 
 	recv(m_socket, buf, BUF_SIZE, 0);
 
-	switch(buf[0])
+	switch(buf[1])
 	{
 	case SC_PACKET_LOGIN_OK: // 서버에서 받아온 로그인 ok신호!!!
 	{

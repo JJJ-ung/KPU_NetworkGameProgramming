@@ -123,7 +123,7 @@ void CMainServer::ProcessPacket(char id)
 
     else if (m_clients[id].GetBuf()[1] == CS_PACKET_CHANGE_COLOR)
     {
-        cout << "[" << atoi(&id) << "] : CS_PACKET_CHANGE_COLOR recv \n";
+        cout << "[" << id << "] : CS_PACKET_CHANGE_COLOR recv \n";
         cs_packet_change_color rp;
         memcpy(&rp, m_clients[id].GetBuf(), sizeof(cs_packet_change_color));
 
@@ -145,7 +145,7 @@ void CMainServer::ProcessPacket(char id)
 
     else if (m_clients[id].GetBuf()[1] == CS_PACKET_READY)
     {
-        cout << "[" << atoi(&id) << "] : CS_PACKET_READY recv \n";
+        cout << "[" << id + '0' << "] : CS_PACKET_READY recv \n";
         cs_packet_ready rp;
         memcpy(&rp, m_clients[id].GetBuf(), sizeof(cs_packet_ready));
 
@@ -163,7 +163,7 @@ void CMainServer::ProcessPacket(char id)
     }
     else
     {
-        cout << "[" << atoi(&id) << "] : move packet recv \n";
+        cout << "[MovePacket] : recv \n";
     }
 
 }
@@ -216,7 +216,7 @@ int CMainServer::DoAccept()
     {   
         m_clients[new_id].SetSocket(client_socket);
         m_client_threads.emplace_back(&CMainServer::ClientThread, this, new_id);
-        cout << "[" << atoi(&new_id) << "] : client incoming \n";
+        cout << "[" << new_id  << "]  : client incoming \n";
         //플레이어 초기 정보 세팅
         //login_ok패킷 전송
     }
@@ -234,7 +234,7 @@ char CMainServer::GetNewID()
         {
             m_clients[i].SetState(ST_ACCEPT);
             m_clients[i].StateUnlock();
-            return i + '0';
+            return i;
         }
         m_clients[i].StateUnlock();
     }
