@@ -19,6 +19,12 @@
     <Filter Include="03 GameObject\00 GameObject">
       <UniqueIdentifier>{1e9b0876-02fd-4451-b0e5-7bc7a8643088}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03 GameObject\03 Bullet">
+      <UniqueIdentifier>{534a9f35-2f40-4745-af6b-267e5ff8f24f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03 GameObject\02 Chest">
+      <UniqueIdentifier>{bc49fbfa-b0e1-44ac-a2c9-4b44f6b23a55}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainServer.h">
@@ -29,6 +35,12 @@
     </ClInclude>
     <ClInclude Include="Player.h">
       <Filter>03 GameObject\01 Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet.h">
+      <Filter>03 GameObject\03 Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Chest.h">
+      <Filter>03 GameObject\02 Chest</Filter>
     </ClInclude>
     <ClInclude Include="GameObject.h">
       <Filter>03 GameObject\00 GameObject</Filter>
@@ -49,6 +61,12 @@
     </ClCompile>
     <ClCompile Include="GameObject.cpp">
       <Filter>03 GameObject\00 GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet.cpp">
+      <Filter>03 GameObject\03 Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Chest.cpp">
+      <Filter>03 GameObject\02 Chest</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

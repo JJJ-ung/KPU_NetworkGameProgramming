@@ -104,7 +104,7 @@ void CMainServer::DoSend()
 
 void CMainServer::DoRecv(char id)
 {
-    recv(m_clients[id].GetSocket(),)
+   
 };
 
 int CMainServer::DoAccept()
