@@ -21,7 +21,7 @@ HRESULT NetworkMgr::Ready_WinSock()
 	m_addr.sin_family = AF_INET;
 	m_addr.sin_addr.s_addr = inet_addr(SERVER_IP);
 	m_addr.sin_port = htons(SERVER_PORT);
-
+	cout << "Network connect!\n";
 	if (connect(m_socket, (SOCKADDR*)&m_addr, sizeof(m_addr)) == SOCKET_ERROR)
 		return E_FAIL;
 

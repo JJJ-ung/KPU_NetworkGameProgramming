@@ -179,6 +179,7 @@ void CMainServer::DoRecv(char id)
 int CMainServer::DoAccept()
 {
     //accpet()
+    cout << "DoAccept() running\n";
     SOCKET client_socket;
     SOCKADDR_IN client_addr;
     int addr_len = sizeof(client_addr);
@@ -190,6 +191,7 @@ int CMainServer::DoAccept()
     {   
         m_clients[new_id].SetSocket(client_socket);
         m_client_threads.emplace_back(&CMainServer::ClientThread, this, new_id);
+        cout << "[" << atoi(&new_id) << "] : client incoming \n";
         //플레이어 초기 정보 세팅
         //login_ok패킷 전송
     }
@@ -217,3 +219,10 @@ char CMainServer::GetNewID()
 
 
 };
+
+void CMainServer::Disconnect(char id)
+{
+    m_clients[id].StateLock();
+    m_clients[id].SetState(ST_FREE);
+    m_clients[id].StateUnlock();
+}
