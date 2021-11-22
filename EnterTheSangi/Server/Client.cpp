@@ -46,6 +46,10 @@ char* CClient::GetBuf()
 	return m_buff;
 }
 
+CPlayer CClient::GetPlayer()
+{
+	return m_player;
+}
 
 void CClient::StateLock()
 {

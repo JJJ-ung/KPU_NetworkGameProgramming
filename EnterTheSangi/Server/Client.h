@@ -26,6 +26,7 @@ public:
 	void StateLock();
 	void StateUnlock();
 
+	CPlayer GetPlayer();
 
 private:
 	SOCKET         m_socket;

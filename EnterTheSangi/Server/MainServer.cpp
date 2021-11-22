@@ -105,6 +105,14 @@ void CMainServer::ProcessPacket(char id)
         memcpy(&rp, m_clients[id].GetBuf(), sizeof(cs_packet_login));
 
         m_clients[id].SetName(rp.name);
+
+        sc_packet_login_ok sp;
+        sp.type = SC_PACKET_LOGIN_OK;
+        sp.id = id;
+        sp.is_ready = false;
+        sp.size = sizeof(sc_packet_login_ok);
+
+        send(m_clients[id].GetSocket(), (char*)&sp, sizeof(sc_packet_login_ok), 0);
     }
 
     else if (m_clients[id].GetBuf()[0] == CS_PACKET_CHANGE_COLOR)
@@ -112,7 +120,9 @@ void CMainServer::ProcessPacket(char id)
         cs_packet_change_color rp;
         memcpy(&rp, m_clients[id].GetBuf(), sizeof(cs_packet_change_color));
 
-       // 여긴 서버에다가 저장할 무언가가 있을거임!
+       // 서버에 id에 해당하는 플레이어 커마정보 저장
+        m_clients[id].GetPlayer().SetBodyColor(rp.body_color);
+        m_clients[id].GetPlayer().SetClothColor(rp.cloth_color);
 
         sc_packet_change_color sp;
         sp.type = SC_PACKET_CHANGE_COLOR;
