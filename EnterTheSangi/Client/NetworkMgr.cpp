@@ -37,6 +37,16 @@ HRESULT NetworkMgr::Setup_Networking()
 	return NOERROR;
 }
 
+HRESULT NetworkMgr::Send_LoginInfo(cs_packet_login& tLoginPacket)
+{
+	if (FAILED(send(m_socket, (char*)&tLoginPacket, sizeof(cs_packet_login), 0)))
+	{
+		Render_Error("Failed To Send Login Info");
+		return E_FAIL;
+	}
+	return NOERROR;
+}
+
 HRESULT NetworkMgr::Send_ClientInfo(GameStatePlayer& tPlayerPacket)
 {
 	if (FAILED(send(m_socket, (char*)&tPlayerPacket, sizeof(GameStatePlayer), 0)))
@@ -70,7 +80,7 @@ HRESULT NetworkMgr::Recv_ServerInfo(void* tRecvInfo)
 
 	recv(m_socket, buf, BUF_SIZE, 0);
 
-	switch(buf[0])
+	switch(buf[1])
 	{
 	case SC_PACKET_LOGIN_OK: // 서버에서 받아온 로그인 ok신호!!!
 	{

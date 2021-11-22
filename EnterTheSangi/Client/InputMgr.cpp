@@ -134,16 +134,17 @@ void InputMgr::Update_Text(WPARAM message)
 {
 	if (!m_bTextMode) return;
 
+	if (m_strText.length() == 16)
+		return;
+
 	if (message == VK_BACK)
 	{
 		if(!m_strText.empty())
-			m_strText.erase(m_strText.length() - 1, 1);
+			m_strText.pop_back();
 	}
 
-	if (message > 64 || message < 91)
+	if (message > 64 && message < 91)
 		m_strText += (char)message;
-
-	cout << m_strText << endl;
 }
 
 void InputMgr::Free()

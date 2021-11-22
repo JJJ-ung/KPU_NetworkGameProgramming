@@ -25,6 +25,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shaders", "Shaders", "{D9BC
 	ProjectSection(SolutionItems) = preProject
 		Binary\Shaders\Blend.hlsl = Binary\Shaders\Blend.hlsl
 		Binary\Shaders\Default.hlsl = Binary\Shaders\Default.hlsl
+		Binary\Shaders\Font.hlsl = Binary\Shaders\Font.hlsl
 		Binary\Shaders\Player.hlsl = Binary\Shaders\Player.hlsl
 	EndProjectSection
 EndProject

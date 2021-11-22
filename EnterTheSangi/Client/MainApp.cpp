@@ -40,6 +40,9 @@ HRESULT MainApp::Ready_MainApp()
 	if (FAILED(m_pShaderMgr->Add_Shader(m_pGraphic_Device, L"Default", L"../Binary/Shaders/Default.hlsl")))
 		return E_FAIL;
 
+	if (FAILED(m_pShaderMgr->Add_Shader(m_pGraphic_Device, L"Font", L"../Binary/Shaders/Font.hlsl")))
+		return E_FAIL;
+
 	// 매니저 초기화
 	m_pGameMgr = GameMgr::GetInstance();
 	if (!m_pGameMgr) return E_FAIL;
@@ -113,4 +116,5 @@ void MainApp::Free()
 	GameMgr::GetInstance()->DestroyInstance();
 	ResourceMgr::GetInstance()->DestroyInstance();
 	DeviceMgr::GetInstance()->DestroyInstance();
+	NetworkMgr::GetInstance()->DestroyInstance();
 }
