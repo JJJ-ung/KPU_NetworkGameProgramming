@@ -4,7 +4,7 @@
 
 using namespace std;
 
-constexpr const char* SERVER_IP = "127.0.0.1";
+constexpr const char* SERVER_IP = "220.94.221.20";
 const int SERVER_PORT = 5000;
 const int MAX_CLIENTS = 3;
 constexpr unsigned int MAX_BUF_SIZE = 256;

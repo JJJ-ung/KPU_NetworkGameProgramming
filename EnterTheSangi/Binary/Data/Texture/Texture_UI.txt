@@ -2,3 +2,5 @@ Title ../Binary/Resources/Title/Title_%d.png 30
 Logo ../Binary/Resources/Logo_0.png 1
 Font ../Binary/Resources/Font/Font_%d.png 26
 Login ../Binary/Resources/Login_0.png 1
+CustomizeWnd ../Binary/Resources/Customize/CustomizeWnd_0.png 1
+ColorIcon ../Binary/Resources/Customize/ColorIcon_0.png 1
