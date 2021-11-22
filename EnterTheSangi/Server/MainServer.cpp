@@ -63,10 +63,17 @@ void CMainServer::Activate()
 
 void CMainServer::ClientThread() 
 {
+    int my_id = g_client_count;
+    g_client_count++;
+
     for (;;)
     {
         //In Robby
-
+        while (ST_READY != m_clients[my_id].GetState())
+        {
+            DoSend();
+            DoRecv();
+        }
 
 
 
