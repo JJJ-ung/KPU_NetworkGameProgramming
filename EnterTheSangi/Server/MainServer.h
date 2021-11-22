@@ -26,17 +26,17 @@ public:
 
 	void ProcessPacket(char id);
 	void DoSend();
-	void DoRecv(char id);
-	int DoAccept();
+	int  DoRecv(char id);
+	int  DoAccept();
 
 
 	char GetNewID();
 
 private:
-	SOCKET m_listen_socket;
-	std::array<CClient, 3> m_clients;
+	SOCKET                   m_listen_socket;
+	std::array<CClient, 3>   m_clients;
 	std::vector<std::thread> m_client_threads;
 	std::vector<std::thread> m_accpet_threads;
 
-	SCENE::ID m_game_state;
+	SCENE::ID                m_game_state;
 };

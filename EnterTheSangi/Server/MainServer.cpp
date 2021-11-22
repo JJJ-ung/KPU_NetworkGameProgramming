@@ -63,12 +63,18 @@ void CMainServer::Activate()
 
 void CMainServer::ClientThread(char id) 
 {
+    int ret;
     for (;;)
     {
         //In Robby
         while (m_game_state==SCENE::ID::CUSTOMIZE)
         {
-            DoRecv(id);
+            ret = DoRecv(id);
+            if (ret == SOCKET_ERROR)
+                continue;
+            else if (ret == 0)
+                continue;
+            ProcessPacket(id);
         }
 
 
@@ -176,12 +182,23 @@ void CMainServer::DoSend()
         send(cl.GetSocket(), (char*)&sp, sizeof(sc_packet_game_state), 0);
 };
 
-void CMainServer::DoRecv(char id)
+int CMainServer::DoRecv(char id)
 {
-   
-    recv(m_clients[id].GetSocket(), m_clients[id].GetBuf(), BUF_SIZE, 0);
-    ProcessPacket(id);
-
+    int received;
+    char* ptr = m_clients[id].GetBuf();
+    int left = BUF_SIZE;
+    while (left>0) 
+    {
+        received=recv(m_clients[id].GetSocket(), ptr, left, 0);
+        if (received == SOCKET_ERROR)
+            break;
+        else
+            if (received == 0)
+                break;
+        left -= received;
+        ptr += received;
+    }
+    return (BUF_SIZE - left); 
 };
 
 int CMainServer::DoAccept()
