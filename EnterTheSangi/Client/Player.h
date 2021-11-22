@@ -1,11 +1,15 @@
 #pragma once
 #include "GameObject.h"
 
-class CPlayer : public GameObject
+class Animation;
+class Player : public GameObject
 {
 public:
-	explicit CPlayer(LPDIRECT3DDEVICE9 pGraphic_Device);
-	virtual ~CPlayer();
+	explicit Player(LPDIRECT3DDEVICE9 pGraphic_Device);
+	virtual ~Player();
+
+public:
+	void Set_CustomInfo(CUSTOMIZE tCustom) { m_tCustomInfo = tCustom; }
 
 public:
 	virtual HRESULT Ready_GameObject();
@@ -13,8 +17,22 @@ public:
 	virtual INT LateUpdate_GameObject(float TimeDelta);
 	virtual HRESULT Render_GameObject();
 
+private:
+	HRESULT Ready_AnimationInfo();
+
+private:
+	D3DXVECTOR3 m_vPosition{0.f, 0.f, 0.f};
+
+private:
+	Animation* m_pCurrAnimation = nullptr;
+	CUSTOMIZE m_tCustomInfo{};
+
+private:
+	typedef map<wstring, Animation*> MAPANI;
+	map<wstring, Animation*> m_mapAnimations;
+
 public:
-	static CPlayer* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
+	static Player* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
 	virtual void Free();
 };
 

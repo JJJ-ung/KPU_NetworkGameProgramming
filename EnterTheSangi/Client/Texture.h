@@ -8,17 +8,25 @@ public:
 	virtual ~Texture();
 
 public:
-	virtual HRESULT Ready_Component(const TCHAR* pPath, const UINT& iCnt);
+	D3DXIMAGE_INFO Get_TextureInfo() { return m_tInfo; }
+	UINT Get_TextureCnt() { return (UINT)m_vecTexture.size(); }
+	LPDIRECT3DTEXTURE9 Get_Texture(UINT index) { return m_vecTexture[index]; }
 
 public:
-	HRESULT SetUp_OnShader(LPD3DXEFFECT pEffect, const char* pConstantName, UINT iIndex = 0);
+	virtual HRESULT Ready_Component(LPD3DXSPRITE pSprite, const TCHAR* pPath, const UINT& iCnt);
+
+public:
+	HRESULT Set_Texture(LPD3DXEFFECT pEffect, const char* pConstantName, UINT iIndex = 0);
+	HRESULT Draw_Sprite(UINT iIndex = 0, const D3DXVECTOR3* pCenter = nullptr, const RECT* pSrcRect = nullptr, const D3DXVECTOR3* pPosition = nullptr, D3DCOLOR Color = D3DCOLOR_ARGB(255, 255, 255, 255));
 
 private:
-	vector<IDirect3DBaseTexture9*>			m_vecTexture;
-	typedef vector<IDirect3DBaseTexture9*>	VECTEXTURE;
+	LPD3DXSPRITE m_pSprite;
+	D3DXIMAGE_INFO m_tInfo{};
+	vector<LPDIRECT3DTEXTURE9>					m_vecTexture;
+	typedef vector<LPDIRECT3DTEXTURE9>	VECTEXTURE;
 
 public:
-	static Texture* Create(LPDIRECT3DDEVICE9 pGraphicDev, const TCHAR* pPath, const UINT& iCnt = 1);
+	static Texture* Create(LPDIRECT3DDEVICE9 pGraphicDev, LPD3DXSPRITE pSprite, const TCHAR* pPath, const UINT& iCnt = 1);
 	virtual void Free(void);
 };
 

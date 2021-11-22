@@ -1,0 +1,2 @@
+Title ../Binary/Resources/Title/Title_%d.png 30
+Logo ../Binary/Resources/Logo_0.png 1

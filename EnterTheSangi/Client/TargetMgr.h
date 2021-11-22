@@ -10,9 +10,6 @@ public:
 	virtual ~TargetMgr();
 
 public:
-	void	SetDebugBuffer(bool bRender) { m_bRenderDebugBuff = bRender; }
-
-public:
 	HRESULT Add_Target(LPDIRECT3DDEVICE9 pGraphic_Device, const TCHAR* pTargetTag, UINT iWidth, UINT iHeight, D3DFORMAT eFormat, D3DXCOLOR Color);
 	HRESULT Add_MRT(const TCHAR* pMRTTag, const TCHAR* pTargetTag);
 	HRESULT Begin_MRT(const TCHAR* pMRTTag);
@@ -24,9 +21,6 @@ public:
 	HRESULT Ready_Debug_Buffer(const TCHAR* pTargetTag, float fX, float fY, float fSizeX, float fSizeY);
 	HRESULT Render_Debug_Buffer(const TCHAR* pMRTTag);
 #endif
-
-private:
-	bool m_bRenderDebugBuff = true;
 
 private:
 	unordered_map<const TCHAR*, Target*>			m_Targets;

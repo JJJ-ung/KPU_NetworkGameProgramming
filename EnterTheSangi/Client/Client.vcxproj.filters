@@ -4,110 +4,110 @@
     <Filter Include="99 Default">
       <UniqueIdentifier>{3503ebfd-e50a-4c62-a5b3-5c1ce252905c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="98 Managers">
-      <UniqueIdentifier>{37c7ba4c-0997-405b-912c-1ba541deaf91}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="98 Managers\00 DeviceMgr">
-      <UniqueIdentifier>{34118b30-1d97-46bd-9acb-801dc7b18897}</UniqueIdentifier>
-    </Filter>
     <Filter Include="00 MainApp">
       <UniqueIdentifier>{4da7850c-b7c2-43b4-9c76-a58ba0c100cd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="98 Managers\01 InputMgr">
-      <UniqueIdentifier>{87929799-197d-4a7f-a253-14a386998cac}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="98 Managers\02 SceneMgr">
-      <UniqueIdentifier>{95715aa8-0342-4fae-893c-4982b7ec9522}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="98 Managers\04 ResourceMgr">
-      <UniqueIdentifier>{584ca09a-8f45-47d7-8a08-d5f5ab581f86}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="98 Managers\05 GameMgr">
-      <UniqueIdentifier>{356de997-ab8a-4efa-95cc-a4b58f6544bd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="97 Renderer">
-      <UniqueIdentifier>{f5141887-5232-4440-b9c0-b71863c05f8e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="97 Renderer\00 Renderer">
-      <UniqueIdentifier>{b63ef892-9bf6-45ab-8ac7-5770b74e96c8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="97 Renderer\01 TextRenderer">
-      <UniqueIdentifier>{9e65f6a1-b9e8-46ba-aa50-89370d4bc825}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="97 Renderer\99 TargetMgr">
-      <UniqueIdentifier>{79eee9f3-5fc2-4708-af89-a34ba20b8f4c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01 GameObject">
-      <UniqueIdentifier>{dd083948-925e-4923-84da-84cb0859f592}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="98 Managers\03 FrameMgr">
-      <UniqueIdentifier>{bbff3baf-a41b-476d-aeb0-e3dddc3c8287}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="98 Managers\07 NetworkMgr">
-      <UniqueIdentifier>{7f44d47f-f69b-47ec-9c62-7a6ee45b058f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="98 Managers\06 DataMgr">
-      <UniqueIdentifier>{8327e2d0-aa9e-40d0-99b0-87a76182f307}</UniqueIdentifier>
     </Filter>
     <Filter Include="99 Default\Resources">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="01 GameObject\00 Player">
-      <UniqueIdentifier>{8fb457ed-f004-408b-a87d-e57bb96e9df6}</UniqueIdentifier>
+    <Filter Include="01 GameObject">
+      <UniqueIdentifier>{eec2ae1d-88f0-4042-bf09-a0569767da14}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02 Components">
-      <UniqueIdentifier>{55fede82-b3a8-4877-8aec-7e6a9974fb8a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02 Components\00 Texture">
-      <UniqueIdentifier>{0614a5df-9ee3-4fce-9b48-6259b83eee96}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="97 Renderer\99 TargetMgr\RenderTarget">
-      <UniqueIdentifier>{e3e89ace-928c-437f-a608-d050024bdbe3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01 GameObject\99 Camera">
-      <UniqueIdentifier>{5293512d-f09b-4605-8e95-6fc214d8726a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01 GameObject\98 Mouse">
-      <UniqueIdentifier>{889ed7fa-ccfa-4bb0-823d-e0ec488339bc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02 Components\02 Shader">
-      <UniqueIdentifier>{42e9a4dc-5c99-47af-83ec-599fa082e135}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02 Components\01 Buffer">
-      <UniqueIdentifier>{4f2969e4-775a-4129-9b24-f2b4a651775f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="98 Managers\99 ShaderMgr">
-      <UniqueIdentifier>{b444acb3-cdc5-4b82-8b3c-166e75607001}</UniqueIdentifier>
+    <Filter Include="02 Component">
+      <UniqueIdentifier>{39fa5f6e-784a-470d-a71d-e55fce0e9c2e}</UniqueIdentifier>
     </Filter>
     <Filter Include="03 Scene">
-      <UniqueIdentifier>{70a006f8-446b-42ab-b5a0-89b16fe3792d}</UniqueIdentifier>
+      <UniqueIdentifier>{3004e4f4-1d6f-4dcc-a804-8289c7b3b7da}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03 Scene\99 Test">
-      <UniqueIdentifier>{fcb7bd72-0ce8-4a68-b3f6-48731a9e596f}</UniqueIdentifier>
+    <Filter Include="98 Managers">
+      <UniqueIdentifier>{856be6a2-f1a1-4f9d-8168-33ca76ffa374}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02 Components\03 Animation">
-      <UniqueIdentifier>{8560faa2-c15d-4a31-b5ec-0947eb89dbbc}</UniqueIdentifier>
+    <Filter Include="01 GameObject\00 Player">
+      <UniqueIdentifier>{faf8a3d9-b6e8-440b-ab98-0e3116635796}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98 Managers\00 DeviceMgr">
+      <UniqueIdentifier>{be8d446f-7961-40f5-a4ce-d817c2b1ef29}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98 Managers\01 TimerMgr">
+      <UniqueIdentifier>{a07cebb3-93b3-4c3f-840a-27c8ec0bb780}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02 Component\00 Texture">
+      <UniqueIdentifier>{923daee6-6bf8-486b-bfe6-95e7847d2e5d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02 Component\01 Shader">
+      <UniqueIdentifier>{9ed0645b-0220-4c7d-88b1-8b3b870c9be4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="97 Management">
+      <UniqueIdentifier>{c3bc8480-fe2f-49a6-af00-cb5c4c5fa58a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="97 Management\00 GameMgr">
+      <UniqueIdentifier>{b1261435-7e88-41b2-96f3-061fc5744781}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="97 Management\01 Renderer">
+      <UniqueIdentifier>{2c5e1aaf-348f-4b51-9fac-a77695737aa2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03 Scene\00 Loading">
+      <UniqueIdentifier>{3c558061-1467-435e-8c30-220f2907c45d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03 Scene\00 Loading\Loading">
+      <UniqueIdentifier>{a036067c-cc79-4764-b906-8ad4739a9667}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03 Scene\01 Title">
+      <UniqueIdentifier>{834dfa1d-b270-46ab-a8cf-535a45b8a5b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98 Managers\02 InputMgr">
+      <UniqueIdentifier>{f567a98a-bdf2-4d98-a632-b979c2e371c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98 Managers\03 ResourceMgr">
+      <UniqueIdentifier>{de9e9a63-d558-4b06-ad8b-9bf0f223b3f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98 Managers\04 ShaderMgr">
+      <UniqueIdentifier>{403a07e4-4181-4b00-ac5e-ad765bc0a46a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98 Managers\05 TargetMgr">
+      <UniqueIdentifier>{3faa3732-367b-4d89-ac15-4469f4090fe1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98 Managers\05 TargetMgr\RenderTarget">
+      <UniqueIdentifier>{3414deaf-656a-4a50-8ef6-91526bbefeae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98 Managers\99 NetworkMgr">
+      <UniqueIdentifier>{050a9de3-aa61-4634-bec4-a38599083173}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02 Component\02 Animation">
+      <UniqueIdentifier>{05848f33-ebed-4d6b-9198-1b1600c0527b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01 GameObject\98 Camera">
+      <UniqueIdentifier>{889f85bf-bb55-4890-92d6-b35e7f3c62fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01 GameObject\02 Bullet">
+      <UniqueIdentifier>{d4cc6f54-8895-409a-b187-175c41f1fdbb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01 GameObject\01 Weapon">
+      <UniqueIdentifier>{bc7d8d84-eaeb-487f-949c-6da310218472}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01 GameObject\99 TestMap">
+      <UniqueIdentifier>{b97b8ec0-052a-4efa-97fc-b25b1d4c7dff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01 GameObject\03 UI">
+      <UniqueIdentifier>{547d8434-8ce1-4170-9e82-980db35c54e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03 Scene\02 Test">
+      <UniqueIdentifier>{b21067e9-3732-4c0b-96e5-296ad1361f8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01 GameObject\03 UI\01 AnimatedSprite">
+      <UniqueIdentifier>{248911ff-2cc6-464a-b524-fa057f156229}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01 GameObject\03 UI\00 StaticSprite">
+      <UniqueIdentifier>{7f17eb75-e1aa-423f-8294-ed2c2c5daa74}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
       <Filter>99 Default</Filter>
     </ClInclude>
-    <ClInclude Include="DeviceMgr.h">
-      <Filter>98 Managers\00 DeviceMgr</Filter>
-    </ClInclude>
     <ClInclude Include="MainApp.h">
       <Filter>00 MainApp</Filter>
-    </ClInclude>
-    <ClInclude Include="InputMgr.h">
-      <Filter>98 Managers\01 InputMgr</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObject.h">
-      <Filter>01 GameObject</Filter>
-    </ClInclude>
-    <ClInclude Include="FrameMgr.h">
-      <Filter>98 Managers\03 FrameMgr</Filter>
     </ClInclude>
     <ClInclude Include="Client.h">
       <Filter>99 Default\Resources</Filter>
@@ -118,53 +118,77 @@
     <ClInclude Include="targetver.h">
       <Filter>99 Default\Resources</Filter>
     </ClInclude>
+    <ClInclude Include="DeviceMgr.h">
+      <Filter>98 Managers\00 DeviceMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="TimerMgr.h">
+      <Filter>98 Managers\01 TimerMgr</Filter>
+    </ClInclude>
     <ClInclude Include="Component.h">
-      <Filter>02 Components</Filter>
+      <Filter>02 Component</Filter>
     </ClInclude>
-    <ClInclude Include="Target.h">
-      <Filter>97 Renderer\99 TargetMgr\RenderTarget</Filter>
-    </ClInclude>
-    <ClInclude Include="TargetMgr.h">
-      <Filter>97 Renderer\99 TargetMgr</Filter>
+    <ClInclude Include="Texture.h">
+      <Filter>02 Component\00 Texture</Filter>
     </ClInclude>
     <ClInclude Include="Shader.h">
-      <Filter>02 Components\02 Shader</Filter>
-    </ClInclude>
-    <ClInclude Include="Renderer.h">
-      <Filter>97 Renderer\00 Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>01 GameObject\00 Player</Filter>
-    </ClInclude>
-    <ClInclude Include="Buffer.h">
-      <Filter>02 Components\01 Buffer</Filter>
-    </ClInclude>
-    <ClInclude Include="ShaderMgr.h">
-      <Filter>98 Managers\99 ShaderMgr</Filter>
-    </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>01 GameObject\99 Camera</Filter>
-    </ClInclude>
-    <ClInclude Include="ResourceMgr.h">
-      <Filter>98 Managers\04 ResourceMgr</Filter>
+      <Filter>02 Component\01 Shader</Filter>
     </ClInclude>
     <ClInclude Include="GameMgr.h">
-      <Filter>98 Managers\05 GameMgr</Filter>
+      <Filter>97 Management\00 GameMgr</Filter>
     </ClInclude>
-    <ClInclude Include="SceneManager.h">
-      <Filter>98 Managers\02 SceneMgr</Filter>
+    <ClInclude Include="GameObject.h">
+      <Filter>01 GameObject</Filter>
     </ClInclude>
     <ClInclude Include="Scene.h">
       <Filter>03 Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Scene_Test.h">
-      <Filter>03 Scene\99 Test</Filter>
+    <ClInclude Include="Loading.h">
+      <Filter>03 Scene\00 Loading\Loading</Filter>
     </ClInclude>
-    <ClInclude Include="Texture.h">
-      <Filter>02 Components\00 Texture</Filter>
+    <ClInclude Include="Scene_Loading.h">
+      <Filter>03 Scene\00 Loading</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene_Title.h">
+      <Filter>03 Scene\01 Title</Filter>
+    </ClInclude>
+    <ClInclude Include="TargetMgr.h">
+      <Filter>98 Managers\05 TargetMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="Target.h">
+      <Filter>98 Managers\05 TargetMgr\RenderTarget</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderMgr.h">
+      <Filter>98 Managers\04 ShaderMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>97 Management\01 Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceMgr.h">
+      <Filter>98 Managers\03 ResourceMgr</Filter>
     </ClInclude>
     <ClInclude Include="Animation.h">
-      <Filter>02 Components\03 Animation</Filter>
+      <Filter>02 Component\02 Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>01 GameObject\00 Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>01 GameObject\98 Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="TestMap.h">
+      <Filter>01 GameObject\99 TestMap</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimatedSprite.h">
+      <Filter>01 GameObject\03 UI\01 AnimatedSprite</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene_Test.h">
+      <Filter>03 Scene\02 Test</Filter>
+    </ClInclude>
+    <ClInclude Include="StaticSprite.h">
+      <Filter>01 GameObject\03 UI\00 StaticSprite</Filter>
+    </ClInclude>
+    <ClInclude Include="InputMgr.h">
+      <Filter>98 Managers\02 InputMgr</Filter>
     </ClInclude>
     <ClInclude Include="NetworkManager.h">
       <Filter>98 Managers\07 NetworkMgr</Filter>
@@ -187,68 +211,80 @@
     <ClCompile Include="Client.cpp">
       <Filter>99 Default</Filter>
     </ClCompile>
-    <ClCompile Include="DeviceMgr.cpp">
-      <Filter>98 Managers\00 DeviceMgr</Filter>
-    </ClCompile>
     <ClCompile Include="MainApp.cpp">
       <Filter>00 MainApp</Filter>
     </ClCompile>
-    <ClCompile Include="InputMgr.cpp">
-      <Filter>98 Managers\01 InputMgr</Filter>
+    <ClCompile Include="DeviceMgr.cpp">
+      <Filter>98 Managers\00 DeviceMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="TimerMgr.cpp">
+      <Filter>98 Managers\01 TimerMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="Component.cpp">
+      <Filter>02 Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>02 Component\00 Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader.cpp">
+      <Filter>02 Component\01 Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="GameMgr.cpp">
+      <Filter>97 Management\00 GameMgr</Filter>
     </ClCompile>
     <ClCompile Include="GameObject.cpp">
       <Filter>01 GameObject</Filter>
     </ClCompile>
-    <ClCompile Include="FrameMgr.cpp">
-      <Filter>98 Managers\03 FrameMgr</Filter>
+    <ClCompile Include="Scene.cpp">
+      <Filter>03 Scene</Filter>
     </ClCompile>
-    <ClCompile Include="Component.cpp">
-      <Filter>02 Components</Filter>
+    <ClCompile Include="Loading.cpp">
+      <Filter>03 Scene\00 Loading\Loading</Filter>
     </ClCompile>
-    <ClCompile Include="Target.cpp">
-      <Filter>97 Renderer\99 TargetMgr\RenderTarget</Filter>
+    <ClCompile Include="Scene_Loading.cpp">
+      <Filter>03 Scene\00 Loading</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene_Title.cpp">
+      <Filter>03 Scene\01 Title</Filter>
     </ClCompile>
     <ClCompile Include="TargetMgr.cpp">
-      <Filter>97 Renderer\99 TargetMgr</Filter>
+      <Filter>98 Managers\05 TargetMgr</Filter>
     </ClCompile>
-    <ClCompile Include="Shader.cpp">
-      <Filter>02 Components\02 Shader</Filter>
+    <ClCompile Include="Target.cpp">
+      <Filter>98 Managers\05 TargetMgr\RenderTarget</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderMgr.cpp">
+      <Filter>98 Managers\04 ShaderMgr</Filter>
     </ClCompile>
     <ClCompile Include="Renderer.cpp">
-      <Filter>97 Renderer\00 Renderer</Filter>
+      <Filter>97 Management\01 Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceMgr.cpp">
+      <Filter>98 Managers\03 ResourceMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="Animation.cpp">
+      <Filter>02 Component\02 Animation</Filter>
     </ClCompile>
     <ClCompile Include="Player.cpp">
       <Filter>01 GameObject\00 Player</Filter>
     </ClCompile>
-    <ClCompile Include="Buffer.cpp">
-      <Filter>02 Components\01 Buffer</Filter>
-    </ClCompile>
-    <ClCompile Include="ShaderMgr.cpp">
-      <Filter>98 Managers\99 ShaderMgr</Filter>
-    </ClCompile>
     <ClCompile Include="Camera.cpp">
-      <Filter>01 GameObject\99 Camera</Filter>
+      <Filter>01 GameObject\98 Camera</Filter>
     </ClCompile>
-    <ClCompile Include="ResourceMgr.cpp">
-      <Filter>98 Managers\04 ResourceMgr</Filter>
+    <ClCompile Include="TestMap.cpp">
+      <Filter>01 GameObject\99 TestMap</Filter>
     </ClCompile>
-    <ClCompile Include="GameMgr.cpp">
-      <Filter>98 Managers\05 GameMgr</Filter>
-    </ClCompile>
-    <ClCompile Include="SceneManager.cpp">
-      <Filter>98 Managers\02 SceneMgr</Filter>
-    </ClCompile>
-    <ClCompile Include="Scene.cpp">
-      <Filter>03 Scene</Filter>
+    <ClCompile Include="AnimatedSprite.cpp">
+      <Filter>01 GameObject\03 UI\01 AnimatedSprite</Filter>
     </ClCompile>
     <ClCompile Include="Scene_Test.cpp">
-      <Filter>03 Scene\99 Test</Filter>
+      <Filter>03 Scene\02 Test</Filter>
     </ClCompile>
-    <ClCompile Include="Texture.cpp">
-      <Filter>02 Components\00 Texture</Filter>
+    <ClCompile Include="StaticSprite.cpp">
+      <Filter>01 GameObject\03 UI\00 StaticSprite</Filter>
     </ClCompile>
-    <ClCompile Include="Animation.cpp">
-      <Filter>02 Components\03 Animation</Filter>
+    <ClCompile Include="InputMgr.cpp">
+      <Filter>98 Managers\02 InputMgr</Filter>
     </ClCompile>
     <ClCompile Include="NetworkManager.cpp">
       <Filter>98 Managers\07 NetworkMgr</Filter>

@@ -1,7 +1,10 @@
 #pragma once
 #include "Component.h"
 #include "Renderer.h"
+#include "InputMgr.h"
+#include "GameMgr.h"
 #include "ShaderMgr.h"
+#include "ResourceMgr.h"
 
 class Buffer;
 class Texture;
@@ -25,7 +28,9 @@ protected:
 	Renderer*							m_pRenderer = nullptr;
 	Shader*								m_pShader = nullptr;
 	Texture*								m_pTexture = nullptr;
-	Buffer*								m_pBuffer = nullptr;
+	InputMgr*							m_pInputMgr = nullptr;
+	GameMgr*							m_pGameMgr = nullptr;
+	ResourceMgr*					m_pResourceMgr = nullptr;
 
 protected:
 	unordered_map<const TCHAR*, Component*>			m_Components;

@@ -13,8 +13,6 @@ GameObject::~GameObject()
 
 HRESULT GameObject::Ready_GameObject()
 {
-
-
 	return NOERROR;
 }
 

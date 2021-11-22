@@ -4,12 +4,14 @@
 #include "framework.h"
 #include "Client.h"
 #include "MainApp.h"
-#include "FrameMgr.h"
+#include "TimerMgr.h"
+#include "InputMgr.h"
 
 #define MAX_LOADSTRING 100
 
 // 전역 변수:
 HWND g_hWnd;
+HINSTANCE g_hInst;
 HINSTANCE hInst;                                // 현재 인스턴스입니다.
 WCHAR szTitle[MAX_LOADSTRING];                  // 제목 표시줄 텍스트입니다.
 WCHAR szWindowClass[MAX_LOADSTRING];            // 기본 창 클래스 이름입니다.
@@ -24,9 +26,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_ LPWSTR    lpCmdLine,
                      _In_ int       nCmdShow)
 {
-//#ifdef _DEBUG
-//    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-//#endif
+#ifdef _DEBUG
+    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+#endif
 
     UNREFERENCED_PARAMETER(hPrevInstance);
     UNREFERENCED_PARAMETER(lpCmdLine);
@@ -48,13 +50,17 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
     MSG msg{};
 
-    MainApp* pMainApp = MainApp::Create();
-    if (!pMainApp) return FALSE;
 	srand(unsigned(time(NULL)));
 
-    FrameMgr* pFrameMgr = FrameMgr::GetInstance();
-    if (!pFrameMgr) return FALSE;
+	MainApp* pMainApp = MainApp::Create();
+    if (!pMainApp) return FALSE;
 
+    TimerMgr* pTimerMgr = TimerMgr::GetInstance();
+    if (!pTimerMgr) return FALSE;
+
+    InputMgr* pInputMgr = InputMgr::GetInstance();
+    if (FAILED(pInputMgr->Init_InputDev()))
+        return FALSE;
 
 	// 기본 메시지 루프입니다.
 	while (WM_QUIT != msg.message)
@@ -66,16 +72,24 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		}
 		else
 		{
-            if(pFrameMgr->FrameLimit(60.f))
+            if(pTimerMgr->Frame_Limit(TimerMgr::CLIENT, 60.f))
             {
-	            pMainApp->Update_MainApp(pFrameMgr->UpdateTime());
+				pInputMgr->Update_Key();
+                pMainApp->Update_MainApp(pTimerMgr->Update_Timer(TimerMgr::CLINET_DEFAULT));
 	            pMainApp->Render_MainApp();
+                pTimerMgr->Print_FrameRate();
+	        }
+            if (pTimerMgr->Frame_Limit(TimerMgr::NETWORKING, 30.f))
+            {
+                // 네트워크 업데이트 사항
+                pTimerMgr->Update_Timer(TimerMgr::NETWORK_DEFAULT);
             }
-		}
+        }
 	}
 
     SafeDelete(pMainApp);
-    pFrameMgr->DestroyInstance();
+    pTimerMgr->DestroyInstance();
+    pInputMgr->DestroyInstance();
 
     _CrtDumpMemoryLeaks();
 
@@ -136,6 +150,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    }
 
    g_hWnd = hWnd;
+   g_hInst = hInst;
 
    ShowWindow(hWnd, nCmdShow);
    UpdateWindow(hWnd);

@@ -1,8 +1,9 @@
 #pragma once
-#include "DeviceMgr.h"
 
 class Renderer;
 class GameMgr;
+class ShaderMgr;
+class ResourceMgr;
 class MainApp
 {
 public:
@@ -14,17 +15,14 @@ public:
 	int Update_MainApp(const float TimeDelta);
 	HRESULT Render_MainApp();
 
-public:
-	HRESULT Ready_Default(DeviceMgr::WINMODE eMode, const UINT& iSizeX, const UINT& iSizeY);
-	HRESULT Ready_Shader();
-	HRESULT Ready_Resource();
+private:
+	LPDIRECT3DDEVICE9 m_pGraphic_Device = nullptr;
 
 private:
 	Renderer* m_pRenderer = nullptr;
 	GameMgr* m_pGameMgr = nullptr;
-
-private:
-	LPDIRECT3DDEVICE9 m_pGraphic_Device = nullptr;
+	ShaderMgr* m_pShaderMgr = nullptr;
+	ResourceMgr* m_pResourceMgr = nullptr;
 
 public:
 	static MainApp* Create();

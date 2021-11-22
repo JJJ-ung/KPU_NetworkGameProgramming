@@ -10,6 +10,9 @@ protected:
 
 public:
 	virtual HRESULT Ready_Component();
+	virtual INT Update_Component(float TimeDelta);
+	virtual INT LateUpdate_Component(float TimeDelta);
+	virtual HRESULT Render_Component();
 
 protected:
 	virtual void Free();
