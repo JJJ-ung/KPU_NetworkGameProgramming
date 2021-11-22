@@ -4,18 +4,57 @@
     <Filter Include="00 Winsock">
       <UniqueIdentifier>{d2c5fe43-5552-4b53-ab32-8058358af4f6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01 MainServer">
+      <UniqueIdentifier>{32e59dd1-6c27-4826-a7b0-2081727c28a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02 Client">
+      <UniqueIdentifier>{54c7ef96-17a9-48dc-80bc-362ff079535e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03 GameObject">
+      <UniqueIdentifier>{e44cfff0-e3c2-4fac-9510-49e30904c970}</UniqueIdentifier>
+    </Filter>
     <Filter Include="99 Protocol">
       <UniqueIdentifier>{ca03773c-f4fe-4556-b741-1392eefa08b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03 GameObject\01 Player">
+      <UniqueIdentifier>{7ad9e03f-49f3-4947-bca1-ba456c1ef176}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03 GameObject\00 GameObject">
+      <UniqueIdentifier>{1e9b0876-02fd-4451-b0e5-7bc7a8643088}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Protocol.h">
       <Filter>99 Protocol</Filter>
     </ClInclude>
+    <ClInclude Include="MainServer.h">
+      <Filter>01 MainServer</Filter>
+    </ClInclude>
+    <ClInclude Include="Client.h">
+      <Filter>02 Client</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>03 GameObject\01 Player</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>03 GameObject\00 GameObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
       <Filter>00 Winsock</Filter>
+    </ClCompile>
+    <ClCompile Include="MainServer.cpp">
+      <Filter>01 MainServer</Filter>
+    </ClCompile>
+    <ClCompile Include="Client.cpp">
+      <Filter>02 Client</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>03 GameObject\01 Player</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>03 GameObject\00 GameObject</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
