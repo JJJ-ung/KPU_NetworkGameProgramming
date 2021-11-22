@@ -11,6 +11,11 @@ void CClient::SetID(const int client_id)
 	m_ID = client_id;
 };
 
+void CClient::SetName(char* name)
+{
+	m_Name = name;
+}
+
 void CClient::SetState(CLIENT_STATE state)
 {
 	m_state = state;
@@ -36,11 +41,15 @@ SOCKET CClient::GetSocket()
 	return m_socket;
 };
 
-unsigned char* CClient::GetBuf()
+char* CClient::GetBuf()
 {
 	return m_buff;
 }
 
+CPlayer CClient::GetPlayer()
+{
+	return m_player;
+}
 
 void CClient::StateLock()
 {

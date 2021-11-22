@@ -50,7 +50,7 @@ HRESULT NetworkMgr::Send_ClientInfo(GameStatePlayer& tPlayerPacket)
 
 HRESULT NetworkMgr::Send_CustomizeInfo(cs_packet_change_color& tColorPacket)
 {
-	tColorPacket.type = '1';
+	tColorPacket.type = CS_PACKET_CHANGE_COLOR;
 	if (FAILED(send(m_socket, (char*)&tColorPacket, sizeof(cs_packet_change_color), 0)))
 	{
 		Render_Error("Failed To Send Customizing Info");
@@ -69,16 +69,19 @@ HRESULT NetworkMgr::Recv_ServerInfo(void* tRecvInfo)
 		return E_FAIL;
 	}
 
-	switch(buf[1])
+	recv(m_socket, buf, BUF_SIZE, 0);
+	switch(buf[0])
 	{
-	case '0':
-		// Player Info
-		memcpy(&tRecvInfo, &buf, sizeof(GameStatePlayer));
+	case SC_PACKET_LOGIN_OK: // 서버에서 받아온 로그인 ok신호!!!
+		sc_packet_login_ok rp;
+		memcpy(&rp, &buf, sizeof(sc_packet_login_ok));
 		break;
-	case '1':
-		// Customizing Info
-		memcpy(&tRecvInfo, &buf, sizeof(cs_packet_change_color));
+
+	case SC_PACKET_CHANGE_COLOR: // 서버에서 받아온 색깔!!!!
+		sc_packet_change_color rp;
+		memcpy(&rp, &buf, sizeof(sc_packet_change_color));
 		break;
+
 	default:
 		break;
 	}

@@ -22,6 +22,7 @@ public:
 	void ClientThread(char id);
 	void AccpetThread();
 
+	void ProcessPacket(char id);
 	void DoSend();
 	void DoRecv(char id);
 	int DoAccept();

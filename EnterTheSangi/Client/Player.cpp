@@ -16,7 +16,7 @@ Player::~Player()
 	Free();
 }
 
-HRESULT Player::Ready_GameObject()
+HRESULT Player::Ready_GameObject(const TCHAR* pName)
 {
 	m_pRenderer = Renderer::GetInstance();
 	if (!m_pRenderer) return E_FAIL;
@@ -40,6 +40,8 @@ HRESULT Player::Ready_GameObject()
 
 	m_tCustomInfo.vBody = D3DXVECTOR3(rand() % 5 * 0.2f, rand() % 5 * 0.2f, rand() % 5 * 0.2f);
 	m_tCustomInfo.vCloth = D3DXVECTOR3(rand() % 5 * 0.2f, rand() % 5 * 0.2f, rand() % 5 * 0.2f);
+
+	m_strName = pName;
 
 	return GameObject::Ready_GameObject();
 }
@@ -133,10 +135,10 @@ HRESULT Player::Ready_AnimationInfo()
 	return NOERROR;
 }
 
-Player* Player::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
+Player* Player::Create(LPDIRECT3DDEVICE9 pGraphic_Device, const TCHAR* pName)
 {
 	Player* pInstance = new Player(pGraphic_Device);
-	if (FAILED(pInstance->Ready_GameObject()))
+	if (FAILED(pInstance->Ready_GameObject(pName)))
 		SafeDelete(pInstance);
 	return pInstance;
 }

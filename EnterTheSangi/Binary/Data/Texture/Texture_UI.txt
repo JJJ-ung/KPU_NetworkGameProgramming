@@ -1,2 +1,3 @@
 Title ../Binary/Resources/Title/Title_%d.png 30
 Logo ../Binary/Resources/Logo_0.png 1
+Font ../Binary/Resources/Font/Font_%d.png 26

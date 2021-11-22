@@ -45,13 +45,13 @@ void CMainServer::Activate()
         //err_quit("listen()")
     };
 
-    //Å¬¶óÀÌ¾ğÆ®º°·Î ÇÏ³ª¾¿ ÇÒ´çµÇ´Â ½º·¹µå.
+    //í´ë¼ì´ì–¸íŠ¸ë³„ë¡œ í•˜ë‚˜ì”© í• ë‹¹ë˜ëŠ” ìŠ¤ë ˆë“œ.
     //for (int i = 0; i < MAX_CLIENTS; ++i)
     //    
     //for (auto& th : m_client_threads)
     //    th.join();
 
-    //accept¸¸À» À§ÇÑ ½º·¹µå. ÁÖ½º·¹µå¿¡¼­ accpet »ó°ü ¾øÀÌ ¼­¹ö ¿¬»êÀ» µ¹¸®±â À§ÇÔ.
+    //acceptë§Œì„ ìœ„í•œ ìŠ¤ë ˆë“œ. ì£¼ìŠ¤ë ˆë“œì—ì„œ accpet ìƒê´€ ì—†ì´ ì„œë²„ ì—°ì‚°ì„ ëŒë¦¬ê¸° ìœ„í•¨.
     for (int i = 0; i < 1; ++i)
         m_accpet_threads.emplace_back(&CMainServer::AccpetThread, this);
     for (auto& th : m_accpet_threads)
@@ -78,11 +78,11 @@ void CMainServer::ClientThread(char id)
         while (true)
         {
             DoRecv(id);
-            //timeout ÇÊ¿ä
+            //timeout í•„ìš”
         }
-        //¼ö½Å ¼º°ø½Ã suspend thread
-        //¸ğµç Å¬¶óÀÌ¾ğÆ®·ÎºÎÅÍ recv È¤Àº timeout½Ã ¼­¹ö ¿¬»ê
-        //ÀÌÈÄ resume thread
+        //ìˆ˜ì‹  ì„±ê³µì‹œ suspend thread
+        //ëª¨ë“  í´ë¼ì´ì–¸íŠ¸ë¡œë¶€í„° recv í˜¹ì€ timeoutì‹œ ì„œë²„ ì—°ì‚°
+        //ì´í›„ resume thread
         DoSend();
 
     }
@@ -92,19 +92,88 @@ void CMainServer::AccpetThread()
 {
 	for (;;)
 	{
-
         DoAccept();
 	}
 };
 
+void CMainServer::ProcessPacket(char id)
+{
+    if (m_clients[id].GetBuf()[0] == CS_PACKET_LOGIN)
+    {
+        cs_packet_login rp;
+        memcpy(&rp, m_clients[id].GetBuf(), sizeof(cs_packet_login));
+
+        m_clients[id].SetName(rp.name);
+
+        sc_packet_login_ok sp;
+        sp.type = SC_PACKET_LOGIN_OK;
+        sp.id = id;
+        sp.is_ready = false;
+        sp.size = sizeof(sc_packet_login_ok);
+
+        send(m_clients[id].GetSocket(), (char*)&sp, sizeof(sc_packet_login_ok), 0);
+    }
+
+    else if (m_clients[id].GetBuf()[0] == CS_PACKET_CHANGE_COLOR)
+    {
+        cs_packet_change_color rp;
+        memcpy(&rp, m_clients[id].GetBuf(), sizeof(cs_packet_change_color));
+
+       // ì„œë²„ì— idì— í•´ë‹¹í•˜ëŠ” í”Œë ˆì´ì–´ ì»¤ë§ˆì •ë³´ ì €ì¥
+        m_clients[id].GetPlayer().SetBodyColor(rp.body_color);
+        m_clients[id].GetPlayer().SetClothColor(rp.cloth_color);
+
+        sc_packet_change_color sp;
+        sp.type = SC_PACKET_CHANGE_COLOR;
+        sp.id = id;
+        sp.body_color = rp.body_color;
+        sp.cloth_color = rp.cloth_color;
+       
+        for (auto& cl : m_clients) {
+            if (id == cl.GetID()) continue;
+            send(cl.GetSocket(), (char*)&sp, sizeof(sc_packet_change_color), 0);
+        }
+    }
+
+    else if (m_clients[id].GetBuf()[0] == CS_PACKET_READY)
+    {
+        cs_packet_ready rp;
+        memcpy(&rp, m_clients[id].GetBuf(), sizeof(cs_packet_ready));
+
+        m_clients[id].SetState(ST_READY);
+
+        sc_packet_ready sp;
+        sp.type = SC_PACKET_READY;
+        sp.size = sizeof(sc_packet_ready);
+        sp.id = id;
+        sp.is_ready = true;
+
+        for (auto& cl : m_clients) {
+            send(cl.GetSocket(), (char*)&sp, sizeof(sc_packet_ready), 0);
+        }
+    }
+}
+
 void CMainServer::DoSend()
 {
+    sc_packet_game_state sp;
+    
+    for (auto& cl : m_clients)
+    {
+        ;
+    }
 
+    // ì—¬ê¸°ì„œ í”Œë ˆì´ì–´ë“¤ ì •ë³´ ì·¨í•©í›„ ì¼ê´„ ì „ì†¡
+    for (auto& cl : m_clients)
+        send(cl.GetSocket(), (char*)&sp, sizeof(sc_packet_game_state), 0);
 };
 
 void CMainServer::DoRecv(char id)
 {
    
+    recv(m_clients[id].GetSocket(), m_clients[id].GetBuf(), BUF_SIZE, 0);
+    ProcessPacket(id);
+
 };
 
 int CMainServer::DoAccept()
@@ -120,9 +189,9 @@ int CMainServer::DoAccept()
     if (new_id != -1)
     {   
         m_clients[new_id].SetSocket(client_socket);
-        m_client_threads.emplace_back(&CMainServer::ClientThread, this);
-        //ÇÃ·¹ÀÌ¾î ÃÊ±â Á¤º¸ ¼¼ÆÃ
-        //login_okÆĞÅ¶ Àü¼Û
+        m_client_threads.emplace_back(&CMainServer::ClientThread, this, new_id);
+        //í”Œë ˆì´ì–´ ì´ˆê¸° ì •ë³´ ì„¸íŒ…
+        //login_okíŒ¨í‚· ì „ì†¡
     }
     else
     {

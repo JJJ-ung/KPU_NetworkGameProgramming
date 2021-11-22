@@ -156,6 +156,7 @@
     <ClInclude Include="Client.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="DeviceMgr.h" />
+    <ClInclude Include="Font.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="GameMgr.h" />
     <ClInclude Include="GameObject.h" />
@@ -163,6 +164,7 @@
     <ClInclude Include="Loading.h" />
     <ClInclude Include="MainApp.h" />
     <ClInclude Include="NetworkMgr.h" />
+    <ClInclude Include="NetworkPlayer.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Resource.h" />
@@ -188,12 +190,14 @@
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="DeviceMgr.cpp" />
+    <ClCompile Include="Font.cpp" />
     <ClCompile Include="GameMgr.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="InputMgr.cpp" />
     <ClCompile Include="Loading.cpp" />
     <ClCompile Include="MainApp.cpp" />
     <ClCompile Include="NetworkMgr.cpp" />
+    <ClCompile Include="NetworkPlayer.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="ResourceMgr.cpp" />

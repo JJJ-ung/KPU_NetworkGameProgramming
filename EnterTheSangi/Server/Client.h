@@ -13,6 +13,7 @@ public:
 	~CClient();
 
 	void SetID(const int client_id);
+	void SetName(char* name);
 	void SetState(CLIENT_STATE state);
 	void SetSocket(SOCKET socket);
 
@@ -20,17 +21,19 @@ public:
 	char GetID();
 	CLIENT_STATE GetState();
 	SOCKET GetSocket();
-	unsigned char* GetBuf();
+	char* GetBuf();
 
 	void StateLock();
 	void StateUnlock();
 
+	CPlayer GetPlayer();
 
 private:
 	SOCKET         m_socket;
 	SOCKADDR_IN    m_addr;
-	unsigned char  m_buff[MAX_BUF_SIZE];
+	char  m_buff[MAX_BUF_SIZE];
 	char           m_ID;
+	char*		   m_Name;
 	CLIENT_STATE   m_state;
 	std::mutex     m_state_lock;
 
