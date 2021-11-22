@@ -32,7 +32,7 @@ void CMainServer::Init(const int server_port)
     for (int i = 0; i < MAX_CLIENTS; ++i)
         m_clients[i].SetID(i);
 
-    m_can_connect = true;
+    SCENE::ID m_game_state = SCENE::ID::CUSTOMIZE;
 };
 
 void CMainServer::Activate()
@@ -61,15 +61,14 @@ void CMainServer::Activate()
 
 };
 
-void CMainServer::ClientThread(int id) 
+void CMainServer::ClientThread(char id) 
 {
-    int my_id = g_client_count;
-    g_client_count++;
     for (;;)
     {
         //In Robby
-        while (ST_READY != m_clients[my_id].GetState()) {
-            // 로비상태일때
+        while (m_game_state==SCENE::ID::CUSTOMIZE)
+        {
+            DoRecv(id);
         }
 
 
@@ -78,7 +77,7 @@ void CMainServer::ClientThread(int id)
 
         while (true)
         {
-            DoRecv();
+            DoRecv(id);
             //timeout 필요
         }
         //수신 성공시 suspend thread
@@ -103,9 +102,9 @@ void CMainServer::DoSend()
 
 };
 
-void CMainServer::DoRecv()
+void CMainServer::DoRecv(char id)
 {
-
+    recv(m_clients[id].GetSocket(),)
 };
 
 int CMainServer::DoAccept()
@@ -116,7 +115,7 @@ int CMainServer::DoAccept()
     int addr_len = sizeof(client_addr);
     client_socket = accept(m_listen_socket, (SOCKADDR*)&client_addr, &addr_len);
     if (client_socket == INVALID_SOCKET) return -1;
-
+ 
     char new_id = GetNewID();
     if (new_id != -1)
     {   

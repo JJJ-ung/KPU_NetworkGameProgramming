@@ -19,6 +19,8 @@ public:
 
 	char GetID();
 	CLIENT_STATE GetState();
+	SOCKET GetSocket();
+	unsigned char* GetBuf();
 
 	void StateLock();
 	void StateUnlock();
@@ -27,6 +29,7 @@ public:
 private:
 	SOCKET         m_socket;
 	SOCKADDR_IN    m_addr;
+	unsigned char  m_buff[MAX_BUF_SIZE];
 	char           m_ID;
 	CLIENT_STATE   m_state;
 	std::mutex     m_state_lock;
