@@ -35,6 +35,11 @@ D3DXVECTOR3 CPlayer::GetClothColor()
 	return m_cloth_color;
 };
 
+float CPlayer::GetHealth()
+{
+	return m_health;
+};
+
 void CPlayer::SetBodyColor(D3DXVECTOR3 body_color)
 {
 	m_body_color = body_color;

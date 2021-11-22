@@ -1,4 +1,5 @@
 #pragma once
+#include <d3dx9.h>
 
 const char PLAYER_MAX_HP=100;
 const char PLAYER_HEIGHT_HF; // half height
@@ -18,4 +19,6 @@ const char CHEST_WIDTH_HF; // half width
 //무기(탄환) 종류별 장전시간
 
 //무기(탄환) 속도
-int g_i = 1;
+
+const D3DXVECTOR3 INITIAL_BODY_COLOR; 
+const D3DXVECTOR3 INITIAL_CLOTH_COLOR;

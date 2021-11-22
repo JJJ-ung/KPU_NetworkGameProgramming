@@ -67,29 +67,44 @@ void CMainServer::ClientThread(char id)
     for (;;)
     {
         //In Robby
-        while (m_game_state==SCENE::ID::CUSTOMIZE)
+		m_state_lock.lock();
+		while (m_game_state == SCENE::ID::CUSTOMIZE)
+		{
+			m_state_lock.unlock();
+
+			ret = DoRecv(id);
+			if (ret == SOCKET_ERROR) continue;
+			else if (ret == 0) continue;
+			ProcessPacket(id);
+
+			m_state_lock.lock();
+        }
+        m_state_lock.unlock();
+
+
+        //In Game
+        m_state_lock.lock();
+        while (m_game_state == SCENE::ID::STAGE)
         {
+            m_state_lock.unlock();
+            //스레드 동기화
+            //타이머 필요
             ret = DoRecv(id);
             if (ret == SOCKET_ERROR)
                 continue;
             else if (ret == 0)
                 continue;
             ProcessPacket(id);
-        }
-
-
-
-        //In Game
-
-        while (true)
-        {
-            DoRecv(id);
             //timeout 필요
+
+            DoSend();
+            m_state_lock.lock();
         }
+        m_state_lock.unlock();
         //수신 성공시 suspend thread
         //모든 클라이언트로부터 recv 혹은 timeout시 서버 연산
         //이후 resume thread
-        DoSend();
+       
 
     }
 };
@@ -102,68 +117,141 @@ void CMainServer::AccpetThread()
 	}
 };
 
-void CMainServer::ProcessPacket(char id)
+void CMainServer::ProcessPacket(char client_id)
 {
-    if (m_clients[id].GetBuf()[1] == CS_PACKET_LOGIN)
-    {
-        cout << "[" << atoi(&id) << "] : login packet recv \n";
-        cs_packet_login rp;
-        memcpy(&rp, m_clients[id].GetBuf(), sizeof(cs_packet_login));
+    char packet_type = m_clients[client_id].GetBuf()[1];
 
-        m_clients[id].SetName(rp.name);
+    if (packet_type == CS_PACKET_LOGIN)
+    {
+        cout << "[" << atoi(&client_id) << "] : login packet recv \n";
+        cs_packet_login rp;
+        memcpy(&rp, m_clients[client_id].GetBuf(), sizeof(cs_packet_login));
+
+        m_clients[client_id].SetName(rp.name);
 
         sc_packet_login_ok sp;
-        sp.type = SC_PACKET_LOGIN_OK;
-        sp.id = id;
-        sp.is_ready = false;
         sp.size = sizeof(sc_packet_login_ok);
+        sp.type = SC_PACKET_LOGIN_OK;
+        sp.id = client_id;
+        sp.is_ready = false;
+        
 
-        send(m_clients[id].GetSocket(), (char*)&sp, sizeof(sc_packet_login_ok), 0);
-    }
+        send(m_clients[client_id].GetSocket(), (char*)&sp, sizeof(sc_packet_login_ok), 0);
 
-    else if (m_clients[id].GetBuf()[1] == CS_PACKET_CHANGE_COLOR)
-    {
-        cout << "[" << id << "] : CS_PACKET_CHANGE_COLOR recv \n";
-        cs_packet_change_color rp;
-        memcpy(&rp, m_clients[id].GetBuf(), sizeof(cs_packet_change_color));
+        m_clients[client_id].StateLock();
+        m_clients[client_id].SetState(ST_INROBBY);
+        m_clients[client_id].StateUnlock();
 
-       // 서버에 id에 해당하는 플레이어 커마정보 저장
-        m_clients[id].GetPlayer().SetBodyColor(rp.body_color);
-        m_clients[id].GetPlayer().SetClothColor(rp.cloth_color);
+        //다른 플레이어들에게 로그인했음을 알림.
 
-        sc_packet_change_color sp;
-        sp.type = SC_PACKET_CHANGE_COLOR;
-        sp.id = id;
-        sp.body_color = rp.body_color;
-        sp.cloth_color = rp.cloth_color;
-       
-        for (auto& cl : m_clients) {
-            if (id == cl.GetID()) continue;
-            send(cl.GetSocket(), (char*)&sp, sizeof(sc_packet_change_color), 0);
+        sc_packet_login_other_client packet;
+        packet.size = sizeof(sc_packet_login_other_client);
+        packet.type = SC_PACKET_LOGIN_OTHER_CLIENT;
+        packet.id = client_id;
+        strcpy_s(packet.name, m_clients[client_id].GetName());
+        packet.body_color = m_clients[client_id].GetPlayer().GetBodyColor();
+        packet.cloth_color = m_clients[client_id].GetPlayer().GetClothColor();
+        packet.is_ready = false; //실은 스테이트 락 걸고 스테이트에서 받아와야함
+                
+        for (auto& other : m_clients)
+        {
+            if (other.GetID() == client_id)continue;
+            other.StateLock();
+            if (ST_INROBBY != other.GetState())
+            {
+                other.StateUnlock();
+                continue;
+            }
+            other.StateUnlock();
+                        
+            send(m_clients[client_id].GetSocket(), (char*)&packet, sizeof(sc_packet_login_other_client), 0);
         }
     }
 
-    else if (m_clients[id].GetBuf()[1] == CS_PACKET_READY)
+    else if (packet_type == CS_PACKET_CHANGE_COLOR)
+    {
+        cout << "[" << client_id + '0' << "] : CS_PACKET_CHANGE_COLOR recv \n";
+
+        cs_packet_change_color rp;
+        memcpy(&rp, m_clients[client_id].GetBuf(), sizeof(cs_packet_change_color));
+
+       // 서버에 id에 해당하는 플레이어 커마정보 저장
+        m_clients[client_id].GetPlayer().SetBodyColor(rp.body_color);
+        m_clients[client_id].GetPlayer().SetClothColor(rp.cloth_color);
+
+        sc_packet_change_color sp;
+        sp.type = SC_PACKET_CHANGE_COLOR;
+        sp.id = client_id;
+        sp.body_color = rp.body_color;
+        sp.cloth_color = rp.cloth_color;
+       
+        for (auto& other : m_clients) {
+            other.StateLock();
+            if (ST_INROBBY != other.GetState())
+            {
+                other.StateUnlock();
+                continue;
+            }
+            other.StateUnlock();
+
+            send(other.GetSocket(), (char*)&sp, sizeof(sc_packet_change_color), 0);
+        }
+    }
+
+    else if (packet_type == CS_PACKET_READY)
     {
         cout << "[" << id + '0' << "] : CS_PACKET_READY recv \n";
+      
         cs_packet_ready rp;
-        memcpy(&rp, m_clients[id].GetBuf(), sizeof(cs_packet_ready));
+        memcpy(&rp, m_clients[client_id].GetBuf(), sizeof(cs_packet_ready));
 
-        m_clients[id].SetState(ST_READY);
-
+        if (rp.is_ready == true)
+        {
+            m_clients[client_id].StateLock();
+            if (m_clients[client_id].GetState() == ST_INROBBY)
+                m_clients[client_id].SetState(ST_READY);
+            m_clients[client_id].StateUnlock();
+        }
+        else
+        {
+            m_clients[client_id].StateLock();
+            if (m_clients[client_id].GetState() == ST_READY)
+                m_clients[client_id].SetState(ST_INROBBY);
+            m_clients[client_id].StateUnlock();
+        }
+        
         sc_packet_ready sp;
         sp.type = SC_PACKET_READY;
         sp.size = sizeof(sc_packet_ready);
-        sp.id = id;
-        sp.is_ready = true;
+        sp.id = client_id;
+        m_clients[client_id].StateLock();
+        if (m_clients[client_id].GetState() == ST_READY)
+            sp.is_ready = true;
+        else if (m_clients[client_id].GetState() == ST_INROBBY)
+            sp.is_ready = false;
+        else
+            std::cout << "state_error" << std::endl;
+        m_clients[client_id].StateUnlock();
 
         for (auto& cl : m_clients) {
             send(cl.GetSocket(), (char*)&sp, sizeof(sc_packet_ready), 0);
         }
+
+        //모든 클라이언트가 준비 상태이면 게임을 시작한다
+        if (true == IsAllClientsReady())
+        {
+            m_state_lock.lock();
+            m_game_state = SCENE::STAGE;
+            m_state_lock.unlock();
+
+
+        }
     }
+
+
     else
     {
-        cout << "[MovePacket] : recv \n";
+
     }
 
 }
@@ -174,7 +262,7 @@ void CMainServer::DoSend()
     
     for (auto& cl : m_clients)
     {
-        ;
+        
     }
 
     // 여기서 플레이어들 정보 취합후 일괄 전송
@@ -226,6 +314,7 @@ int CMainServer::DoAccept()
     }
 };
 
+
 char CMainServer::GetNewID()
 {
     for (int i = 0; i < MAX_CLIENTS; ++i) {
@@ -234,6 +323,7 @@ char CMainServer::GetNewID()
         {
             m_clients[i].SetState(ST_ACCEPT);
             m_clients[i].StateUnlock();
+
             return i;
         }
         m_clients[i].StateUnlock();
@@ -244,6 +334,22 @@ char CMainServer::GetNewID()
 
 
 };
+bool CMainServer::IsAllClientsReady()
+{
+    for (int i = 0; i < MAX_CLIENTS; ++i)
+    {
+        m_clients[i].StateLock();
+        if (m_clients[i].GetState() == ST_READY)
+        {
+            m_clients[i].StateUnlock();
+            return false;
+        }
+        m_clients[i].StateUnlock();
+    }
+    return true;
+}
+
+
 
 void CMainServer::Disconnect(char id)
 {

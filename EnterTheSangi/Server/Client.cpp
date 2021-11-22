@@ -13,7 +13,7 @@ void CClient::SetID(const int client_id)
 
 void CClient::SetName(char* name)
 {
-	m_Name = name;
+	strcpy_s(m_name, name);
 }
 
 void CClient::SetState(CLIENT_STATE state)
@@ -49,6 +49,11 @@ char* CClient::GetBuf()
 CPlayer CClient::GetPlayer()
 {
 	return m_player;
+}
+
+char* CClient::GetName()
+{
+	return m_name;
 }
 
 void CClient::StateLock()

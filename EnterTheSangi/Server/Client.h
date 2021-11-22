@@ -21,19 +21,21 @@ public:
 	char GetID();
 	CLIENT_STATE GetState();
 	SOCKET GetSocket();
+	CPlayer GetPlayer();
 	char* GetBuf();
+	char* GetName();
 
 	void StateLock();
 	void StateUnlock();
 
-	CPlayer GetPlayer();
+	
 
 private:
 	SOCKET         m_socket;
 	SOCKADDR_IN    m_addr;
-	char           m_buff[MAX_BUF_SIZE];
+	char           m_buff[BUF_SIZE];
 	char           m_ID;
-	char*		   m_Name;
+	char		   m_name[MAX_NAME_SIZE];
 	CLIENT_STATE   m_state;
 	std::mutex     m_state_lock;
 
