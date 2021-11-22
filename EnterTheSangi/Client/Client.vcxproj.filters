@@ -104,11 +104,14 @@
     <Filter Include="01 GameObject\00 Player\NetworkPlayer">
       <UniqueIdentifier>{0e8679a5-f719-4e3f-adbb-4ae691bc76f0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01 GameObject\00 Player\CustomizePlayer">
-      <UniqueIdentifier>{e2e58640-3d01-4fea-b22a-cca1729de813}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02 Component\03 Font">
+    <Filter Include="01 GameObject\03 UI\02 Font">
       <UniqueIdentifier>{454b9047-4acc-4edb-b874-ca5e0e873a56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01 GameObject\00 Player\PlayerState">
+      <UniqueIdentifier>{e6cc0baa-47ec-4149-8527-0134ae6aa740}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02 Component\03 StateMachine">
+      <UniqueIdentifier>{61a56a78-b2cc-42d7-a8a5-34776cabf420}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -206,7 +209,13 @@
       <Filter>01 GameObject\00 Player\NetworkPlayer</Filter>
     </ClInclude>
     <ClInclude Include="Font.h">
-      <Filter>02 Component\03 Font</Filter>
+      <Filter>01 GameObject\03 UI\02 Font</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerState.h">
+      <Filter>01 GameObject\00 Player\PlayerState</Filter>
+    </ClInclude>
+    <ClInclude Include="StateMachine.h">
+      <Filter>02 Component\03 StateMachine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -308,7 +317,13 @@
       <Filter>01 GameObject\00 Player\NetworkPlayer</Filter>
     </ClCompile>
     <ClCompile Include="Font.cpp">
-      <Filter>02 Component\03 Font</Filter>
+      <Filter>01 GameObject\03 UI\02 Font</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerState.cpp">
+      <Filter>01 GameObject\00 Player\PlayerState</Filter>
+    </ClCompile>
+    <ClCompile Include="StateMachine.cpp">
+      <Filter>02 Component\03 StateMachine</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

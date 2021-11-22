@@ -116,6 +116,13 @@ HRESULT Renderer::Render_Alpha()
 
 HRESULT Renderer::Render_UI()
 {
+	for (auto& pGameObject : m_RenderList[RENDER_UI])
+	{
+		if (nullptr != pGameObject)
+			pGameObject->Render_GameObject();
+	}
+	m_RenderList[RENDER_UI].clear();
+
 	return NOERROR;
 }
 

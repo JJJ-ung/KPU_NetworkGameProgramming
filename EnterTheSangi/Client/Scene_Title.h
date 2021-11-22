@@ -1,6 +1,7 @@
 #pragma once
 #include "Scene.h"
 
+class Font;
 class AnimatedSprite;
 class Scene_Title : public Scene
 {
@@ -14,6 +15,8 @@ public:
 	virtual HRESULT Render_Scene();
 
 private:
+	string m_strName = "";
+	Font* m_pName = nullptr;
 	AnimatedSprite* m_pAnimation = nullptr;
 
 public:

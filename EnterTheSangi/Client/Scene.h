@@ -1,6 +1,7 @@
 #pragma once
 #include "GameMgr.h"
 
+class InputMgr;
 class Scene
 {
 public:
@@ -16,6 +17,7 @@ protected:
 	bool m_bChangeScene = false;
 
 protected:
+	InputMgr*							m_pInputMgr = nullptr;
 	GameMgr*							m_pGameMgr = nullptr;
 	LPDIRECT3DDEVICE9		m_pGraphic_Device = nullptr;
 

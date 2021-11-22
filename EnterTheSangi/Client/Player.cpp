@@ -5,6 +5,7 @@
 #include "ResourceMgr.h"
 #include "Texture.h"
 #include "DeviceMgr.h"
+#include "Font.h"
 
 Player::Player(LPDIRECT3DDEVICE9 pGraphic_Device)
 	:GameObject(pGraphic_Device)
@@ -16,7 +17,7 @@ Player::~Player()
 	Free();
 }
 
-HRESULT Player::Ready_GameObject(const TCHAR* pName)
+HRESULT Player::Ready_GameObject(string strName)
 {
 	m_pRenderer = Renderer::GetInstance();
 	if (!m_pRenderer) return E_FAIL;
@@ -41,7 +42,14 @@ HRESULT Player::Ready_GameObject(const TCHAR* pName)
 	m_tCustomInfo.vBody = D3DXVECTOR3(rand() % 5 * 0.2f, rand() % 5 * 0.2f, rand() % 5 * 0.2f);
 	m_tCustomInfo.vCloth = D3DXVECTOR3(rand() % 5 * 0.2f, rand() % 5 * 0.2f, rand() % 5 * 0.2f);
 
-	m_strName = pName;
+	m_strName = strName;
+
+	//m_pNameTag = Font::Create(m_pDevice, m_strName, 3);
+
+	if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::UI, m_pNameTag = Font::Create(m_pDevice, m_strName, 0.5f))))
+		return E_FAIL;
+	if (!m_pNameTag) return E_FAIL;
+	m_pNameTag->Update_Position(m_vPosition, D3DXVECTOR3(0.f, 48.f, 0.f));
 
 	return GameObject::Ready_GameObject();
 }
@@ -60,6 +68,8 @@ INT Player::Update_GameObject(float time_delta)
 	m_pGameMgr->Get_PlayerPos() = m_vPosition;
 
 	m_pCurrAnimation->Update_Component(time_delta);
+
+	m_pNameTag->Update_Position(m_vPosition, D3DXVECTOR3(0.f, -48.f, 0.f));
 
 	return GameObject::Update_GameObject(time_delta);
 }
@@ -135,10 +145,10 @@ HRESULT Player::Ready_AnimationInfo()
 	return NOERROR;
 }
 
-Player* Player::Create(LPDIRECT3DDEVICE9 pGraphic_Device, const TCHAR* pName)
+Player* Player::Create(LPDIRECT3DDEVICE9 pGraphic_Device, string strName)
 {
 	Player* pInstance = new Player(pGraphic_Device);
-	if (FAILED(pInstance->Ready_GameObject(pName)))
+	if (FAILED(pInstance->Ready_GameObject(strName)))
 		SafeDelete(pInstance);
 	return pInstance;
 }

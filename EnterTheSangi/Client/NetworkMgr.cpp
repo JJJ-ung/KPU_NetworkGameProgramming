@@ -37,6 +37,16 @@ HRESULT NetworkMgr::Setup_Networking()
 	return NOERROR;
 }
 
+HRESULT NetworkMgr::Send_LoginInfo(cs_packet_login& tLoginPacket)
+{
+	if (FAILED(send(m_socket, (char*)&tLoginPacket, sizeof(cs_packet_login), 0)))
+	{
+		Render_Error("Failed To Send Login Info");
+		return E_FAIL;
+	}
+	return NOERROR;
+}
+
 HRESULT NetworkMgr::Send_ClientInfo(GameStatePlayer& tPlayerPacket)
 {
 	if (FAILED(send(m_socket, (char*)&tPlayerPacket, sizeof(GameStatePlayer), 0)))

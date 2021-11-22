@@ -13,6 +13,7 @@ public:
 	HRESULT Setup_Networking();
 
 public:
+	HRESULT Send_LoginInfo(cs_packet_login& tLoginPacket);
 	HRESULT Send_ClientInfo(GameStatePlayer& tPlayerPacket);
 	HRESULT Send_CustomizeInfo(cs_packet_change_color& tColorPacket);
 

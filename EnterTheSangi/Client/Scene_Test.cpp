@@ -1,6 +1,7 @@
 #include "framework.h"
 #include "Scene_Test.h"
 
+#include "Player.h"
 #include "Camera.h"
 #include "TestMap.h"
 
@@ -18,7 +19,10 @@ HRESULT Scene_Test::Ready_Scene()
 {
 	cout << "Test" << endl;
 
-	if (FAILED(m_pGameMgr->Set_PrototypesOnScene(OBJECT::PLAYER)))
+	//if (FAILED(m_pGameMgr->Set_PrototypesOnScene(OBJECT::PLAYER)))
+	//	return E_FAIL;
+
+	if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::PLAYER, Player::Create(m_pGraphic_Device, m_pGameMgr->Get_ClientPlayerName()))))
 		return E_FAIL;
 
 	if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::CAMERA, Camera::Create(m_pGraphic_Device))))
