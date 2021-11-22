@@ -46,10 +46,10 @@ void CMainServer::Activate()
     };
 
     //클라이언트별로 하나씩 할당되는 스레드.
-    for (int i = 0; i < MAX_CLIENTS; ++i)
-        m_client_threads.emplace_back(&CMainServer::ClientThread,this);
-    for (auto& th : m_client_threads)
-        th.join();
+    //for (int i = 0; i < MAX_CLIENTS; ++i)
+    //    
+    //for (auto& th : m_client_threads)
+    //    th.join();
 
     //accept만을 위한 스레드. 주스레드에서 accpet 상관 없이 서버 연산을 돌리기 위함.
     for (int i = 0; i < 1; ++i)
@@ -61,7 +61,7 @@ void CMainServer::Activate()
 
 };
 
-void CMainServer::ClientThread() 
+void CMainServer::ClientThread(int id) 
 {
     int my_id = g_client_count;
     g_client_count++;
@@ -95,7 +95,6 @@ void CMainServer::AccpetThread()
 	{
 
         DoAccept();
-		
 	}
 };
 
@@ -122,6 +121,7 @@ int CMainServer::DoAccept()
     if (new_id != -1)
     {   
         m_clients[new_id].SetSocket(client_socket);
+        m_client_threads.emplace_back(&CMainServer::ClientThread, this);
         //플레이어 초기 정보 세팅
         //login_ok패킷 전송
     }

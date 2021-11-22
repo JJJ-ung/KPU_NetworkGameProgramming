@@ -18,7 +18,7 @@ public:
 	void Init(const int server_port);
 	void Activate();
 
-	void ClientThread();
+	void ClientThread(int id);
 	void AccpetThread();
 
 	void DoSend();
