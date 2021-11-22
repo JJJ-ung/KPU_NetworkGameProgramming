@@ -154,7 +154,9 @@
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Client.h" />
+    <ClInclude Include="ColorButton.h" />
     <ClInclude Include="Component.h" />
+    <ClInclude Include="CustomPlayer.h" />
     <ClInclude Include="DeviceMgr.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="framework.h" />
@@ -167,6 +169,7 @@
     <ClInclude Include="NetworkPlayer.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerState.h" />
+    <ClInclude Include="PostCard.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="ResourceMgr.h" />
@@ -191,7 +194,9 @@
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Client.cpp" />
+    <ClCompile Include="ColorButton.cpp" />
     <ClCompile Include="Component.cpp" />
+    <ClCompile Include="CustomPlayer.cpp" />
     <ClCompile Include="DeviceMgr.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="GameMgr.cpp" />
@@ -203,6 +208,7 @@
     <ClCompile Include="NetworkPlayer.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerState.cpp" />
+    <ClCompile Include="PostCard.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="ResourceMgr.cpp" />
     <ClCompile Include="Scene.cpp" />

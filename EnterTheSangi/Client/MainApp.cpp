@@ -57,7 +57,8 @@ HRESULT MainApp::Ready_MainApp()
 
 	m_pNetworkMgr = NetworkMgr::GetInstance();
 	if (FAILED(m_pNetworkMgr->Ready_WinSock()))
-		return E_FAIL;
+		int a = 0;
+		//return E_FAIL;
 
 	// 로딩용 이미지 로드
 	if (FAILED(m_pResourceMgr->Add_Texture(L"UI", L"Loading", L"../Binary/Resources/Loading/Loading_%d.png", 17)))

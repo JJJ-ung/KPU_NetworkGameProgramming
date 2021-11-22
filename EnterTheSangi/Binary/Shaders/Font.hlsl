@@ -1,6 +1,7 @@
 matrix		g_matWorld, g_matView, g_matProj;
 float		g_fAlpha = 1.f;
-texture		g_BaseTexture;
+float4		g_vColor = float4(1.f, 1.f, 1.f, 0.f);
+texture	g_BaseTexture;
 sampler BaseSampler = sampler_state
 {
 	minfilter = point;
@@ -54,7 +55,7 @@ PS_OUT PS_MAIN(PS_IN In)
 {
 	PS_OUT		Out = (PS_OUT)0;
 
-	Out.vColor = (tex2D(BaseSampler, In.vTexUV) + vector(1.f, 1.f, 1.f, 0.f)) * g_fAlpha;
+	Out.vColor = (tex2D(BaseSampler, In.vTexUV) + g_vColor) * g_fAlpha;
 
 	return Out;
 }

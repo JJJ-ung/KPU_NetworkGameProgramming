@@ -113,20 +113,23 @@
     <Filter Include="03 Scene\99 Test">
       <UniqueIdentifier>{b21067e9-3732-4c0b-96e5-296ad1361f8a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03 Scene\02 Customize">
-      <UniqueIdentifier>{d83d14c9-5b07-4f84-9d11-360a7e163f45}</UniqueIdentifier>
+    <Filter Include="01 GameObject\03 UI\03 Button">
+      <UniqueIdentifier>{8d162b14-3f0a-4995-be9c-044ca788e311}</UniqueIdentifier>
     </Filter>
     <Filter Include="01 GameObject\03 UI\99 Customize">
       <UniqueIdentifier>{3507471a-42f0-4916-bb76-04114d361afd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01 GameObject\03 UI\99 Customize\Postcard">
-      <UniqueIdentifier>{03413aeb-5068-4a6c-935b-b303249f346d}</UniqueIdentifier>
     </Filter>
     <Filter Include="01 GameObject\03 UI\99 Customize\ColorButton">
       <UniqueIdentifier>{f5fa395d-41c6-4882-b0e9-1f4d09080589}</UniqueIdentifier>
     </Filter>
     <Filter Include="01 GameObject\03 UI\99 Customize\CustomPlayer">
       <UniqueIdentifier>{007a63d7-6fc8-4b05-ad5e-a3113f2a466c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01 GameObject\03 UI\99 Customize\Postcard">
+      <UniqueIdentifier>{03413aeb-5068-4a6c-935b-b303249f346d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03 Scene\02 Customize">
+      <UniqueIdentifier>{d83d14c9-5b07-4f84-9d11-360a7e163f45}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -234,6 +237,15 @@
     </ClInclude>
     <ClInclude Include="Scene_Customize.h">
       <Filter>03 Scene\02 Customize</Filter>
+    </ClInclude>
+    <ClInclude Include="PostCard.h">
+      <Filter>01 GameObject\03 UI\99 Customize\Postcard</Filter>
+    </ClInclude>
+    <ClInclude Include="CustomPlayer.h">
+      <Filter>01 GameObject\03 UI\99 Customize\CustomPlayer</Filter>
+    </ClInclude>
+    <ClInclude Include="ColorButton.h">
+      <Filter>01 GameObject\03 UI\99 Customize\ColorButton</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -345,6 +357,15 @@
     </ClCompile>
     <ClCompile Include="Scene_Customize.cpp">
       <Filter>03 Scene\02 Customize</Filter>
+    </ClCompile>
+    <ClCompile Include="PostCard.cpp">
+      <Filter>01 GameObject\03 UI\99 Customize\Postcard</Filter>
+    </ClCompile>
+    <ClCompile Include="CustomPlayer.cpp">
+      <Filter>01 GameObject\03 UI\99 Customize\CustomPlayer</Filter>
+    </ClCompile>
+    <ClCompile Include="ColorButton.cpp">
+      <Filter>01 GameObject\03 UI\99 Customize\ColorButton</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -17,6 +17,7 @@ public:
 
 public:
 	HRESULT Set_Texture(LPD3DXEFFECT pEffect, const char* pConstantName, UINT iIndex = 0);
+	HRESULT Set_Transform(D3DXMATRIX& mat);
 	HRESULT Draw_Sprite(UINT iIndex = 0, const D3DXVECTOR3* pCenter = nullptr, const RECT* pSrcRect = nullptr, const D3DXVECTOR3* pPosition = nullptr, D3DCOLOR Color = D3DCOLOR_ARGB(255, 255, 255, 255));
 
 private:

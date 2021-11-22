@@ -37,6 +37,8 @@ HRESULT Font::Ready_GameObject(string strName, float fSize, bool align)
 	m_strLine = strName;
 	Convert_Line(strName);
 
+	D3DXMatrixIdentity(&m_matView);
+
 	return GameObject::Ready_GameObject();
 }
 
@@ -69,12 +71,13 @@ HRESULT Font::Render_GameObject()
 		matWorld = matScale * matTrans;
 		pEffect->SetMatrix("g_matWorld", &matWorld);
 
-		D3DXMATRIX		matTmp;
-		m_pDevice->GetTransform(D3DTS_TEXTURE0, &matTmp);
-		pEffect->SetMatrix("g_matView", &matTmp);
+		pEffect->SetMatrix("g_matView", &m_matView);
 
+		D3DXMATRIX		matTmp;
 		m_pDevice->GetTransform(D3DTS_PROJECTION, &matTmp);
 		pEffect->SetMatrix("g_matProj", &matTmp);
+
+		m_pShader->Set_Value("g_vColor", &m_vColor, sizeof(D3DXVECTOR4));
 
 		pEffect->Begin(nullptr, 0);
 		pEffect->BeginPass(0);

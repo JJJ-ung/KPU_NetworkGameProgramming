@@ -1,6 +1,7 @@
 matrix		g_matWorld, g_matView, g_matProj;
 
 float3		g_vCloth, g_vBody;
+float		g_fAlpha = 1.f;
 
 texture		g_BaseTexture;
 sampler BaseSampler = sampler_state
@@ -82,7 +83,7 @@ PS_OUT PS_MAIN(PS_IN In)
 
 	float3 vResult = vBase * (1 - vColor.g) * (1 - vColor.b) + vCloth + vBody;
 
-	Out.vColor = vector(vResult.r, vResult.g, vResult.b, vColor.a);
+	Out.vColor = vector(vResult.r, vResult.g, vResult.b, vColor.a * g_fAlpha);
 
 	return Out;
 }

@@ -1,6 +1,6 @@
 #include "framework.h"
 #include "Scene_Title.h"
-#include "Scene_Test.h"
+#include "Scene_Customize.h"
 #include "InputMgr.h"
 #include "NetworkMgr.h"
 #include "StaticSprite.h"
@@ -73,7 +73,7 @@ HRESULT Scene_Title::Render_Scene()
 		NetworkMgr::GetInstance()->Send_LoginInfo(t);
 
 		m_pGameMgr->Clear_Scene();
-		Scene_Test* pScene = Scene_Test::Create(m_pGraphic_Device);
+		Scene_Customize* pScene = Scene_Customize::Create(m_pGraphic_Device);
 		if (FAILED(m_pGameMgr->Set_CurrScene(pScene)))
 			return -1;
 	}

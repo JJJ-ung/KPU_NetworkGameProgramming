@@ -44,8 +44,6 @@ HRESULT Player::Ready_GameObject(string strName)
 
 	m_strName = strName;
 
-	//m_pNameTag = Font::Create(m_pDevice, m_strName, 3);
-
 	if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::UI, m_pNameTag = Font::Create(m_pDevice, m_strName, 0.5f))))
 		return E_FAIL;
 	if (!m_pNameTag) return E_FAIL;

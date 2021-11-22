@@ -49,6 +49,11 @@ HRESULT Texture::Set_Texture(LPD3DXEFFECT pEffect, const char* pConstantName, UI
 	return pEffect->SetTexture(pConstantName, m_vecTexture[iIndex]);
 }
 
+HRESULT Texture::Set_Transform(D3DXMATRIX& mat)
+{
+	return m_pSprite->SetTransform(&mat);
+}
+
 HRESULT Texture::Draw_Sprite(UINT iIndex, const D3DXVECTOR3* pCenter, const RECT* pSrcRect, const D3DXVECTOR3* pPosition, D3DCOLOR Color)
 {
 	HRESULT hr =  m_pSprite->Draw(m_vecTexture[iIndex], pSrcRect, pCenter, pPosition, Color);
