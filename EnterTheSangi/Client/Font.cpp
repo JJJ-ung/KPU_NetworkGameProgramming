@@ -41,7 +41,6 @@ HRESULT Font::Convert_Line(wstring strLine)
 			idx = -1;
 			continue;
 		}
-
 		m_vecIndex.push_back(idx);
 	}
 

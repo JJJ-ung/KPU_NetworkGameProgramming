@@ -22,7 +22,6 @@ HRESULT NetworkMgr::Ready_WinSock()
 	m_addr.sin_addr.s_addr = inet_addr(SERVER_IP);
 	m_addr.sin_port = htons(SERVER_PORT);
 
-	retval = connect(m_socket, (SOCKADDR*)&m_addr, sizeof(m_addr));
 	if (connect(m_socket, (SOCKADDR*)&m_addr, sizeof(m_addr)) == SOCKET_ERROR)
 		return E_FAIL;
 

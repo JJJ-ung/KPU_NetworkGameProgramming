@@ -181,8 +181,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			DestroyWindow(hWnd);
 			break;
 		default:
-            cout << wParam << endl;
-            g_pInputMgr->Get_Message() = wParam;
+            g_pInputMgr->Update_Text(wParam);
             break;
 		}
 		break;

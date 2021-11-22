@@ -130,6 +130,22 @@ void InputMgr::Update_Key()
 		m_dwCurKey |= KEY_F3;
 }
 
+void InputMgr::Update_Text(WPARAM message)
+{
+	if (!m_bTextMode) return;
+
+	if (message == VK_BACK)
+	{
+		if(!m_strText.empty())
+			m_strText.erase(m_strText.length() - 1, 1);
+	}
+
+	if (message > 64 || message < 91)
+		m_strText += (char)message;
+
+	cout << m_strText << endl;
+}
+
 void InputMgr::Free()
 {
 	m_pKeyBoard->Release();

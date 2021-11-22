@@ -31,7 +31,8 @@ public:
 	enum MOUSEMOVESTATE { DIMS_X, DIMS_Y, DIMS_WHEEL, DIMS_END };
 
 public:
-	WPARAM& Get_Message() { return m_iMessage; }
+	bool& Get_TextMode() { return m_bTextMode; }
+	string& Get_Text() { return m_strText; }
 
 private:
 	InputMgr();
@@ -51,6 +52,7 @@ public:
 public:
 	HRESULT Init_InputDev();
 	void	 Update_Key();
+	void Update_Text(WPARAM message);
 
 private:
 	LPDIRECTINPUT8			m_pInputSDK = nullptr;
@@ -64,7 +66,8 @@ private:
 	DIMOUSESTATE			m_tMouseState;
 
 private:
-	WPARAM						m_iMessage;
+	bool									m_bTextMode = false;
+	string								m_strText = "";
 
 public:
 	ULONG m_dwCurKey = 0;

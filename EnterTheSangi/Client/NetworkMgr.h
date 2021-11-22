@@ -27,9 +27,6 @@ private:
 	SOCKET						m_socket;
 	SOCKADDR_IN			m_addr;
 	WSADATA					m_wsa;
-	GameStatePlayer		m_playerPacket;
-	cs_packet_change_color		m_player_color_packet;
-	int								retval;
 
 public:
 	void			Free();
