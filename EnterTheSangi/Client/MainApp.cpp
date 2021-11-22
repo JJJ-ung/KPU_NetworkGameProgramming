@@ -5,6 +5,7 @@
 #include "GameMgr.h"
 #include "Renderer.h"
 #include "ShaderMgr.h"
+#include "NetworkMgr.h"
 #include "ResourceMgr.h"
 
 #include "Scene_Loading.h"
@@ -50,6 +51,10 @@ HRESULT MainApp::Ready_MainApp()
 	m_pResourceMgr = ResourceMgr::GetInstance();
 	if (FAILED(m_pResourceMgr->Ready_ResourceMgr(m_pGraphic_Device, DeviceMgr::GetInstance()->Get_Sprite())))
 		return E_FAIL;
+
+	m_pNetworkMgr = NetworkMgr::GetInstance();
+	//if (FAILED(m_pNetworkMgr->Ready_WinSock()))
+	//	return E_FAIL;
 
 	// 로딩용 이미지 로드
 	if (FAILED(m_pResourceMgr->Add_Texture(L"UI", L"Loading", L"../Binary/Resources/Loading/Loading_%d.png", 17)))

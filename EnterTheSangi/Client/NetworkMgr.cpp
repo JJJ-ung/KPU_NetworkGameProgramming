@@ -1,6 +1,18 @@
-#include "NetworkManager.h"
+#include "framework.h"
+#include "NetworkMgr.h"
+
+IMPLEMENT_SINGLETON(NetworkMgr)
 
 NetworkMgr::NetworkMgr()
+{
+}
+
+NetworkMgr::~NetworkMgr()
+{
+	Free();
+}
+
+HRESULT NetworkMgr::Ready_WinSock()
 {
 	WSAStartup(MAKEWORD(2, 2), &m_wsa);
 	m_socket = socket(AF_INET, SOCK_STREAM, 0);
@@ -11,9 +23,15 @@ NetworkMgr::NetworkMgr()
 	m_addr.sin_port = htons(SERVER_PORT);
 
 	retval = connect(m_socket, (SOCKADDR*)&m_addr, sizeof(m_addr));
+	if (retval == SOCKET_ERROR)
+		return E_FAIL;
+
+	cout << "Network Mgr Initailize Succeed!" << endl;
+
+	return NOERROR;
 }
 
-NetworkMgr::~NetworkMgr()
+void NetworkMgr::Free()
 {
 	closesocket(m_socket);
 	WSACleanup();
@@ -28,7 +46,7 @@ void NetworkMgr::err_display(const char* msg)
 		MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
 		(LPTSTR)&lpMsgBuf, 0, NULL);
 
-	std::cout << "[" << msg << "] : " << (char*)lpMsgBuf << std::endl;
+	cout << "[" << msg << "] : " << (char*)lpMsgBuf << endl;
 	LocalFree(lpMsgBuf);
 }
 
@@ -64,7 +82,7 @@ void NetworkMgr::do_send()
 void NetworkMgr::do_send_customizing() //커스터마이징 정보 수신
 {
 	m_player_color_packet.type = '1';
-	retval = send(m_socket, (char*)&m_player_color_packet, sizeof(cs_change_color), 0);
+	retval = send(m_socket, (char*)&m_player_color_packet, sizeof(cs_packet_change_color), 0);
 	
 	if (retval == SOCKET_ERROR)
 		err_display("send()");
@@ -94,8 +112,8 @@ void NetworkMgr::do_recv()
 	}
 	
 	else if (buf[1] == '1') { // 커스터마이징 정보 수신
-		sc_change_color rp;
-		memcpy(&rp, &buf, sizeof(sc_change_color));
+		cs_packet_change_color rp;
+		memcpy(&rp, &buf, sizeof(cs_packet_change_color));
 	}
 }
 

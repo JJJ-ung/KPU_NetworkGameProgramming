@@ -4,6 +4,7 @@
 #include "InputMgr.h"
 #include "GameMgr.h"
 #include "ShaderMgr.h"
+#include "NetworkMgr.h"
 #include "ResourceMgr.h"
 
 class Buffer;
@@ -30,6 +31,7 @@ protected:
 	Texture*								m_pTexture = nullptr;
 	InputMgr*							m_pInputMgr = nullptr;
 	GameMgr*							m_pGameMgr = nullptr;
+	NetworkMgr*					m_pNetworkMgr = nullptr;
 	ResourceMgr*					m_pResourceMgr = nullptr;
 
 protected:

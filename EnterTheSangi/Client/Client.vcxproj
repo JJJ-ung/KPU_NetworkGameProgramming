@@ -162,7 +162,7 @@
     <ClInclude Include="InputMgr.h" />
     <ClInclude Include="Loading.h" />
     <ClInclude Include="MainApp.h" />
-    <ClInclude Include="NetworkManager.h" />
+    <ClInclude Include="NetworkMgr.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Resource.h" />
@@ -193,7 +193,7 @@
     <ClCompile Include="InputMgr.cpp" />
     <ClCompile Include="Loading.cpp" />
     <ClCompile Include="MainApp.cpp" />
-    <ClCompile Include="NetworkManager.cpp" />
+    <ClCompile Include="NetworkMgr.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="ResourceMgr.cpp" />

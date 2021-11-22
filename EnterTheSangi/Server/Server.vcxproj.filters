@@ -13,9 +13,6 @@
     <Filter Include="03 GameObject">
       <UniqueIdentifier>{e44cfff0-e3c2-4fac-9510-49e30904c970}</UniqueIdentifier>
     </Filter>
-    <Filter Include="99 Protocol">
-      <UniqueIdentifier>{ca03773c-f4fe-4556-b741-1392eefa08b8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="03 GameObject\01 Player">
       <UniqueIdentifier>{7ad9e03f-49f3-4947-bca1-ba456c1ef176}</UniqueIdentifier>
     </Filter>
@@ -24,9 +21,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Protocol.h">
-      <Filter>99 Protocol</Filter>
-    </ClInclude>
     <ClInclude Include="MainServer.h">
       <Filter>01 MainServer</Filter>
     </ClInclude>

@@ -4,7 +4,7 @@
 
 using namespace std;
 
-const char* SERVER_IP = "255.255.255.255";
+constexpr const char* SERVER_IP = "255.255.255.255";
 const int SERVER_PORT = 5000;
 const int MAX_CLIENTS = 3;
 
@@ -44,22 +44,22 @@ struct Item
 	WEAPON        e_weapon;     //무기 종류 (아이템에서 무기외에 다른 것도 나오게 하려면 수정 필요)
 };
 
-struct Player  //player 정보
-{
-	char          id;
-	char          name[MAX_NAME_SIZE];
-	D3DXVECTOR4   body_color;
-	D3DXVECTOR4   cloth_color;
-
-	D3DXVECTOR2   v_position;
-	D3DXVECTOR2   v_look;
-	DIR           e_direction;
-	STATE         e_state;
-	char          health;
-	bool          is_invincible;
-	WEAPON        e_weapon;
-	float         cool_time;
-};
+//struct Player  //player 정보
+//{
+//	char          id;
+//	char          name[MAX_NAME_SIZE];
+//	D3DXVECTOR4   body_color;
+//	D3DXVECTOR4   cloth_color;
+//
+//	D3DXVECTOR2   v_position;
+//	D3DXVECTOR2   v_look;
+//	DIR           e_direction;
+//	STATE         e_state;
+//	char          health;
+//	bool          is_invincible;
+//	WEAPON        e_weapon;
+//	float         cool_time;
+//};
 
 struct GameStatePlayer   //game_state 전송에 필요없는 데이터 제외한 구조체
 {

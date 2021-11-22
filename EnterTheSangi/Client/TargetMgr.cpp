@@ -107,6 +107,7 @@ HRESULT TargetMgr::SetUp_OnShader(LPD3DXEFFECT pEffect, const TCHAR* pTargetTag,
 	return pTarget->SetUp_OnShader(pEffect, hHandle);;
 }
 
+#ifdef _DEBUG
 HRESULT TargetMgr::Ready_Debug_Buffer(const TCHAR* pTargetTag, float fX, float fY, float fSizeX, float fSizeY)
 {
 	Target* pTarget = Find_Target(pTargetTag);
@@ -129,6 +130,7 @@ HRESULT TargetMgr::Render_Debug_Buffer(const TCHAR* pMRTTag)
 
 	return NOERROR;
 }
+#endif
 
 Target* TargetMgr::Find_Target(const TCHAR* pTargetTag)
 {

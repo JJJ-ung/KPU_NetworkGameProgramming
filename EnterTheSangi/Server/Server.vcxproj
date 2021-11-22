@@ -151,7 +151,6 @@
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="MainServer.h" />
     <ClInclude Include="Player.h" />
-    <ClInclude Include="Protocol.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp" />

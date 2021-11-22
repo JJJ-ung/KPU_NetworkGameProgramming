@@ -3,6 +3,7 @@
 class Renderer;
 class GameMgr;
 class ShaderMgr;
+class NetworkMgr;
 class ResourceMgr;
 class MainApp
 {
@@ -22,6 +23,7 @@ private:
 	Renderer* m_pRenderer = nullptr;
 	GameMgr* m_pGameMgr = nullptr;
 	ShaderMgr* m_pShaderMgr = nullptr;
+	NetworkMgr* m_pNetworkMgr = nullptr;
 	ResourceMgr* m_pResourceMgr = nullptr;
 
 public:
