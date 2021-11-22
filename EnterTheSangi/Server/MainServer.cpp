@@ -98,8 +98,9 @@ void CMainServer::AccpetThread()
 
 void CMainServer::ProcessPacket(char id)
 {
-    if (m_clients[id].GetBuf()[0] == CS_PACKET_LOGIN)
+    if (m_clients[id].GetBuf()[1] == CS_PACKET_LOGIN)
     {
+        cout << "[" << atoi(&id) << "] : login packet recv \n";
         cs_packet_login rp;
         memcpy(&rp, m_clients[id].GetBuf(), sizeof(cs_packet_login));
 
@@ -114,8 +115,9 @@ void CMainServer::ProcessPacket(char id)
         send(m_clients[id].GetSocket(), (char*)&sp, sizeof(sc_packet_login_ok), 0);
     }
 
-    else if (m_clients[id].GetBuf()[0] == CS_PACKET_CHANGE_COLOR)
+    else if (m_clients[id].GetBuf()[1] == CS_PACKET_CHANGE_COLOR)
     {
+        cout << "[" << atoi(&id) << "] : CS_PACKET_CHANGE_COLOR recv \n";
         cs_packet_change_color rp;
         memcpy(&rp, m_clients[id].GetBuf(), sizeof(cs_packet_change_color));
 
@@ -135,8 +137,9 @@ void CMainServer::ProcessPacket(char id)
         }
     }
 
-    else if (m_clients[id].GetBuf()[0] == CS_PACKET_READY)
+    else if (m_clients[id].GetBuf()[1] == CS_PACKET_READY)
     {
+        cout << "[" << atoi(&id) << "] : CS_PACKET_READY recv \n";
         cs_packet_ready rp;
         memcpy(&rp, m_clients[id].GetBuf(), sizeof(cs_packet_ready));
 
@@ -152,6 +155,11 @@ void CMainServer::ProcessPacket(char id)
             send(cl.GetSocket(), (char*)&sp, sizeof(sc_packet_ready), 0);
         }
     }
+    else
+    {
+        cout << "[" << atoi(&id) << "] : move packet recv \n";
+    }
+
 }
 
 void CMainServer::DoSend()
@@ -209,7 +217,7 @@ char CMainServer::GetNewID()
         {
             m_clients[i].SetState(ST_ACCEPT);
             m_clients[i].StateUnlock();
-            return i;
+            return i + '0';
         }
         m_clients[i].StateUnlock();
     }
