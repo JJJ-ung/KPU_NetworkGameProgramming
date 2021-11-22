@@ -45,13 +45,13 @@ void CMainServer::Activate()
         //err_quit("listen()")
     };
 
-    //Å¬¶óÀÌ¾ğÆ®º°·Î ÇÏ³ª¾¿ ÇÒ´çµÇ´Â ½º·¹µå.
+    //í´ë¼ì´ì–¸íŠ¸ë³„ë¡œ í•˜ë‚˜ì”© í• ë‹¹ë˜ëŠ” ìŠ¤ë ˆë“œ.
     //for (int i = 0; i < MAX_CLIENTS; ++i)
     //    
     //for (auto& th : m_client_threads)
     //    th.join();
 
-    //accept¸¸À» À§ÇÑ ½º·¹µå. ÁÖ½º·¹µå¿¡¼­ accpet »ó°ü ¾øÀÌ ¼­¹ö ¿¬»êÀ» µ¹¸®±â À§ÇÔ.
+    //acceptë§Œì„ ìœ„í•œ ìŠ¤ë ˆë“œ. ì£¼ìŠ¤ë ˆë“œì—ì„œ accpet ìƒê´€ ì—†ì´ ì„œë²„ ì—°ì‚°ì„ ëŒë¦¬ê¸° ìœ„í•¨.
     for (int i = 0; i < 1; ++i)
         m_accpet_threads.emplace_back(&CMainServer::AccpetThread, this);
     for (auto& th : m_accpet_threads)
@@ -78,11 +78,11 @@ void CMainServer::ClientThread(char id)
         while (true)
         {
             DoRecv(id);
-            //timeout ÇÊ¿ä
+            //timeout í•„ìš”
         }
-        //¼ö½Å ¼º°ø½Ã suspend thread
-        //¸ğµç Å¬¶óÀÌ¾ğÆ®·ÎºÎÅÍ recv È¤Àº timeout½Ã ¼­¹ö ¿¬»ê
-        //ÀÌÈÄ resume thread
+        //ìˆ˜ì‹  ì„±ê³µì‹œ suspend thread
+        //ëª¨ë“  í´ë¼ì´ì–¸íŠ¸ë¡œë¶€í„° recv í˜¹ì€ timeoutì‹œ ì„œë²„ ì—°ì‚°
+        //ì´í›„ resume thread
         DoSend();
 
     }
@@ -119,7 +119,7 @@ void CMainServer::ProcessPacket(char id)
         cs_packet_change_color rp;
         memcpy(&rp, m_clients[id].GetBuf(), sizeof(cs_packet_change_color));
 
-       // ¼­¹ö¿¡ id¿¡ ÇØ´çÇÏ´Â ÇÃ·¹ÀÌ¾î Ä¿¸¶Á¤º¸ ÀúÀå
+       // ì„œë²„ì— idì— í•´ë‹¹í•˜ëŠ” í”Œë ˆì´ì–´ ì»¤ë§ˆì •ë³´ ì €ì¥
         m_clients[id].GetPlayer().SetBodyColor(rp.body_color);
         m_clients[id].GetPlayer().SetClothColor(rp.cloth_color);
 
@@ -163,7 +163,7 @@ void CMainServer::DoSend()
         ;
     }
 
-    // ¿©±â¼­ ÇÃ·¹ÀÌ¾îµé Á¤º¸ ÃëÇÕÈÄ ÀÏ°ı Àü¼Û
+    // ì—¬ê¸°ì„œ í”Œë ˆì´ì–´ë“¤ ì •ë³´ ì·¨í•©í›„ ì¼ê´„ ì „ì†¡
     for (auto& cl : m_clients)
         send(cl.GetSocket(), (char*)&sp, sizeof(sc_packet_game_state), 0);
 };
@@ -173,6 +173,7 @@ void CMainServer::DoRecv(char id)
    
     recv(m_clients[id].GetSocket(), m_clients[id].GetBuf(), BUF_SIZE, 0);
     ProcessPacket(id);
+
 };
 
 int CMainServer::DoAccept()
@@ -189,8 +190,8 @@ int CMainServer::DoAccept()
     {   
         m_clients[new_id].SetSocket(client_socket);
         m_client_threads.emplace_back(&CMainServer::ClientThread, this, new_id);
-        //ÇÃ·¹ÀÌ¾î ÃÊ±â Á¤º¸ ¼¼ÆÃ
-        //login_okÆĞÅ¶ Àü¼Û
+        //í”Œë ˆì´ì–´ ì´ˆê¸° ì •ë³´ ì„¸íŒ…
+        //login_okíŒ¨í‚· ì „ì†¡
     }
     else
     {

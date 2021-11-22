@@ -2,29 +2,41 @@
 #include <d3dx9.h>
 #include "Protocol.h"
 #include "GameObject.h"
+#include "Enum.h"
+#include "ObjectStatus.h"
 
 class CPlayer:CGameObject
 {
 public:
-	explicit CPlayer();
+	CPlayer();
 	~CPlayer();
+		
+	D3DXVECTOR3        GetBodyColor();
+	D3DXVECTOR3        GetClothColor();
+	float              GetHealth();
 
-	D3DXVECTOR4 GetBodyColor();
-	D3DXVECTOR4 GetClothColor();
+	float              vGetHeightHf();   //  return half height
+	float              vGetWidthHf();    //  return half width
+	OBJECT::TYPE       vGetObjectType(); // return object type
 
-	void SetBodyColor(D3DXVECTOR4 body_color);
-	void SetClothColor(D3DXVECTOR4 cloth_color);
-
-	void ChangeInvincibleMode();
+	void               SetBodyColor(D3DXVECTOR3 body_color);
+	void               SetClothColor(D3DXVECTOR3 cloth_color);
+	void               SetHealth(float health);         // set player.health to health
+	void               ChangeHealth(float delta_health); // add delta_health to player.health
+	void               ChangeInvincibleMode();
 
 private:
-	STATE         m_e_state;
-	DIR           m_e_direction;	
-	char          m_health;
-	bool          m_is_invincible;
-	WEAPON        m_e_weapon;
-	float         m_cool_time;
+	STATE              m_e_state;
+	DIR                m_e_direction;
+	char               m_health;
+	bool               m_is_invincible;
+	WEAPON             m_e_weapon;
+	float              m_cool_time;
 
-	D3DXVECTOR4   m_body_color;
-	D3DXVECTOR4   m_cloth_color;
+	D3DXVECTOR3        m_body_color;
+	D3DXVECTOR3        m_cloth_color;
+
+	static const OBJECT::TYPE  m_object_type = OBJECT::PLAYER;
+	static const float m_height_hf;
+	static const float m_width_hf;
 };

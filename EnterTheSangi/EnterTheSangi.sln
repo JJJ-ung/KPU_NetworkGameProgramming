@@ -10,6 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Headers", "Headers", "{B84D
 		Binary\Include\Define.h = Binary\Include\Define.h
 		Binary\Include\Enum.h = Binary\Include\Enum.h
 		Binary\Include\Function.h = Binary\Include\Function.h
+		ObjectStatus.h = ObjectStatus.h
 		Binary\Include\Protocol.h = Binary\Include\Protocol.h
 		Binary\Include\Struct.h = Binary\Include\Struct.h
 	EndProjectSection
