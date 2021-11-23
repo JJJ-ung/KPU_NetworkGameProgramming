@@ -56,7 +56,7 @@ HRESULT PostCard::Ready_GameObject(UINT iPlayerID, bool bLocalPlayer)
 		// check is spawned
 		m_vPosition.y = 0.f;
 		m_bAnimation = false;
-		if (FAILED(m_pGameMgr->Add_GameObject((OBJECT::TYPE)5, CustomPlayer::Create(m_pDevice, m_iPlayerID))))
+		if (FAILED(m_pGameMgr->Add_GameObject((OBJECT::TYPE)5, m_pCustomPlayer = CustomPlayer::Create(m_pDevice, m_iPlayerID))))
 			return E_FAIL;
 		if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::UI, ColorButton::Create(m_pDevice, m_iPlayerID, false))))
 			return E_FAIL;

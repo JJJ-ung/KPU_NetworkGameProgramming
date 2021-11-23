@@ -79,6 +79,12 @@ HRESULT Scene_Customize::Update_PlayerColor(sc_packet_change_color tRecv)
 	int id = tRecv.id;
 	D3DXVECTOR3 t = tRecv.body_color;
 
+	if (!m_pPostCard[id])
+		return E_FAIL;
+
+	//PostCard* p = m_pPostCard[id];
+	//auto k = p->Get_Player();
+
 	m_pPostCard[id]->Get_Player()->Get_CustomInfo().vBody = tRecv.body_color;
 	m_pPostCard[id]->Get_Player()->Get_CustomInfo().vCloth = tRecv.cloth_color;
 
