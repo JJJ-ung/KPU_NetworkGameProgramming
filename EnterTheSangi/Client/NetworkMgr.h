@@ -18,7 +18,7 @@ public:
 	HRESULT Send_CustomizeInfo(cs_packet_change_color& tColorPacket);
 
 public:
-	HRESULT Recv_ServerInfo(void* tRecvInfo);
+	void*		Recv_ServerInfo(char& cType);
 	int			recvn(SOCKET s, char* buf, int len, int flags);
 
 private:

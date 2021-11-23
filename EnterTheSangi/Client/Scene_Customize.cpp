@@ -35,6 +35,10 @@ HRESULT Scene_Customize::Ready_Scene()
 	if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::PLAYER, PostCard::Create(m_pGraphic_Device, 2, false))))
 		return E_FAIL;
 
+	InitializeCriticalSection(&m_Crt);
+
+	m_hThread = (HANDLE)_beginthreadex(NULL, 0, Thread_Recv, this, 0, NULL);
+
 	return Scene::Ready_Scene();
 }
 
@@ -48,6 +52,31 @@ int Scene_Customize::Update_Scene(float time_delta)
 HRESULT Scene_Customize::Render_Scene()
 {
 	return Scene::Render_Scene();
+}
+
+unsigned Scene_Customize::Thread_Recv(void* pArg)
+{
+	Scene_Customize* pScene = (Scene_Customize*)pArg;
+
+	EnterCriticalSection(pScene->Get_Crt());
+
+	while(!pScene->m_bFinish)
+	{
+		// 쓰레드에서 할거
+		cout << "***" << endl;
+
+		char c = ' ';
+		void* p = pScene->m_pNetworkMgr->Recv_ServerInfo(c);
+
+		if(c == SC_PACKET_CHANGE_COLOR)
+		{
+			cout << "Change Color" << endl;
+		}
+	}
+
+	LeaveCriticalSection(pScene->Get_Crt());
+
+	return 0;
 }
 
 Scene_Customize* Scene_Customize::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
@@ -65,5 +94,9 @@ Scene_Customize* Scene_Customize::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
 
 void Scene_Customize::Free()
 {
+	WaitForSingleObject(m_hThread, INFINITE);
+	CloseHandle(m_hThread);
+	DeleteCriticalSection(&m_Crt);
+	cout << "Customize Thread Closed" << endl;
 	Scene::Free();
 }

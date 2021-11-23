@@ -68,17 +68,19 @@ HRESULT NetworkMgr::Send_CustomizeInfo(cs_packet_change_color& tColorPacket)
 	return NOERROR;
 }
 
-HRESULT NetworkMgr::Recv_ServerInfo(void* tRecvInfo)
+void* NetworkMgr::Recv_ServerInfo(char& cType)
 {
 	char buf[BUF_SIZE];
 
 	if(FAILED(recv(m_socket, buf, BUF_SIZE, 0)))
 	{
 		Render_Error("Failed To Receive Info");
-		return E_FAIL;
+		return nullptr;
 	}
 
 	recv(m_socket, buf, BUF_SIZE, 0);
+
+	cType = buf[1];
 
 	switch(buf[1])
 	{
@@ -86,28 +88,27 @@ HRESULT NetworkMgr::Recv_ServerInfo(void* tRecvInfo)
 	{
 		sc_packet_login_ok login;
 		memcpy(&login, &buf, sizeof(sc_packet_login_ok));
-		break;
+		return (void*)&login;
 	}
 
 	case SC_PACKET_CHANGE_COLOR: // 서버에서 받아온 색깔!!!!
 	{
 		sc_packet_change_color color;
 		memcpy(&color, &buf, sizeof(sc_packet_change_color));
-		break;
+		return (void*)&color;
 	}
 
 	case SC_PACKET_LOGIN_OTHER_CLIENT:  // 나 말고 다른 플레이어 정보 받아옴!!!
 	{
 		sc_packet_login_other_client other_client;
 		memcpy(&other_client, &buf, sizeof(sc_packet_login_other_client));
-		break;
+		return (void*)&other_client;
 	}
-
 	default:
 		break;
 	}
 
-	return NOERROR;
+	return nullptr;
 }
 
 void NetworkMgr::Render_Error(const char* msg)
