@@ -54,6 +54,19 @@ HRESULT Scene_Customize::Render_Scene()
 	return Scene::Render_Scene();
 }
 
+HRESULT Scene_Customize::Update_PlayerColor(sc_packet_change_color tRecv)
+{
+	if (tRecv.type != SC_PACKET_CHANGE_COLOR)
+		return E_FAIL;
+
+	int id = tRecv.id;
+
+	m_pPostCard[id]->Get_Player()->Get_CustomInfo().vBody = tRecv.body_color;
+	m_pPostCard[id]->Get_Player()->Get_CustomInfo().vCloth = tRecv.cloth_color;
+
+	return NOERROR;
+}
+
 unsigned Scene_Customize::Thread_Recv(void* pArg)
 {
 	Scene_Customize* pScene = (Scene_Customize*)pArg;
@@ -70,7 +83,8 @@ unsigned Scene_Customize::Thread_Recv(void* pArg)
 
 		if(c == SC_PACKET_CHANGE_COLOR)
 		{
-			cout << "Change Color" << endl;
+			pScene->Update_PlayerColor((sc_packet_change_color&)p);
+			cout << "Changed Color" << endl;
 		}
 	}
 

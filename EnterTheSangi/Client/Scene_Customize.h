@@ -15,6 +15,9 @@ public:
 	virtual HRESULT Render_Scene();
 
 public:
+	HRESULT Update_PlayerColor(sc_packet_change_color tRecv);
+
+public:
 	CRITICAL_SECTION* Get_Crt(void) { return &m_Crt; }
 	BOOL Get_Finish(void) const { return m_bFinish; }
 	static unsigned int CALLBACK Thread_Recv(void* pArg);
