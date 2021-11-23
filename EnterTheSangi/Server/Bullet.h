@@ -9,9 +9,9 @@ public:
 	CBullet();
 	~CBullet();
 
-	float         vGetHeightHf();   //  return half height
-	float         vGetWidthHf();    //  return half width
-	OBJECT::TYPE  vGetObjectType();
+	virtual float         vGetHeightHf();   //  return half height
+	virtual float         vGetWidthHf();    //  return half width
+	virtual OBJECT::TYPE  vGetObjectType();
 private:
 	char          m_type; //ÃÑ¾Ë Á¾·ù
 

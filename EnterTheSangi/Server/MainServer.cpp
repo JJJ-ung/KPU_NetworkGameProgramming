@@ -361,12 +361,51 @@ int CMainServer::DoAccept()
     }
 };
 
-void CMainServer::ServerProcess()
+void CMainServer::ServerProcess(){
+
+    CollisionCheckTerrainPlayer();    
+    CollisionCheckPlayerBullet();
+    CollisionCheckTerrainBullet();
+    CollisionCheckPlayerChest();
+};
+
+void CMainServer::CollisionCheckTerrainPlayer()
 {
 
-    //충돌체크 등 서버 로직 진행
+}
 
-};
+void CMainServer::CollisionCheckTerrainBullet()
+{
+ 
+}
+
+void CMainServer::CollisionCheckPlayerBullet()
+{
+    /*for (auto bullet : m_bullets)
+    {
+        for (int i = 0; i < MAX_CLIENTS; ++i)
+        {
+     
+           
+        }
+    }*/
+}
+void CMainServer::CollisionCheckPlayerChest()
+{
+    
+}
+
+bool CMainServer::CollisionCheck(CGameObject* object_1, CGameObject* object_2)
+{
+   if (abs( object_1->GetPosition().x- object_2->GetPosition().x)<= 
+       (object_1->vGetWidthHf()+ object_2->vGetWidthHf()))
+       return true;
+   if (abs(object_1->GetPosition().y - object_2->GetPosition().y) <=
+       (object_1->vGetHeightHf() + object_2->vGetHeightHf()))
+       return true;
+
+   return false;
+}
 
 char CMainServer::GetNewID()
 {
