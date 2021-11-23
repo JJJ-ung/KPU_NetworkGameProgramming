@@ -10,12 +10,13 @@ public:
 	virtual ~Scene_Customize();
 
 public:
-	virtual HRESULT Ready_Scene();
+	virtual HRESULT Ready_Scene(sc_packet_login_ok tLogin);
 	virtual int Update_Scene(float TimeDelta);
 	virtual HRESULT Render_Scene();
 
 public:
 	HRESULT Update_PlayerColor(sc_packet_change_color tRecv);
+	HRESULT Add_OtherPlayer(int id);
 
 public:
 	CRITICAL_SECTION* Get_Crt(void) { return &m_Crt; }
@@ -32,6 +33,6 @@ private:
 	BOOL									m_bFinish = false;
 
 public:
-	static Scene_Customize* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
+	static Scene_Customize* Create(LPDIRECT3DDEVICE9 pGraphic_Device, sc_packet_login_ok tLogin);
 	virtual void Free();
 };

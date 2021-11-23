@@ -6,6 +6,7 @@
 #include "StaticSprite.h"
 #include "AnimatedSprite.h"
 #include "Font.h"
+#include "NetworkMgr.h"
 
 Scene_Title::Scene_Title(LPDIRECT3DDEVICE9 pGraphic_Device)
 	:Scene(pGraphic_Device)
@@ -23,6 +24,10 @@ HRESULT Scene_Title::Ready_Scene()
 
 	m_pInputMgr = InputMgr::GetInstance();
 	if (!m_pInputMgr) return E_FAIL;
+
+	m_pNetworkMgr = NetworkMgr::GetInstance();
+	if (!m_pNetworkMgr)
+		return E_FAIL;
 
 	m_pInputMgr->Get_TextMode() = true;
 
@@ -72,13 +77,47 @@ HRESULT Scene_Title::Render_Scene()
 		strcpy(t.name, m_strName.c_str());
 		NetworkMgr::GetInstance()->Send_LoginInfo(t);
 
-		m_pGameMgr->Clear_Scene();
-		Scene_Customize* pScene = Scene_Customize::Create(m_pGraphic_Device);
-		if (FAILED(m_pGameMgr->Set_CurrScene(pScene)))
-			return -1;
+		while(true)
+		{
+			sc_packet_login_ok login;
+			char c = m_pNetworkMgr->Recv_ServerInfo(&login);
+			if(c == SC_PACKET_LOGIN_OK)
+			{
+				m_pGameMgr->Clear_Scene();
+				//memcpy(&login, p, sizeof(sc_packet_login_ok));
+				Scene_Customize* pScene = Scene_Customize::Create(m_pGraphic_Device, login);
+				m_bFinish = true;
+				if (FAILED(m_pGameMgr->Set_CurrScene(pScene)))
+					return -1;
+				break;
+			}
+		}
 	}
 
-	return Scene::Render_Scene();
+	return Scene::Render_Scene(); 
+}
+
+unsigned Scene_Title::Thread_Recv(void* pArg)
+{
+	Scene_Title* pScene = (Scene_Title*)pArg;
+
+	EnterCriticalSection(pScene->Get_Crt());
+
+	while (!pScene->m_bFinish)
+	{
+		// 쓰레드에서 할거
+		cout << "***" << endl;
+
+		sc_packet_login_other_client t;
+		char c = pScene->m_pNetworkMgr->Recv_ServerInfo(&t);
+
+		if (c == SC_PACKET_LOGIN_OTHER_CLIENT)
+			pScene->m_pGameMgr->Get_ClientInfo().push_back(t);
+	}
+
+	LeaveCriticalSection(pScene->Get_Crt());
+
+	return 0;
 }
 
 Scene_Title* Scene_Title::Create(LPDIRECT3DDEVICE9 pGraphic_Device)

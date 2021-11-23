@@ -13,6 +13,7 @@ private:
 public:
 	D3DXVECTOR3& Get_PlayerPos() { return m_vPlayerPos; }
 	string& Get_ClientPlayerName() { return m_strClientPlayerName; }
+	vector< sc_packet_login_other_client>& Get_ClientInfo() { return m_vecClientInfo; }
 
 public:
 	HRESULT Set_CurrScene(Scene* pScene);
@@ -47,6 +48,7 @@ private:
 
 private:
 	string m_strClientPlayerName = "";
+	vector< sc_packet_login_other_client> m_vecClientInfo;
 
 private:
 	void Free();

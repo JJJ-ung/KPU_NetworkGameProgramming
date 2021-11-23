@@ -68,47 +68,57 @@ HRESULT NetworkMgr::Send_CustomizeInfo(cs_packet_change_color& tColorPacket)
 	return NOERROR;
 }
 
-void* NetworkMgr::Recv_ServerInfo(char& cType)
+char NetworkMgr::Recv_ServerInfo(void* p)
 {
 	char buf[BUF_SIZE];
 
 	if(FAILED(recv(m_socket, buf, BUF_SIZE, 0)))
 	{
-		Render_Error("Failed To Receive Info");
-		return nullptr;
+		//Render_Error("Failed To Receive Info");
+		return -1;
 	}
 
-	recv(m_socket, buf, BUF_SIZE, 0);
+	//recv(m_socket, buf, BUF_SIZE, 0);
 
-	cType = buf[1];
+	char c = buf[1];
+//	void* p = nullptr;
 
-	switch(buf[1])
+	if(p)
 	{
-	case SC_PACKET_LOGIN_OK: // 서버에서 받아온 로그인 ok신호!!!
-	{
-		sc_packet_login_ok login;
-		memcpy(&login, &buf, sizeof(sc_packet_login_ok));
-		return (void*)&login;
+		switch(buf[1])
+		{
+		case SC_PACKET_LOGIN_OK: // 서버에서 받아온 로그인 ok신호!!!
+		{
+			memcpy(p, &buf, sizeof(sc_packet_login_ok));
+			break;
+			//sc_packet_login_ok login;
+			//memcpy(&login, &buf, sizeof(sc_packet_login_ok));
+		}
+
+		case SC_PACKET_CHANGE_COLOR: // 서버에서 받아온 색깔!!!!
+		{
+			memcpy(p, &buf, sizeof(sc_packet_change_color));
+			break;
+			//sc_packet_change_color color;
+			//memcpy(&color, &buf, sizeof(sc_packet_change_color));
+			//return (void*)&color;
+		}
+
+		case SC_PACKET_LOGIN_OTHER_CLIENT:  // 나 말고 다른 플레이어 정보 받아옴!!!
+		{
+			memcpy(p, &buf, sizeof(sc_packet_login_other_client));
+			break;
+			//sc_packet_login_other_client other_client;
+			//memcpy(&other_client, &buf, sizeof(sc_packet_login_other_client));
+			//return (void*)&other_client;
+		}
+		default:
+			break;
+		}
+		
 	}
 
-	case SC_PACKET_CHANGE_COLOR: // 서버에서 받아온 색깔!!!!
-	{
-		sc_packet_change_color color;
-		memcpy(&color, &buf, sizeof(sc_packet_change_color));
-		return (void*)&color;
-	}
-
-	case SC_PACKET_LOGIN_OTHER_CLIENT:  // 나 말고 다른 플레이어 정보 받아옴!!!
-	{
-		sc_packet_login_other_client other_client;
-		memcpy(&other_client, &buf, sizeof(sc_packet_login_other_client));
-		return (void*)&other_client;
-	}
-	default:
-		break;
-	}
-
-	return nullptr;
+	return c;
 }
 
 void NetworkMgr::Render_Error(const char* msg)
