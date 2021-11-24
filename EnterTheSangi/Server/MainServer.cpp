@@ -188,7 +188,7 @@ void CMainServer::ProcessPacket(char client_id)
         memcpy(&rp, m_clients[client_id].GetBuf(), sizeof(cs_packet_login));
 
         m_clients[client_id].SetName(rp.name);
-        cout << m_clients[client_id].GetName()<< endl;
+        cout << "Client [" << int(client_id) << "] name : " << m_clients[client_id].GetName() << endl;
         sc_packet_login_ok sp;
         sp.size = sizeof(sc_packet_login_ok);
         sp.type = SC_PACKET_LOGIN_OK;
@@ -197,7 +197,7 @@ void CMainServer::ProcessPacket(char client_id)
         
         cout << int(client_id) << endl;
         send(m_clients[client_id].GetSocket(), (char*)&sp, sizeof(sc_packet_login_ok), 0);
-        cout << "login ok send!\n";
+        cout << "Client [" << int(client_id) << "] : " << "login ok send!\n";
         m_clients[client_id].StateLock();
         m_clients[client_id].SetState(ST_INROBBY);
         m_clients[client_id].StateUnlock();
@@ -230,7 +230,7 @@ void CMainServer::ProcessPacket(char client_id)
 
     else if (packet_type == CS_PACKET_CHANGE_COLOR)
     {
-        cout << "CS_PACKET_CHANGE_COLOR Packet comein\n";
+        cout << "Client [" << int(client_id) << "] : " << "Change Color\n";
 
         cs_packet_change_color rp;
         memcpy(&rp, m_clients[client_id].GetBuf(), sizeof(cs_packet_change_color));
@@ -260,7 +260,7 @@ void CMainServer::ProcessPacket(char client_id)
 
     else if (packet_type == CS_PACKET_READY)
     {
-        cout << "CS_PACKET_READY Packet comein\n";
+        cout << "Client [" << int(client_id) << "] : " << "Ready \n";
       
         cs_packet_ready rp;
         memcpy(&rp, m_clients[client_id].GetBuf(), sizeof(cs_packet_ready));
@@ -361,7 +361,7 @@ int CMainServer::DoAccept()
         if(m_client_threads.size() < 3)
             m_client_threads.emplace_back(&CMainServer::ClientThread, this, new_id);
             
-        cout << "[" << new_id  << "]  : client incoming \n";
+        cout << "[" << int(new_id) << "] : client incoming \n";
         //플레이어 초기 정보 세팅
         //login_ok패킷 전송
     }
@@ -416,7 +416,7 @@ bool CMainServer::IsAllClientsReady()
 
 void CMainServer::Disconnect(char id)
 {
-    cout << "Disconnect Client \n";
+    cout << "Client [" << int(id) << "] : " << "Disconnect \n";
     m_clients[id].StateLock();
     closesocket(m_clients[id].GetSocket());
     m_clients[id].SetState(ST_FREE);
