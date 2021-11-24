@@ -80,19 +80,20 @@ void CMainServer::ClientThread(char id)
 		{
 			m_state_lock.unlock();
 
-			ret = DoRecv(id);
-            if (ret == SOCKET_ERROR)
-            {
-                m_state_lock.lock();
-                continue;
+            if (m_clients[id].GetState() != ST_FREE) {
+                ret = DoRecv(id);
+                if (ret == SOCKET_ERROR)
+                {
+                    m_state_lock.lock();
+                    continue;
+                }
+                else if (ret == 0)
+                {
+                    m_state_lock.lock();
+                    continue;
+                }
+                ProcessPacket(id);
             }
-            else if (ret == 0)
-            {
-                m_state_lock.lock();
-                continue;
-            }
-			ProcessPacket(id);
-
 			m_state_lock.lock();
         }
         m_state_lock.unlock();
@@ -108,6 +109,7 @@ void CMainServer::ClientThread(char id)
             ret = DoRecv(id);
             if (ret == SOCKET_ERROR)
             {
+                
                 m_state_lock.lock();
                 continue;
             }
@@ -133,7 +135,7 @@ void CMainServer::ClientThread(char id)
        
 
     }
-};
+}
 
 void CMainServer::ServerThread()
 {
@@ -185,7 +187,6 @@ void CMainServer::ProcessPacket(char client_id)
         memcpy(&rp, m_clients[client_id].GetBuf(), sizeof(cs_packet_login));
 
         m_clients[client_id].SetName(rp.name);
-
         cout << m_clients[client_id].GetName()<< endl;
         sc_packet_login_ok sp;
         sp.size = sizeof(sc_packet_login_ok);
@@ -193,9 +194,9 @@ void CMainServer::ProcessPacket(char client_id)
         sp.id = client_id;
         sp.is_ready = false;
         
-
+        cout << int(client_id) << endl;
         send(m_clients[client_id].GetSocket(), (char*)&sp, sizeof(sc_packet_login_ok), 0);
-
+        cout << "login ok send!\n";
         m_clients[client_id].StateLock();
         m_clients[client_id].SetState(ST_INROBBY);
         m_clients[client_id].StateUnlock();
@@ -330,10 +331,15 @@ void CMainServer::DoSend()
 
 int CMainServer::DoRecv(char id)
 {
-    recv(m_clients[id].GetSocket(), m_clients[id].GetBuf(), BUF_SIZE, 0);
+    int ret;
+    ret = recv(m_clients[id].GetSocket(), m_clients[id].GetBuf(), BUF_SIZE, 0);
+    if (ret == -1) {
+        Disconnect(id);
+        return ret;
+    }
     ProcessPacket(id);
 
-    return 0;
+    return ret;
 };
 
 int CMainServer::DoAccept()
@@ -350,7 +356,10 @@ int CMainServer::DoAccept()
     if (new_id != -1)
     {   
         m_clients[new_id].SetSocket(client_socket);
-        m_client_threads.emplace_back(&CMainServer::ClientThread, this, new_id);
+        
+        if(m_client_threads.size() < 3)
+            m_client_threads.emplace_back(&CMainServer::ClientThread, this, new_id);
+            
         cout << "[" << new_id  << "]  : client incoming \n";
         //플레이어 초기 정보 세팅
         //login_ok패킷 전송
@@ -406,7 +415,9 @@ bool CMainServer::IsAllClientsReady()
 
 void CMainServer::Disconnect(char id)
 {
+    cout << "Disconnect Client \n";
     m_clients[id].StateLock();
+    closesocket(m_clients[id].GetSocket());
     m_clients[id].SetState(ST_FREE);
     m_clients[id].StateUnlock();
 }
