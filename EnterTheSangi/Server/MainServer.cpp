@@ -118,7 +118,8 @@ void CMainServer::ClientThread(char id)
                 m_state_lock.lock();
                 continue;
             }
-            ProcessPacket(id);
+            if(ret != SOCKET_ERROR)
+                ProcessPacket(id);
 
             SetEvent(m_client_event[id]);
             WaitForSingleObject(m_server_event, INFINITE);//timeout 넣어야 하지 않을까 싶긴 한데 server_timer 동기화때문에 일단 둠
