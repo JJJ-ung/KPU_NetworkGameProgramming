@@ -96,7 +96,11 @@ INT PostCard::Update_GameObject(float time_delta)
 	}
 
 	if(m_pInputMgr->KeyDown(KEY_ENTER))
-		m_pNetworkMgr->Send_ReadyInfo(!m_bReady);
+	{
+		if (FAILED(m_pNetworkMgr->Send_ReadyInfo(!m_bReady)))
+			cout << "Failed" << endl;
+		cout << "Press" << endl;
+	}
 
 	return GameObject::Update_GameObject(time_delta);
 }
@@ -156,7 +160,9 @@ HRESULT PostCard::Render_GameObject()
 		pEffect->Begin(nullptr, 0);
 		pEffect->BeginPass(0);
 
-		if (FAILED(m_pReadyTexture->Draw_Sprite(0)))
+		D3DXVECTOR3 vCenter = D3DXVECTOR3(64.f, 64.f, 0.f);
+
+		if (FAILED(m_pReadyTexture->Draw_Sprite(0, &vCenter)))
 			return E_FAIL;
 
 		pEffect->EndPass();
@@ -168,7 +174,10 @@ HRESULT PostCard::Render_GameObject()
 
 HRESULT PostCard::Setup_Ready(bool bReady)
 {
+	cout << "R" << endl;
 	m_bReady = bReady;
+
+	m_pColorButton->Get_Active() = !m_bReady;
 
 	return NOERROR;
 }

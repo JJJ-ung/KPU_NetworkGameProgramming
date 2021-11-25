@@ -14,9 +14,9 @@ public:
 	virtual HRESULT Render_Scene();
 
 public:
-	HRESULT Update_PlayerColor(sc_packet_change_color tRecv);
-	HRESULT Add_OtherPlayer(sc_packet_login_other_client tRecv);
-	HRESULT Update_PlayerReady(sc_packet_ready tRecv);
+	HRESULT Update_PlayerColor(sc_packet_change_color* tRecv);
+	HRESULT Add_OtherPlayer(sc_packet_login_other_client* tRecv);
+	HRESULT Update_PlayerReady(sc_packet_ready* tRecv);
 
 public:
 	CRITICAL_SECTION* Get_Crt(void) { return &m_Crt; }

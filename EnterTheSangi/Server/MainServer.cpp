@@ -209,6 +209,7 @@ void CMainServer::ProcessPacket(char client_id)
         strcpy_s(packet.name, m_clients[client_id].GetName());
         packet.body_color = m_clients[client_id].GetPlayer().GetBodyColor();
         packet.cloth_color = m_clients[client_id].GetPlayer().GetClothColor();
+
         packet.is_ready = false; //실은 스테이트 락 걸고 스테이트에서 받아와야함
                 
         for (auto& other : m_clients)
@@ -224,7 +225,7 @@ void CMainServer::ProcessPacket(char client_id)
             }
             other.StateUnlock();
                         
-            send(m_clients[client_id].GetSocket(), (char*)&packet, sizeof(sc_packet_login_other_client), 0);
+            send(other.GetSocket(), (char*)&packet, sizeof(sc_packet_login_other_client), 0);
         }
 
         // 접속한 대상에게 다른 클라이언트 정보도 다 보냄!
@@ -234,7 +235,7 @@ void CMainServer::ProcessPacket(char client_id)
                 continue;
 
             cl.StateLock();
-            if (cl.GetState() != ST_FREE)
+            if (ST_INROBBY != cl.GetState())
             {
                 cl.StateUnlock();
                 continue;
@@ -242,14 +243,22 @@ void CMainServer::ProcessPacket(char client_id)
             cl.StateUnlock();
             sp.id = cl.GetID();
             sp.type = SC_PACKET_LOGIN_OTHER_CLIENT;
-            sp.size = sizeof(sc_packet_login_ok);
-            sp.body_color = m_clients[cl.GetID()].GetPlayer().GetBodyColor();
-            sp.cloth_color = m_clients[cl.GetID()].GetPlayer().GetClothColor();
+            sp.size = sizeof(sc_packet_login_other_client);
+            sp.body_color = m_clients[sp.id].GetPlayer().GetBodyColor();
+            sp.cloth_color = m_clients[sp.id].GetPlayer().GetClothColor();
+            cl.StateLock();
+            if (m_clients[sp.id].GetState() == ST_READY)
+                sp.is_ready = true;
+            else if (m_clients[sp.id].GetState() == ST_INROBBY)
+                sp.is_ready = false;
+            else cout << "STATE ERROR" << endl;
+            cl.StateUnlock();
 
             send(m_clients[client_id].GetSocket(), (char*)&sp, sizeof(sc_packet_login_other_client), 0);
         }
 
     }
+
 
     else if (packet_type == CS_PACKET_CHANGE_COLOR)
     {

@@ -54,43 +54,49 @@ HRESULT Scene_Customize::Render_Scene()
 	return Scene::Render_Scene();
 }
 
-HRESULT Scene_Customize::Update_PlayerColor(sc_packet_change_color tRecv)
+HRESULT Scene_Customize::Update_PlayerColor(sc_packet_change_color* tRecv)
 {
-	if (tRecv.type != SC_PACKET_CHANGE_COLOR)
+	if (!tRecv) return E_FAIL;
+
+	if (tRecv->type != SC_PACKET_CHANGE_COLOR)
 		return E_FAIL;
 
-	if (!m_pPostCard[tRecv.id])
+	if (!m_pPostCard[tRecv->id])
 		return E_FAIL;
 
-	m_pPostCard[tRecv.id]->Get_Player()->Get_CustomInfo().vBody = tRecv.body_color;
-	m_pPostCard[tRecv.id]->Get_Player()->Get_CustomInfo().vCloth = tRecv.cloth_color;
+	m_pPostCard[tRecv->id]->Get_Player()->Get_CustomInfo().vBody = tRecv->body_color;
+	m_pPostCard[tRecv->id]->Get_Player()->Get_CustomInfo().vCloth = tRecv->cloth_color;
 
 	return NOERROR;
 }
 
-HRESULT Scene_Customize::Add_OtherPlayer(sc_packet_login_other_client tRecv)
+HRESULT Scene_Customize::Add_OtherPlayer(sc_packet_login_other_client* tRecv)
 {
-	if (tRecv.type != SC_PACKET_LOGIN_OTHER_CLIENT)
+	if (!tRecv) return E_FAIL;
+
+	if (tRecv->type != SC_PACKET_LOGIN_OTHER_CLIENT)
 		return E_FAIL;
 
-	if (m_pPostCard[tRecv.id])
+	if (m_pPostCard[tRecv->id])
 		return E_FAIL;
 
-	if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::PLAYER, m_pPostCard[tRecv.id] = PostCard::Create(m_pGraphic_Device, tRecv.id, true))))
+	if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::PLAYER, m_pPostCard[tRecv->id] = PostCard::Create(m_pGraphic_Device, tRecv->id, false))))
 		return E_FAIL;
 
 	return NOERROR;
 }
 
-HRESULT Scene_Customize::Update_PlayerReady(sc_packet_ready tRecv)
+HRESULT Scene_Customize::Update_PlayerReady(sc_packet_ready* tRecv)
 {
-	if (tRecv.type != SC_PACKET_READY)
+	if (!tRecv) return E_FAIL;
+
+	if (tRecv->type != SC_PACKET_READY)
 		return E_FAIL;
 
-	if (!m_pPostCard[tRecv.id])
+	if (!m_pPostCard[tRecv->id])
 		return E_FAIL;
 
-	return m_pPostCard[tRecv.id]->Setup_Ready(tRecv.is_ready);
+	return m_pPostCard[tRecv->id]->Setup_Ready(tRecv->is_ready);
 }
 
 unsigned Scene_Customize::Thread_Recv(void* pArg)
@@ -101,23 +107,22 @@ unsigned Scene_Customize::Thread_Recv(void* pArg)
 
 	while(!pScene->m_bFinish)
 	{
-		void* p = nullptr;
-		char c = pScene->m_pNetworkMgr->Recv_ServerInfo(&p);
+		void* p = malloc(BUF_SIZE);
+		char c = pScene->m_pNetworkMgr->Recv_ServerInfo(p);
 		switch (c)
 		{
 		case SC_PACKET_CHANGE_COLOR:
-		{
-			if (FAILED(pScene->Update_PlayerColor((sc_packet_change_color&)p)))
+			if (FAILED(pScene->Update_PlayerColor((sc_packet_change_color*)p)))
 				return E_FAIL;
 			break;
-		}
 		case SC_PACKET_LOGIN_OTHER_CLIENT:
-			if (FAILED(pScene->Add_OtherPlayer((sc_packet_login_other_client&)p)))
+			if (FAILED(pScene->Add_OtherPlayer((sc_packet_login_other_client*)p)))
 				return E_FAIL;
 			break;
 		case SC_PACKET_READY:
-			if (FAILED(pScene->Update_PlayerReady((sc_packet_ready&)p)))
+			if (FAILED(pScene->Update_PlayerReady((sc_packet_ready*)p)))
 				return E_FAIL;
+			cout << "Recv" << endl;
 			break;
 		default:
 			break;

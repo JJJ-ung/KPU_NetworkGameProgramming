@@ -79,19 +79,20 @@ HRESULT NetworkMgr::Send_ColorInfo(D3DXVECTOR3 body, D3DXVECTOR3 cloth)
 
 HRESULT NetworkMgr::Send_ReadyInfo(bool ready)
 {
+	cout << ready << endl;
 	cs_packet_ready t = { sizeof(cs_packet_ready), CS_PACKET_READY, ready };
 	return Send_ClientInfo(CS_PACKET_READY, (void*)&t);
 }
 
 char NetworkMgr::Recv_ServerInfo(void* p)
 {
+	if (!p)
+		return -1;
+
 	char buf[BUF_SIZE];
 
 	if(FAILED(recv(m_socket, buf, BUF_SIZE, 0)))
 		return -1;
-
-	if (p == nullptr)
-		p = malloc(buf[0]);
 
 	switch (buf[1])
 	{
@@ -108,7 +109,7 @@ char NetworkMgr::Recv_ServerInfo(void* p)
 		//memcpy(p, &buf, sizeof(sc_packet_login_other_client));
 		break;
 	case SC_PACKET_READY:  // 나 말고 다른 플레이어 정보 받아옴!!!
-		//memcpy(p, &buf, sizeof(sc_packet_login_other_client));
+		memcpy(p, &buf, sizeof(sc_packet_ready));
 		break;
 	default:
 		break;
