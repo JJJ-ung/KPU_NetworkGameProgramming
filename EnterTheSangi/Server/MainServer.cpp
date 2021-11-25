@@ -277,18 +277,15 @@ void CMainServer::ProcessPacket(char client_id)
         sp.body_color = rp.body_color;
         sp.cloth_color = rp.cloth_color;
        
-        for (auto& other : m_clients) {
-            other.StateLock();
-            if (ST_INROBBY != other.GetState())
-            {
-                other.StateUnlock();
-                continue;
-            }
-            other.StateUnlock();
-
-            send(other.GetSocket(), (char*)&sp, sizeof(sc_packet_change_color), 0);
-        }
-    }
+        for (auto& other : m_clients) 
+		{
+			other.StateLock();
+			CLIENT_STATE temp_state = other.GetState();
+			other.StateUnlock();
+			if ((ST_INROBBY == temp_state) || ((ST_READY == temp_state)))
+				send(other.GetSocket(), (char*)&sp, sizeof(sc_packet_change_color), 0);
+		}
+	}
 
     else if (packet_type == CS_PACKET_READY)
     {
