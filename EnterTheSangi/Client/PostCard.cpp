@@ -52,6 +52,8 @@ HRESULT PostCard::Ready_GameObject(UINT iPlayerID, bool bLocalPlayer, string str
 
 	m_strName = strName;
 
+	m_bLocal = bLocalPlayer;
+
 	m_vCenter = D3DXVECTOR3(m_pTexture->Get_TextureInfo().Width * 0.5f, m_pTexture->Get_TextureInfo().Height * 0.5f, 0.f);
 
 	m_vPosition = D3DXVECTOR3(420.f * (int)(iPlayerID - 1), 720.f, 0.f);
@@ -84,8 +86,11 @@ INT PostCard::Update_GameObject(float time_delta)
 		{
 			if (FAILED(m_pGameMgr->Add_GameObject((OBJECT::TYPE)5, m_pCustomPlayer = CustomPlayer::Create(m_pDevice, m_iPlayerID, m_strName))))
 				return E_FAIL;
-			if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::UI, m_pColorButton = ColorButton::Create(m_pDevice, m_iPlayerID, true))))
-				return E_FAIL;
+			if(m_bLocal)
+			{
+				if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::UI, m_pColorButton = ColorButton::Create(m_pDevice, m_iPlayerID, true))))
+					return E_FAIL;
+			}
 			m_vPosition.y = 0.f;
 			m_bAnimation = false;
 		}

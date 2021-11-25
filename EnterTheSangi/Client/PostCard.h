@@ -24,6 +24,7 @@ public:
 	HRESULT Setup_Ready(bool bReady);
 
 private:
+	bool m_bLocal = false;
 	bool m_bReady = false;
 	Texture* m_pReadyTexture = nullptr;
 	NetworkMgr* m_pNetworkMgr = nullptr;
