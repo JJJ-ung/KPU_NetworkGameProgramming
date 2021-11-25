@@ -9,6 +9,7 @@ NetworkMgr::NetworkMgr()
 
 NetworkMgr::~NetworkMgr()
 {
+	closesocket(m_socket);
 	Free();
 }
 

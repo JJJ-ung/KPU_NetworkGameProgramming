@@ -119,14 +119,6 @@ struct sc_packet_game_start // 3명이 모두 준비를 마쳐 게임을 시작
 {
 	unsigned char   size;
 	char            type;
-	svector2        position;
-	svector2        look;
-	DIR::DIR        direction;
-	WEAPON::TYPE    weapon;
-	char            health;
-	bool            is_shooting;
-	float           cool_time;
-	//
 };
 
 struct sc_packet_game_state  //매 프레임마다 게임 전체 정보 전달
