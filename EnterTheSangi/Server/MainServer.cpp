@@ -233,6 +233,13 @@ void CMainServer::ProcessPacket(char client_id)
             if (cl.GetID() == client_id)
                 continue;
 
+            cl.StateLock();
+            if (cl.GetState() != ST_FREE)
+            {
+                cl.StateUnlock();
+                continue;
+            }
+            cl.StateUnlock();
             sp.id = cl.GetID();
             sp.type = SC_PACKET_LOGIN_OTHER_CLIENT;
             sp.size = sizeof(sc_packet_login_ok);
