@@ -384,32 +384,68 @@ void CMainServer::CollisionCheckTerrainPlayer()
 
 void CMainServer::CollisionCheckTerrainBullet()
 {
- 
+    for (auto& bullet : m_bullets)
+    {
+        //벽 충돌시
+
+        //총알 삭제
+    }
 }
 
 void CMainServer::CollisionCheckPlayerBullet()
 {
-    /*for (auto bullet : m_bullets)
-    {
-        for (int i = 0; i < MAX_CLIENTS; ++i)
-        {
-     
-           
-        }
-    }*/
-}
-void CMainServer::CollisionCheckPlayerChest()
-{
-    
+	for (auto& client : m_clients)
+	{
+		CPlayer& player = client.GetPlayer();
+		for (auto& bullet : m_bullets)
+		{
+			if (CollisionCheck(bullet, player) == true)
+			{
+				//플레이어 체력 감소
+
+				//플레이어 사망 판정
+
+				//불릿 삭제
+			}
+			else
+			{
+				continue;
+			}
+		}
+	}
 }
 
-bool CMainServer::CollisionCheck(CGameObject* object_1, CGameObject* object_2)
+void CMainServer::CollisionCheckPlayerChest()
 {
-   if (abs( object_1->GetPosition().x- object_2->GetPosition().x)<= 
-       (object_1->vGetWidthHf()+ object_2->vGetWidthHf()))
+    for (auto& client : m_clients)
+    {
+        CPlayer& player = client.GetPlayer();
+        for (auto& chest : m_chests)
+        {
+            if (CollisionCheck(chest, player) == true)
+            {
+                //무기 선택 (랜덤? 사전 설정?)
+
+                //플레이어 무기 변경
+
+                //아이템 삭제
+            }
+            else
+            {
+                continue;
+            }
+        }
+    }
+}
+
+template<class T1, class T2 >
+bool CMainServer::CollisionCheck(T1& object_1, T2& object_2)
+{
+   if (abs( object_1.GetPosition().x- object_2.GetPosition().x)<= 
+       (object_1.vGetWidthHf()+ object_2.vGetWidthHf()))
        return true;
-   if (abs(object_1->GetPosition().y - object_2->GetPosition().y) <=
-       (object_1->vGetHeightHf() + object_2->vGetHeightHf()))
+   if (abs(object_1.GetPosition().y - object_2.GetPosition().y) <=
+       (object_1.vGetHeightHf() + object_2.vGetHeightHf()))
        return true;
 
    return false;

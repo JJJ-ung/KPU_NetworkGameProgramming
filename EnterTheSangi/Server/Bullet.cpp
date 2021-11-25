@@ -1,7 +1,5 @@
 #include "Bullet.h"
 
-OBJECT::TYPE  CBullet::m_object_type = OBJECT::BULLET;
-
 CBullet::CBullet()
 {
 
@@ -11,7 +9,6 @@ CBullet::~CBullet()
 {
 
 };
-
 
 float CBullet::vGetHeightHf()
 {
@@ -23,7 +20,7 @@ float CBullet::vGetWidthHf()
 	return 0.f; //temp
 };
 
-OBJECT::TYPE  CBullet::vGetObjectType()
+OBJECT::TYPE  CBullet::vGetObjectType() const
 {
 	return m_object_type;
 };

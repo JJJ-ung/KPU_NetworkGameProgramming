@@ -24,3 +24,14 @@ D3DXVECTOR2 CGameObject::GetLook()
 	return m_look;
 };
 
+bool CGameObject::operator<(const CGameObject& robject) const
+{
+	if (vGetObjectType() < robject.vGetObjectType()) return true;
+	else return false;
+}
+
+bool CGameObject::operator==(const CGameObject& robject)const
+{
+	if (vGetObjectType() == robject.vGetObjectType()) return true;
+	else return false;
+}
