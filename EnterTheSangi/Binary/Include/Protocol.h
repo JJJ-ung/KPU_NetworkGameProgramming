@@ -28,6 +28,7 @@ const char SC_PACKET_LOGIN_OTHER_CLIENT = 2;
 const char SC_PACKET_REMOVE_OBJECT = 3;
 const char SC_PACKET_CHANGE_COLOR = 4;
 const char SC_PACKET_READY = 5;
+const char SC_PACKET_GAME_STATE = 6;
 
 //--------------------------------------------------
 //         client to server packet 
