@@ -46,6 +46,7 @@ HRESULT Scene_Customize::Ready_Scene(sc_packet_login_ok tLogin)
 
 int Scene_Customize::Update_Scene(float time_delta)
 {
+	//cout << "Client" << endl;
 	return Scene::Update_Scene(time_delta);
 }
 
@@ -107,6 +108,7 @@ unsigned Scene_Customize::Thread_Recv(void* pArg)
 
 	while(!pScene->m_bFinish)
 	{
+		cout << "Thread" << endl;
 		void* p = malloc(BUF_SIZE);
 		char c = pScene->m_pNetworkMgr->Recv_ServerInfo(p);
 		switch (c)

@@ -62,7 +62,7 @@ unsigned int Loading::Thread_Main(void* pArg)
 	Loading* pLoading = (Loading*)pArg;
 
 	EnterCriticalSection(pLoading->Get_Crt());
-	
+
 	if(FAILED(pLoading->Load_Resources())) return -1;
 	cout << "Resource Loaded" << endl;
 
