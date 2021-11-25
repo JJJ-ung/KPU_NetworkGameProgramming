@@ -109,7 +109,6 @@ void CMainServer::ClientThread(char id)
             ret = DoRecv(id);
             if (ret == SOCKET_ERROR)
             {
-                
                 m_state_lock.lock();
                 continue;
             }
@@ -193,6 +192,8 @@ void CMainServer::ProcessPacket(char client_id)
         sp.type = SC_PACKET_LOGIN_OK;
         sp.id = client_id;
         sp.is_ready = false;
+        sp.body_color = D3DXVECTOR3(rand() % 5 * 0.2f, rand() % 5 * 0.2f, rand() % 5 * 0.2f);
+        sp.cloth_color = D3DXVECTOR3(rand() % 5 * 0.2f, rand() % 5 * 0.2f, rand() % 5 * 0.2f);
        
         send(m_clients[client_id].GetSocket(), (char*)&sp, sizeof(sc_packet_login_ok), 0);
         cout << "Client [" << int(client_id) << "] : " << "login ok send!\n";
@@ -226,22 +227,6 @@ void CMainServer::ProcessPacket(char client_id)
                         
             send(m_clients[client_id].GetSocket(), (char*)&packet, sizeof(sc_packet_login_other_client), 0);
         }
-
-        // 접속한 대상에게 다른 클라이언트 정보도 다 보냄!
-        for (auto& cl : m_clients)
-        {
-            if (cl.GetID() == client_id)
-                continue;
-
-            sp.id = cl.GetID();
-            sp.type = SC_PACKET_LOGIN_OTHER_CLIENT;
-            sp.size = sizeof(sc_packet_login_ok);
-            sp.body_color = m_clients[cl.GetID()].GetPlayer().GetBodyColor();
-            sp.cloth_color = m_clients[cl.GetID()].GetPlayer().GetClothColor();
-
-            send(m_clients[client_id].GetSocket(), (char*)&sp, sizeof(sc_packet_login_other_client), 0);
-        }
-
     }
 
     else if (packet_type == CS_PACKET_CHANGE_COLOR)
@@ -329,6 +314,7 @@ void CMainServer::ProcessPacket(char client_id)
     {
 
     }
+
 }
 
 void CMainServer::DoSend()
@@ -349,9 +335,9 @@ int CMainServer::DoRecv(char id)
 {
     int ret;
     ret = recv(m_clients[id].GetSocket(), m_clients[id].GetBuf(), BUF_SIZE, 0);
-    if (ret == -1) {
+    if (ret == SOCKET_ERROR) {
+        closesocket(m_clients[id].GetSocket());
         Disconnect(id);
-        return ret;
     }
     return ret;
 };
@@ -369,8 +355,11 @@ int CMainServer::DoAccept()
     char new_id = GetNewID();
     if (new_id != -1)
     {   
+        m_clients[new_id].StateLock();
         m_clients[new_id].SetSocket(client_socket);
-        
+        m_clients[new_id].SetState(ST_ACCEPT);
+        m_clients[new_id].StateUnlock();
+
         if (m_client_threads.size() < 3) {
             if(int(new_id) >= m_client_threads.size())
                 m_client_threads.emplace_back(&CMainServer::ClientThread, this, new_id);
@@ -473,7 +462,6 @@ char CMainServer::GetNewID()
         m_clients[i].StateLock();
         if (m_clients[i].GetState() == ST_FREE)
         {
-            m_clients[i].SetState(ST_ACCEPT);
             m_clients[i].StateUnlock();
 
             return i;
@@ -505,9 +493,9 @@ bool CMainServer::IsAllClientsReady()
 
 void CMainServer::Disconnect(char id)
 {
-    cout << "Client [" << int(id) << "] : " << "Disconnect \n";
     m_clients[id].StateLock();
-    closesocket(m_clients[id].GetSocket());
     m_clients[id].SetState(ST_FREE);
+    closesocket(m_clients[id].GetSocket());
     m_clients[id].StateUnlock();
+    cout << "Client [" << int(id) << "] : " << "Disconnect \n";
 }
