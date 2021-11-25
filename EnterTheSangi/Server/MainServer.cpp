@@ -360,13 +360,25 @@ void CMainServer::DoSend()
 
 int CMainServer::DoRecv(char id)
 {
-    int ret;
-    ret = recv(m_clients[id].GetSocket(), m_clients[id].GetBuf(), BUF_SIZE, 0);
-    if (ret == -1) {
-        Disconnect(id);
-        return ret;
-    }
-    return ret;
+	char* buf = m_clients[id].GetBuf();
+	int received;
+	int left;
+	bool first_recv = true;
+	do
+    {
+       received = recv(m_clients[id].GetSocket(), buf, BUF_SIZE, 0);
+       if (first_recv == true)
+       {
+           left = buf[0];
+           first_recv = false;
+       }
+       if (received == SOCKET_ERROR)
+           return SOCKET_ERROR;
+       else if (received == 0)
+           break;
+       left -= received;
+       buf += received;
+    } while (left > 0);
 };
 
 int CMainServer::DoAccept()
