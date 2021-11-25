@@ -356,9 +356,10 @@ int CMainServer::DoAccept()
     {   
         m_clients[new_id].SetSocket(client_socket);
         
-        if(m_client_threads.size() < 3)
-            m_client_threads.emplace_back(&CMainServer::ClientThread, this, new_id);
-            
+        if (m_client_threads.size() < 3) {
+            if(int(new_id) >= m_client_threads.size())
+                m_client_threads.emplace_back(&CMainServer::ClientThread, this, new_id);
+        }
         cout << "[" << int(new_id) << "] : client incoming \n";
         //플레이어 초기 정보 세팅
         //login_ok패킷 전송
