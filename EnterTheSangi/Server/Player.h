@@ -15,9 +15,9 @@ public:
 	D3DXVECTOR3         GetClothColor();
 	float               GetHealth();
 
-	float               vGetHeightHf();   //  return half height
-	float               vGetWidthHf();    //  return half width
-	OBJECT::TYPE        vGetObjectType(); // return object type
+	virtual float               vGetHeightHf();   //  return half height
+	virtual float               vGetWidthHf();    //  return half width
+	virtual OBJECT::TYPE        vGetObjectType(); // return object type
 
 	void                SetBodyColor(D3DXVECTOR3 body_color);
 	void                SetClothColor(D3DXVECTOR3 cloth_color);

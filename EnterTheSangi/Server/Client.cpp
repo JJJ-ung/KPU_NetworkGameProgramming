@@ -4,6 +4,8 @@
 
 CClient::CClient() {};
 
+CClient::CClient(const CClient& client) {};
+
 CClient::~CClient() {};
 
 void CClient::SetID(const int client_id)
