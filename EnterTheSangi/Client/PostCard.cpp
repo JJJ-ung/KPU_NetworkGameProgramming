@@ -17,7 +17,7 @@ PostCard::~PostCard()
 	Free();
 }
 
-HRESULT PostCard::Ready_GameObject(UINT iPlayerID, bool bLocalPlayer)
+HRESULT PostCard::Ready_GameObject(UINT iPlayerID, bool bLocalPlayer, string strName)
 {
 	m_pRenderer = Renderer::GetInstance();
 	if (!m_pRenderer) return E_FAIL;
@@ -50,20 +50,22 @@ HRESULT PostCard::Ready_GameObject(UINT iPlayerID, bool bLocalPlayer)
 
 	m_iPlayerID = iPlayerID;
 
+	m_strName = strName;
+
 	m_vCenter = D3DXVECTOR3(m_pTexture->Get_TextureInfo().Width * 0.5f, m_pTexture->Get_TextureInfo().Height * 0.5f, 0.f);
 
 	m_vPosition = D3DXVECTOR3(420.f * (int)(iPlayerID - 1), 720.f, 0.f);
 
-	if(!bLocalPlayer)
-	{
-		// check is spawned
-		m_vPosition.y = 0.f;
-		m_bAnimation = false;
-		if (FAILED(m_pGameMgr->Add_GameObject((OBJECT::TYPE)5, m_pCustomPlayer = CustomPlayer::Create(m_pDevice, m_iPlayerID))))
-			return E_FAIL;
-		if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::UI, ColorButton::Create(m_pDevice, m_iPlayerID, false))))
-			return E_FAIL;
-	}
+	//if(!bLocalPlayer)
+	//{
+	//	// check is spawned
+	//	m_vPosition.y = 0.f;
+	//	m_bAnimation = false;
+	//	if (FAILED(m_pGameMgr->Add_GameObject((OBJECT::TYPE)5, m_pCustomPlayer = CustomPlayer::Create(m_pDevice, m_iPlayerID, m_strName))))
+	//		return E_FAIL;
+	//	if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::UI, ColorButton::Create(m_pDevice, m_iPlayerID, false))))
+	//		return E_FAIL;
+	//}
 
 	return GameObject::Ready_GameObject();
 }
@@ -80,7 +82,7 @@ INT PostCard::Update_GameObject(float time_delta)
 
 		if (abs(m_vPosition.y) < 20.f)
 		{
-			if (FAILED(m_pGameMgr->Add_GameObject((OBJECT::TYPE)5, m_pCustomPlayer = CustomPlayer::Create(m_pDevice, m_iPlayerID))))
+			if (FAILED(m_pGameMgr->Add_GameObject((OBJECT::TYPE)5, m_pCustomPlayer = CustomPlayer::Create(m_pDevice, m_iPlayerID, m_strName))))
 				return E_FAIL;
 			if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::UI, m_pColorButton = ColorButton::Create(m_pDevice, m_iPlayerID, true))))
 				return E_FAIL;
@@ -183,10 +185,10 @@ HRESULT PostCard::Setup_Ready(bool bReady)
 	return NOERROR;
 }
 
-PostCard* PostCard::Create(LPDIRECT3DDEVICE9 pGraphic_Device, UINT iPlayerID, bool bLocalPlayer)
+PostCard* PostCard::Create(LPDIRECT3DDEVICE9 pGraphic_Device, UINT iPlayerID, bool bLocalPlayer, string strName)
 {
 	PostCard* pInstance = new PostCard(pGraphic_Device);
-	if (FAILED(pInstance->Ready_GameObject(iPlayerID, bLocalPlayer)))
+	if (FAILED(pInstance->Ready_GameObject(iPlayerID, bLocalPlayer, strName)))
 		SafeDelete(pInstance);
 	return pInstance;
 }

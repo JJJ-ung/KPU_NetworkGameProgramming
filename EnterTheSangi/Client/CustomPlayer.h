@@ -15,7 +15,7 @@ public:
 	void Set_CustomInfo(CUSTOMIZE tCustom) { m_tCustomInfo = tCustom; }
 
 public:
-	virtual HRESULT Ready_GameObject(UINT iPlayerID);
+	virtual HRESULT Ready_GameObject(UINT iPlayerID, string strName);
 	virtual INT Update_GameObject(float TimeDelta);
 	virtual INT LateUpdate_GameObject(float TimeDelta);
 	virtual HRESULT Render_GameObject();
@@ -32,7 +32,7 @@ private:
 	CUSTOMIZE m_tCustomInfo{};
 
 public:
-	static CustomPlayer* Create(LPDIRECT3DDEVICE9 pGraphic_Device, UINT iPlayerID);
+	static CustomPlayer* Create(LPDIRECT3DDEVICE9 pGraphic_Device, UINT iPlayerID, string strName);
 	virtual void Free();
 };
 

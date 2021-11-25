@@ -16,7 +16,7 @@ CustomPlayer::~CustomPlayer()
 {
 }
 
-HRESULT CustomPlayer::Ready_GameObject(UINT iPlayerID)
+HRESULT CustomPlayer::Ready_GameObject(UINT iPlayerID, string strName)
 {
 	m_pRenderer = Renderer::GetInstance();
 	if (!m_pRenderer) return E_FAIL;
@@ -41,11 +41,11 @@ HRESULT CustomPlayer::Ready_GameObject(UINT iPlayerID)
 	m_tCustomInfo.vCloth = D3DXVECTOR3(rand() % 5 * 0.2f, rand() % 5 * 0.2f, rand() % 5 * 0.2f);
 
 	// iPlayerID로 이름 받아오기
-	m_strName = "Player";
+	m_strName = strName;
 
 	m_vPosition = D3DXVECTOR3(420.f * (int)(iPlayerID - 1), -130.f, 0.f);
 
-	if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::UI, m_pNameTag = Font::Create(m_pDevice, m_strName, 1.f))))
+	if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::UI, m_pNameTag = Font::Create(m_pDevice, strName, 1.f))))
 		return E_FAIL;
 	if (!m_pNameTag) return E_FAIL;
 	m_pNameTag->Get_Color() = D3DXVECTOR4(0.f, 0.f, 0.f, 0.f);
@@ -115,10 +115,10 @@ HRESULT CustomPlayer::Render_GameObject()
 	return GameObject::Render_GameObject();
 }
 
-CustomPlayer* CustomPlayer::Create(LPDIRECT3DDEVICE9 pGraphic_Device, UINT iPlayerID)
+CustomPlayer* CustomPlayer::Create(LPDIRECT3DDEVICE9 pGraphic_Device, UINT iPlayerID, string strName)
 {
 	CustomPlayer* pInstance = new CustomPlayer(pGraphic_Device);
-	if (FAILED(pInstance->Ready_GameObject(iPlayerID)))
+	if (FAILED(pInstance->Ready_GameObject(iPlayerID, strName)))
 		SafeDelete(pInstance);
 	return pInstance;
 }

@@ -28,13 +28,13 @@ HRESULT Scene_Customize::Ready_Scene(sc_packet_login_ok tLogin)
 	if (!m_pNetworkMgr) 
 		return E_FAIL;
 
-	for(int i = 0; i < tLogin.id; ++i)
-	{
-		if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::PLAYER, m_pPostCard[i] = PostCard::Create(m_pGraphic_Device, i, false))))
-			return E_FAIL;
-	}
+	//for(int i = 0; i < tLogin.id; ++i)
+	//{
+	//	if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::PLAYER, m_pPostCard[i] = PostCard::Create(m_pGraphic_Device, i, false, ""))))
+	//		return E_FAIL;
+	//}
 
-	if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::PLAYER, m_pPostCard[tLogin.id] = PostCard::Create(m_pGraphic_Device, tLogin.id, true))))
+	if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::PLAYER, m_pPostCard[tLogin.id] = PostCard::Create(m_pGraphic_Device, tLogin.id, true, m_pGameMgr->Get_ClientPlayerName()))))
 		return E_FAIL;
 
 	InitializeCriticalSection(&m_Crt);
@@ -80,7 +80,7 @@ HRESULT Scene_Customize::Add_OtherPlayer(sc_packet_login_other_client* tRecv)
 	if (m_pPostCard[tRecv->id])
 		return E_FAIL;
 
-	if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::PLAYER, m_pPostCard[tRecv->id] = PostCard::Create(m_pGraphic_Device, tRecv->id, false))))
+	if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::PLAYER, m_pPostCard[tRecv->id] = PostCard::Create(m_pGraphic_Device, tRecv->id, false, tRecv->name))))
 		return E_FAIL;
 
 	return NOERROR;
@@ -122,7 +122,6 @@ unsigned Scene_Customize::Thread_Recv(void* pArg)
 		case SC_PACKET_READY:
 			if (FAILED(pScene->Update_PlayerReady((sc_packet_ready*)p)))
 				return E_FAIL;
-			cout << "Recv" << endl;
 			break;
 		default:
 			break;
