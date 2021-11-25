@@ -61,9 +61,9 @@ char* CClient::GetName()
 void CClient::StateLock()
 {
 	m_state_lock.lock();
-};
+}
 
 void CClient::StateUnlock()
 {
 	m_state_lock.unlock();
-};
+}

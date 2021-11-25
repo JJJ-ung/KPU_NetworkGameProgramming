@@ -29,6 +29,15 @@ public:
 	void StateLock();
 	void StateUnlock();
 
+	void SocketLock()
+	{
+		m_socket_lock.lock();
+	}
+
+	void SocketUnlock()
+	{
+		m_socket_lock.unlock();
+	}
 	
 
 private:
@@ -39,6 +48,6 @@ private:
 	char		   m_name[MAX_NAME_SIZE];
 	CLIENT_STATE   m_state;
 	std::mutex     m_state_lock;
-
+	std::mutex	   m_socket_lock;
 	CPlayer        m_player;
 };
