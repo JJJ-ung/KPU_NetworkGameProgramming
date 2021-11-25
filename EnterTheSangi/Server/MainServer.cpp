@@ -507,7 +507,7 @@ bool CMainServer::IsAllClientsReady()
     for (int i = 0; i < MAX_CLIENTS; ++i)
     {
         m_clients[i].StateLock();
-        if (m_clients[i].GetState() == ST_READY)
+        if (m_clients[i].GetState() != ST_READY)
         {
             m_clients[i].StateUnlock();
             return false;
