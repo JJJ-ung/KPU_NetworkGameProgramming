@@ -4,7 +4,8 @@
 
 using namespace std;
 
-constexpr const char* SERVER_IP = "220.94.221.20";
+//constexpr const char* SERVER_IP = "220.94.221.20";
+constexpr const char* SERVER_IP = "127.0.0.1";
 const int SERVER_PORT = 5000;
 const int MAX_CLIENTS = 3;
 //constexpr unsigned int MAX_BUF_SIZE = 256;
@@ -16,6 +17,7 @@ const int MAX_CLIENTS = 3;
 const char CS_PACKET_LOGIN = 1;
 const char CS_PACKET_CHANGE_COLOR = 2;
 const char CS_PACKET_READY = 3;
+const char CS_PACKET_TYPE_END = 4;
 
 //server to client packet
 const char SC_PACKET_LOGIN_OK = 1;
@@ -23,6 +25,7 @@ const char SC_PACKET_LOGIN_OTHER_CLIENT = 2;
 const char SC_PACKET_REMOVE_OBJECT = 3;
 const char SC_PACKET_CHANGE_COLOR = 4;
 const char SC_PACKET_READY = 5;
+const char SC_PACKET_TYPE_END = 6;
 
 //--------------------------------------------------
 //         client to server packet 
