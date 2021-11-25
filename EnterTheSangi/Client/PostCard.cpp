@@ -31,6 +31,9 @@ HRESULT PostCard::Ready_GameObject(UINT iPlayerID, bool bLocalPlayer)
 	m_pTexture = m_pResourceMgr->Find_Texture(L"UI", L"CustomizeWnd");
 	if (!m_pTexture) return E_FAIL;
 
+	m_pReadyTexture = m_pResourceMgr->Find_Texture(L"UI", L"CustomizeReady");
+	if (!m_pReadyTexture) return E_FAIL;
+
 	m_pGameMgr = GameMgr::GetInstance();
 	if (!m_pGameMgr) return E_FAIL;
 
@@ -93,9 +96,7 @@ INT PostCard::Update_GameObject(float time_delta)
 	}
 
 	if(m_pInputMgr->KeyDown(KEY_ENTER))
-	{
-		
-	}
+		m_pNetworkMgr->Send_ReadyInfo(!m_bReady);
 
 	return GameObject::Update_GameObject(time_delta);
 }
@@ -112,6 +113,7 @@ HRESULT PostCard::Render_GameObject()
 	LPD3DXEFFECT	pEffect = m_pShader->Get_EffectHandle();
 	if (nullptr == pEffect) return E_FAIL;
 
+	//
 	if (FAILED(m_pTexture->Set_Texture(pEffect, "g_BaseTexture")))
 		return E_FAIL;
 
@@ -136,7 +138,39 @@ HRESULT PostCard::Render_GameObject()
 	pEffect->EndPass();
 	pEffect->End();
 
+	//
+	if(m_bReady)
+	{
+		if (FAILED(m_pReadyTexture->Set_Texture(pEffect, "g_BaseTexture")))
+			return E_FAIL;
+
+		D3DXMatrixScaling(&matScale, 2.4f, 2.4f, 2.4f);
+		D3DXMatrixTranslation(&matTrans, m_vPosition.x, m_vPosition.y, m_vPosition.z);
+		matWorld = matScale * matTrans;
+		pEffect->SetMatrix("g_matWorld", &matWorld);
+		pEffect->SetMatrix("g_matView", &m_matView);
+
+		m_pDevice->GetTransform(D3DTS_PROJECTION, &matTmp);
+		pEffect->SetMatrix("g_matProj", &matTmp);
+
+		pEffect->Begin(nullptr, 0);
+		pEffect->BeginPass(0);
+
+		if (FAILED(m_pReadyTexture->Draw_Sprite(0)))
+			return E_FAIL;
+
+		pEffect->EndPass();
+		pEffect->End();
+	}
+
 	return GameObject::Render_GameObject();
+}
+
+HRESULT PostCard::Setup_Ready(bool bReady)
+{
+	m_bReady = bReady;
+
+	return NOERROR;
 }
 
 PostCard* PostCard::Create(LPDIRECT3DDEVICE9 pGraphic_Device, UINT iPlayerID, bool bLocalPlayer)

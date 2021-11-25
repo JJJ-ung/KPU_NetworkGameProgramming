@@ -167,22 +167,13 @@ HRESULT ColorButton::Update_Collision(CustomPlayer* pPlayer)
 		if (PtInRect(&m_vBodyColors[i].collrect, pt))
 		{
 			cout << "Body" << i << endl;
-			tSend.size = sizeof(cs_packet_change_color);
-			tSend.type = CS_PACKET_CHANGE_COLOR;
-			tSend.body_color = D3DXVECTOR3(m_vBodyColors[i].color.x, m_vBodyColors[i].color.y, m_vBodyColors[i].color.z);
-			tSend.cloth_color = pPlayer->Get_CustomInfo().vCloth;
-			m_pNetworkMgr->Send_CustomizeInfo(tSend);
-			pPlayer->Get_CustomInfo().vBody = D3DXVECTOR3(m_vBodyColors[i].color.x, m_vBodyColors[i].color.y, m_vBodyColors[i].color.z);
+			m_pNetworkMgr->Send_ColorInfo(D3DXVECTOR3(m_vBodyColors[i].color.x, m_vBodyColors[i].color.y, m_vBodyColors[i].color.z), pPlayer->Get_CustomInfo().vCloth);
+
 		}
 		if (PtInRect(&m_vClothColors[i].collrect, pt))
 		{
 			cout << "Cloth" << i << endl;
-			tSend.size = sizeof(cs_packet_change_color);
-			tSend.type = CS_PACKET_CHANGE_COLOR;
-			tSend.body_color = pPlayer->Get_CustomInfo().vBody;
-			tSend.cloth_color = D3DXVECTOR3(m_vClothColors[i].color.x, m_vClothColors[i].color.y, m_vClothColors[i].color.z);
-			m_pNetworkMgr->Send_CustomizeInfo(tSend);
-			pPlayer->Get_CustomInfo().vCloth = D3DXVECTOR3(m_vClothColors[i].color.x, m_vClothColors[i].color.y, m_vClothColors[i].color.z);
+			m_pNetworkMgr->Send_ColorInfo(pPlayer->Get_CustomInfo().vBody, D3DXVECTOR3(m_vClothColors[i].color.x, m_vClothColors[i].color.y, m_vClothColors[i].color.z));
 		}
 	}
 

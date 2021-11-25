@@ -37,35 +37,49 @@ HRESULT NetworkMgr::Setup_Networking()
 	return NOERROR;
 }
 
-HRESULT NetworkMgr::Send_LoginInfo(cs_packet_login& tLoginPacket)
+HRESULT NetworkMgr::Send_ClientInfo(char type, void* p)
 {
-	if (FAILED(send(m_socket, (char*)&tLoginPacket, sizeof(cs_packet_login), 0)))
-	{
-		Render_Error("Failed To Send Login Info");
+	if (type >= CS_PACKET_TYPE_END)
 		return E_FAIL;
+
+	HRESULT hr = -1;
+
+	switch (type)
+	{
+		case CS_PACKET_LOGIN:
+			hr = send(m_socket, (char*)p, sizeof(cs_packet_login), 0);
+			break;
+		case CS_PACKET_CHANGE_COLOR:
+			hr = send(m_socket, (char*)p, sizeof(cs_packet_change_color), 0);
+			break;
+		case CS_PACKET_READY:
+			hr = send(m_socket, (char*)p, sizeof(cs_packet_ready), 0);
+			break;
+		default:
+			hr = E_FAIL;
+			break;
 	}
-	return NOERROR;
+
+	return hr;
 }
 
-HRESULT NetworkMgr::Send_ClientInfo(sc_packet_game_state& tPlayerPacket)
+HRESULT NetworkMgr::Send_LoginInfo(const char* name)
 {
-	if (FAILED(send(m_socket, (char*)&tPlayerPacket, sizeof(sc_packet_game_state), 0)))
-	{
-		Render_Error("Failed To Send Client Info");
-		return E_FAIL;
-	}
-	return NOERROR;
+	cs_packet_login t = {sizeof(cs_packet_login), CS_PACKET_LOGIN, 0 };
+	memcpy(t.name, name, sizeof(MAX_NAME_SIZE));
+	return Send_ClientInfo(CS_PACKET_LOGIN, (void*)&t);
 }
 
-HRESULT NetworkMgr::Send_CustomizeInfo(cs_packet_change_color& tColorPacket)
+HRESULT NetworkMgr::Send_ColorInfo(D3DXVECTOR3 body, D3DXVECTOR3 cloth)
 {
-	tColorPacket.type = CS_PACKET_CHANGE_COLOR;
-	if (FAILED(send(m_socket, (char*)&tColorPacket, sizeof(cs_packet_change_color), 0)))
-	{
-		Render_Error("Failed To Send Customizing Info");
-		return E_FAIL;
-	}
-	return NOERROR;
+	cs_packet_change_color t = { sizeof(cs_packet_change_color), CS_PACKET_CHANGE_COLOR, body, cloth };
+	return Send_ClientInfo(CS_PACKET_CHANGE_COLOR, (void*)&t);
+}
+
+HRESULT NetworkMgr::Send_ReadyInfo(bool ready)
+{
+	cs_packet_ready t = { sizeof(cs_packet_ready), CS_PACKET_READY, ready };
+	return Send_ClientInfo(CS_PACKET_READY, (void*)&t);
 }
 
 char NetworkMgr::Recv_ServerInfo(void* p)
@@ -73,52 +87,33 @@ char NetworkMgr::Recv_ServerInfo(void* p)
 	char buf[BUF_SIZE];
 
 	if(FAILED(recv(m_socket, buf, BUF_SIZE, 0)))
-	{
-		//Render_Error("Failed To Receive Info");
 		return -1;
-	}
 
-	//recv(m_socket, buf, BUF_SIZE, 0);
+	if (p == nullptr)
+		p = malloc(buf[0]);
 
-	char c = buf[1];
-//	void* p = nullptr;
-
-	if(p)
+	switch (buf[1])
 	{
-		switch(buf[1])
-		{
-		case SC_PACKET_LOGIN_OK: // 서버에서 받아온 로그인 ok신호!!!
-		{
-			memcpy(p, &buf, sizeof(sc_packet_login_ok));
-			break;
-			//sc_packet_login_ok login;
-			//memcpy(&login, &buf, sizeof(sc_packet_login_ok));
-		}
-
-		case SC_PACKET_CHANGE_COLOR: // 서버에서 받아온 색깔!!!!
-		{
-			memcpy(p, &buf, sizeof(sc_packet_change_color));
-			break;
-			//sc_packet_change_color color;
-			//memcpy(&color, &buf, sizeof(sc_packet_change_color));
-			//return (void*)&color;
-		}
-
-		case SC_PACKET_LOGIN_OTHER_CLIENT:  // 나 말고 다른 플레이어 정보 받아옴!!!
-		{
-			memcpy(p, &buf, sizeof(sc_packet_login_other_client));
-			break;
-			//sc_packet_login_other_client other_client;
-			//memcpy(&other_client, &buf, sizeof(sc_packet_login_other_client));
-			//return (void*)&other_client;
-		}
-		default:
-			break;
-		}
-		
+	case SC_PACKET_LOGIN_OK: // 서버에서 받아온 로그인 ok신호!!!
+		memcpy(p, &buf, sizeof(sc_packet_login_ok));
+		break;
+	case SC_PACKET_CHANGE_COLOR: // 서버에서 받아온 색깔!!!!
+		memcpy(p, &buf, sizeof(sc_packet_change_color));
+		break;
+	case SC_PACKET_LOGIN_OTHER_CLIENT:  // 나 말고 다른 플레이어 정보 받아옴!!!
+		memcpy(p, &buf, sizeof(sc_packet_login_other_client));
+		break;
+	case SC_PACKET_REMOVE_OBJECT:  // 나 말고 다른 플레이어 정보 받아옴!!!
+		//memcpy(p, &buf, sizeof(sc_packet_login_other_client));
+		break;
+	case SC_PACKET_READY:  // 나 말고 다른 플레이어 정보 받아옴!!!
+		//memcpy(p, &buf, sizeof(sc_packet_login_other_client));
+		break;
+	default:
+		break;
 	}
 
-	return c;
+	return buf[1];
 }
 
 void NetworkMgr::Render_Error(const char* msg)
