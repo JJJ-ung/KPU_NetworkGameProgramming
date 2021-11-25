@@ -100,10 +100,10 @@ char NetworkMgr::Recv_ServerInfo(void* p)
 	bool first_recv = true;
 	do
 	{
-		received = recv(m_socket, buf, BUF_SIZE, 0);
+		received = recv(m_socket, ptr, BUF_SIZE, 0);
 		if (first_recv == true)
 		{
-			left = buf[0];
+			left = *ptr;
 			first_recv = false;
 		}
 		if (received == SOCKET_ERROR)

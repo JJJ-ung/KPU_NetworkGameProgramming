@@ -3,7 +3,7 @@
 
 CMainServer::CMainServer() {};
 CMainServer::~CMainServer() {};
-
+int ttt;
 void CMainServer::Init(const int server_port)
 {
     int rt;
@@ -84,6 +84,7 @@ void CMainServer::ClientThread(char id)
                 ret = DoRecv(id);
                 if (ret == SOCKET_ERROR)
                 {
+                    Disconnect(id);
                     m_state_lock.lock();
                     continue;
                 }
@@ -193,7 +194,8 @@ void CMainServer::ProcessPacket(char client_id)
         sp.type = SC_PACKET_LOGIN_OK;
         sp.id = client_id;
         sp.is_ready = false;
-       
+        
+        
         send(m_clients[client_id].GetSocket(), (char*)&sp, sizeof(sc_packet_login_ok), 0);
         cout << "Client [" << int(client_id) << "] : " << "login ok send!\n";
         m_clients[client_id].StateLock();
@@ -224,8 +226,9 @@ void CMainServer::ProcessPacket(char client_id)
                 continue;
             }
             other.StateUnlock();
-                        
-            send(other.GetSocket(), (char*)&packet, sizeof(sc_packet_login_other_client), 0);
+            
+            ttt = send(other.GetSocket(), (char*)&packet, sizeof(sc_packet_login_other_client), 0);
+            cout << "me -> other : " << ttt << endl;
         }
 
         // 접속한 대상에게 다른 클라이언트 정보도 다 보냄!
@@ -254,7 +257,8 @@ void CMainServer::ProcessPacket(char client_id)
             else cout << "STATE ERROR" << endl;
             cl.StateUnlock();
 
-            send(m_clients[client_id].GetSocket(), (char*)&sp, sizeof(sc_packet_login_other_client), 0);
+            ttt = send(m_clients[client_id].GetSocket(), (char*)&sp, sizeof(sc_packet_login_other_client), 0);
+            cout << "other -> me : " << ttt << endl;
         }
 
     }
