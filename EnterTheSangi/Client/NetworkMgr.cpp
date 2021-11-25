@@ -66,7 +66,6 @@ HRESULT NetworkMgr::Send_ClientInfo(char type, void* p)
 
 HRESULT NetworkMgr::Send_LoginInfo(const char* name)
 {
-	cout << "send" << endl;
 	cs_packet_login t = {sizeof(cs_packet_login), CS_PACKET_LOGIN, 0 };
 	memcpy(t.name, name, sizeof(MAX_NAME_SIZE));
 	return Send_ClientInfo(CS_PACKET_LOGIN, (void*)&t);
@@ -92,29 +91,44 @@ char NetworkMgr::Recv_ServerInfo(void* p)
 
 	char buf[BUF_SIZE];
 
-	if(FAILED(recv(m_socket, buf, BUF_SIZE, 0)))
-		return -1;
+	/*if(FAILED(recv(m_socket, buf, BUF_SIZE, 0)))
+		return -1;*/
+
+	char* ptr = buf;
+	int received;
+	int left;
+	bool first_recv = true;
+	do
+	{
+		received = recv(m_socket, buf, BUF_SIZE, 0);
+		if (first_recv == true)
+		{
+			left = buf[0];
+			first_recv = false;
+		}
+		if (received == SOCKET_ERROR)
+			return SOCKET_ERROR;
+		else if (received == 0)
+			break;
+		left -= received;
+		ptr += received;
+	} while (left > 0);
 
 	switch (buf[1])
 	{
 	case SC_PACKET_LOGIN_OK: // 서버에서 받아온 로그인 ok신호!!!
-		cout << "**Login" << endl;
 		memcpy(p, &buf, sizeof(sc_packet_login_ok));
 		break;
 	case SC_PACKET_CHANGE_COLOR: // 서버에서 받아온 색깔!!!!
-		cout << "**Color" << endl;
 		memcpy(p, &buf, sizeof(sc_packet_change_color));
 		break;
 	case SC_PACKET_LOGIN_OTHER_CLIENT:  // 나 말고 다른 플레이어 정보 받아옴!!!
-		cout << "**Other" << endl;
 		memcpy(p, &buf, sizeof(sc_packet_login_other_client));
 		break;
 	case SC_PACKET_REMOVE_OBJECT:  // 나 말고 다른 플레이어 정보 받아옴!!!
 		//memcpy(p, &buf, sizeof(sc_packet_login_other_client));
-		cout << "**Remove" << endl;
 		break;
 	case SC_PACKET_READY:  // 나 말고 다른 플레이어 정보 받아옴!!!
-		cout << "**Ready" << endl;
 		memcpy(p, &buf, sizeof(sc_packet_ready));
 		break;
 	default:

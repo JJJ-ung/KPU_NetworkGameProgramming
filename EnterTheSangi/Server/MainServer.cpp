@@ -299,6 +299,8 @@ void CMainServer::ProcessPacket(char client_id)
             m_clients[client_id].StateLock();
             if (m_clients[client_id].GetState() == ST_INROBBY)
                 m_clients[client_id].SetState(ST_READY);
+            else
+                cout << "ready_error_no1" << endl;
             m_clients[client_id].StateUnlock();
         }
         else
@@ -306,6 +308,8 @@ void CMainServer::ProcessPacket(char client_id)
             m_clients[client_id].StateLock();
             if (m_clients[client_id].GetState() == ST_READY)
                 m_clients[client_id].SetState(ST_INROBBY);
+            else
+                cout << "ready_error_no2" << endl;
             m_clients[client_id].StateUnlock();
         }
         
