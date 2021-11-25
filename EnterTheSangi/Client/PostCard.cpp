@@ -177,7 +177,8 @@ HRESULT PostCard::Setup_Ready(bool bReady)
 	cout << "R" << endl;
 	m_bReady = bReady;
 
-	m_pColorButton->Get_Active() = !m_bReady;
+	if(m_pColorButton)
+		m_pColorButton->Get_Active() = !m_bReady;
 
 	return NOERROR;
 }
