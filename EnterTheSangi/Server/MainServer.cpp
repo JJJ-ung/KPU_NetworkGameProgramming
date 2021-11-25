@@ -118,8 +118,7 @@ void CMainServer::ClientThread(char id)
                 m_state_lock.lock();
                 continue;
             }
-            if(ret != SOCKET_ERROR)
-                ProcessPacket(id);
+            ProcessPacket(id);
 
             SetEvent(m_client_event[id]);
             WaitForSingleObject(m_server_event, INFINITE);//timeout 넣어야 하지 않을까 싶긴 한데 server_timer 동기화때문에 일단 둠
@@ -194,8 +193,7 @@ void CMainServer::ProcessPacket(char client_id)
         sp.type = SC_PACKET_LOGIN_OK;
         sp.id = client_id;
         sp.is_ready = false;
-        
-        cout << int(client_id) << endl;
+       
         send(m_clients[client_id].GetSocket(), (char*)&sp, sizeof(sc_packet_login_ok), 0);
         cout << "Client [" << int(client_id) << "] : " << "login ok send!\n";
         m_clients[client_id].StateLock();
@@ -215,7 +213,9 @@ void CMainServer::ProcessPacket(char client_id)
                 
         for (auto& other : m_clients)
         {
-            if (other.GetID() == client_id)continue;
+            if (other.GetID() == client_id)
+                continue;
+
             other.StateLock();
             if (ST_INROBBY != other.GetState())
             {
@@ -338,8 +338,6 @@ int CMainServer::DoRecv(char id)
         Disconnect(id);
         return ret;
     }
-    ProcessPacket(id);
-
     return ret;
 };
 
