@@ -2,7 +2,6 @@
 #include "Scene.h"
 
 class PostCard;
-class NetworkMgr;
 class Scene_Customize : public Scene
 {
 public:
@@ -16,7 +15,8 @@ public:
 
 public:
 	HRESULT Update_PlayerColor(sc_packet_change_color tRecv);
-	HRESULT Add_OtherPlayer(int id);
+	HRESULT Add_OtherPlayer(sc_packet_login_other_client tRecv);
+	HRESULT Update_PlayerReady(sc_packet_ready tRecv);
 
 public:
 	CRITICAL_SECTION* Get_Crt(void) { return &m_Crt; }
@@ -25,7 +25,6 @@ public:
 
 private:
 	PostCard* m_pPostCard[3] = {};
-	NetworkMgr* m_pNetworkMgr = nullptr;
 
 private:
 	HANDLE								m_hThread;

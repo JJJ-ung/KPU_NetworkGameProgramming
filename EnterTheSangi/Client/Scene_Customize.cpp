@@ -28,29 +28,14 @@ HRESULT Scene_Customize::Ready_Scene(sc_packet_login_ok tLogin)
 	if (!m_pNetworkMgr) 
 		return E_FAIL;
 
-	//if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::PLAYER, PostCard::Create(m_pGraphic_Device, 0, true))))
-	//	return E_FAIL;
-	//if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::PLAYER, PostCard::Create(m_pGraphic_Device, 1, false))))
-	//	return E_FAIL;
-	//if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::PLAYER, PostCard::Create(m_pGraphic_Device, 2, false))))
-	//	return E_FAIL;
-
-	//for(auto p : m_pGameMgr->Get_ClientInfo())
-	//{
-	//	if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::PLAYER, PostCard::Create(m_pGraphic_Device, p.id, false))))
-	//		return E_FAIL;
-	//}
-
-	if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::PLAYER, m_pPostCard[tLogin.id] = PostCard::Create(m_pGraphic_Device, tLogin.id, true))))
-		return E_FAIL;
-
-	for(int i = 0; i < 3; ++i)
+	for(int i = 0; i < tLogin.id; ++i)
 	{
-		if(i == tLogin.id)
-			continue;
 		if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::PLAYER, m_pPostCard[i] = PostCard::Create(m_pGraphic_Device, i, false))))
 			return E_FAIL;
 	}
+
+	if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::PLAYER, m_pPostCard[tLogin.id] = PostCard::Create(m_pGraphic_Device, tLogin.id, true))))
+		return E_FAIL;
 
 	InitializeCriticalSection(&m_Crt);
 
@@ -61,8 +46,6 @@ HRESULT Scene_Customize::Ready_Scene(sc_packet_login_ok tLogin)
 
 int Scene_Customize::Update_Scene(float time_delta)
 {
-
-
 	return Scene::Update_Scene(time_delta);
 }
 
@@ -76,24 +59,38 @@ HRESULT Scene_Customize::Update_PlayerColor(sc_packet_change_color tRecv)
 	if (tRecv.type != SC_PACKET_CHANGE_COLOR)
 		return E_FAIL;
 
-	int id = tRecv.id;
-	D3DXVECTOR3 t = tRecv.body_color;
-
-	if (!m_pPostCard[id])
+	if (!m_pPostCard[tRecv.id])
 		return E_FAIL;
 
-	//PostCard* p = m_pPostCard[id];
-	//auto k = p->Get_Player();
-
-	m_pPostCard[id]->Get_Player()->Get_CustomInfo().vBody = tRecv.body_color;
-	m_pPostCard[id]->Get_Player()->Get_CustomInfo().vCloth = tRecv.cloth_color;
+	m_pPostCard[tRecv.id]->Get_Player()->Get_CustomInfo().vBody = tRecv.body_color;
+	m_pPostCard[tRecv.id]->Get_Player()->Get_CustomInfo().vCloth = tRecv.cloth_color;
 
 	return NOERROR;
 }
 
-HRESULT Scene_Customize::Add_OtherPlayer(int id)
+HRESULT Scene_Customize::Add_OtherPlayer(sc_packet_login_other_client tRecv)
 {
+	if (tRecv.type != SC_PACKET_LOGIN_OTHER_CLIENT)
+		return E_FAIL;
+
+	if (m_pPostCard[tRecv.id])
+		return E_FAIL;
+
+	if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::PLAYER, m_pPostCard[tRecv.id] = PostCard::Create(m_pGraphic_Device, tRecv.id, true))))
+		return E_FAIL;
+
 	return NOERROR;
+}
+
+HRESULT Scene_Customize::Update_PlayerReady(sc_packet_ready tRecv)
+{
+	if (tRecv.type != SC_PACKET_READY)
+		return E_FAIL;
+
+	if (!m_pPostCard[tRecv.id])
+		return E_FAIL;
+
+	return m_pPostCard[tRecv.id]->Setup_Ready(tRecv.is_ready);
 }
 
 unsigned Scene_Customize::Thread_Recv(void* pArg)
@@ -104,31 +101,28 @@ unsigned Scene_Customize::Thread_Recv(void* pArg)
 
 	while(!pScene->m_bFinish)
 	{
-		// 쓰레드에서 할거
-		cout << "***" << endl;
-
-		//
-		void* p = malloc(1024);
-		char c = pScene->m_pNetworkMgr->Recv_ServerInfo(p);
-
-		if(c == SC_PACKET_CHANGE_COLOR)
+		void* p = nullptr;
+		char c = pScene->m_pNetworkMgr->Recv_ServerInfo(&p);
+		switch (c)
 		{
-			sc_packet_change_color t;
-			memcpy(&t, p, sizeof(sc_packet_login_ok));
-			delete p;
-			pScene->Update_PlayerColor(t);
-			cout << "Changed Color" << endl;
+		case SC_PACKET_CHANGE_COLOR:
+		{
+			if (FAILED(pScene->Update_PlayerColor((sc_packet_change_color&)p)))
+				return E_FAIL;
+			break;
 		}
-
-		//if (c == SC_PACKET_LOGIN_OTHER_CLIENT)
-		//{
-		//	sc_packet_login_other_client t;
-		//	memcpy(&t, p, sizeof(sc_packet_login_other_client));
-		//	delete p;
-		//	if (FAILED(pScene->m_pGameMgr->Add_GameObject(OBJECT::PLAYER, PostCard::Create(pScene->m_pGraphic_Device, t.id, false))))
-		//		return E_FAIL;
-		//	cout << "sdfh" << endl;
-		//}
+		case SC_PACKET_LOGIN_OTHER_CLIENT:
+			if (FAILED(pScene->Add_OtherPlayer((sc_packet_login_other_client&)p)))
+				return E_FAIL;
+			break;
+		case SC_PACKET_READY:
+			if (FAILED(pScene->Update_PlayerReady((sc_packet_ready&)p)))
+				return E_FAIL;
+			break;
+		default:
+			break;
+		}
+		delete p;
 	}
 
 	LeaveCriticalSection(pScene->Get_Crt());

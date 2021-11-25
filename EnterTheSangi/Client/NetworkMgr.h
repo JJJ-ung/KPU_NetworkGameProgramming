@@ -13,9 +13,11 @@ public:
 	HRESULT Setup_Networking();
 
 public:
-	HRESULT Send_LoginInfo(cs_packet_login& tLoginPacket);
-	HRESULT Send_ClientInfo(sc_packet_game_state& tPlayerPacket);
-	HRESULT Send_CustomizeInfo(cs_packet_change_color& tColorPacket);
+	HRESULT Send_ClientInfo(char type, void* p);
+
+	HRESULT Send_LoginInfo(const char* name);
+	HRESULT Send_ColorInfo(D3DXVECTOR3 body, D3DXVECTOR3 cloth);
+	HRESULT Send_ReadyInfo(bool ready);
 
 public:
 	char		Recv_ServerInfo(void* p = nullptr);

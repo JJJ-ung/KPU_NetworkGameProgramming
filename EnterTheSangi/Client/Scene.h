@@ -2,6 +2,7 @@
 #include "GameMgr.h"
 
 class InputMgr;
+class NetworkMgr;
 class Scene
 {
 public:
@@ -19,6 +20,7 @@ protected:
 protected:
 	InputMgr*							m_pInputMgr = nullptr;
 	GameMgr*							m_pGameMgr = nullptr;
+	NetworkMgr*					m_pNetworkMgr = nullptr;
 	LPDIRECT3DDEVICE9		m_pGraphic_Device = nullptr;
 
 public:
