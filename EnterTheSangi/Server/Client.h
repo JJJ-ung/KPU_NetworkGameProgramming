@@ -10,6 +10,7 @@ class CClient
 {
 public:
 	CClient();
+	CClient(const CClient& client);
 	~CClient();
 
 	void SetID(const int client_id);

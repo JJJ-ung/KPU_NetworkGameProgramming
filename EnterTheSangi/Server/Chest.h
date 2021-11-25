@@ -9,9 +9,9 @@ public:
 	CChest();
 	~CChest();
 
-	float              vGetHeightHf();   //  return half height
-	float              vGetWidthHf();    //  return half width
-	OBJECT::TYPE       vGetObjectType(); // return object type
+	virtual float              vGetHeightHf();   //  return half height
+	virtual float              vGetWidthHf();    //  return half width
+	virtual OBJECT::TYPE       vGetObjectType(); // return object type
 
 private:
 	static OBJECT::TYPE  m_object_type;

@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 #include <array>
+#include <unordered_set>
 #include <thread>
 #include <chrono>
 #include <mutex>
@@ -11,6 +12,9 @@
 #include "Client.h"
 #include "Protocol.h"
 #include "Enum.h"
+#include "GameObject.h"
+#include "Chest.h"
+#include "Bullet.h"
 
 class CMainServer
 {
@@ -31,6 +35,11 @@ public:
 	int  DoAccept();
 	void ProcessPacket(char id);
 	void ServerProcess();
+	void CollisionCheckTerrainPlayer();
+	void CollisionCheckTerrainBullet();
+	void CollisionCheckPlayerBullet();
+	void CollisionCheckPlayerChest();
+	bool CollisionCheck(CGameObject* object_1, CGameObject* object_2);
 
 	char GetNewID();
 	bool IsAllClientsReady();
@@ -47,4 +56,7 @@ private:
 
 	SCENE::ID                m_game_state;
 	std::mutex               m_state_lock;
+
+	//unordered_set<CChest>    m_chests;
+	//unordered_set<CBullet>   m_bullets;
 };
