@@ -3,7 +3,7 @@
 #include "Protocol.h"
 #include "Enum.h"
 
-class CChest :CGameObject
+class CChest :public CGameObject
 {
 public:
 	CChest();
@@ -11,10 +11,10 @@ public:
 
 	virtual float              vGetHeightHf();   //  return half height
 	virtual float              vGetWidthHf();    //  return half width
-	virtual OBJECT::TYPE       vGetObjectType(); // return object type
+	virtual OBJECT::TYPE       vGetObjectType()const; // return object type
 
 private:
-	static OBJECT::TYPE  m_object_type;
-	static float m_height_hf;
-	static float m_width_hf;
+	const static OBJECT::TYPE  m_object_type= OBJECT::CHEST;
+	static float               m_height_hf;
+	static float               m_width_hf;
 };

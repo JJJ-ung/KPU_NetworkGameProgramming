@@ -1,7 +1,7 @@
 #pragma once
 #include "Player.h"
 
-OBJECT::TYPE CPlayer::m_object_type = OBJECT::PLAYER;
+
 float CPlayer::m_height_hf;
 float CPlayer::m_width_hf;
 
@@ -20,7 +20,7 @@ float CPlayer::vGetWidthHf()
 	return m_width_hf;
 };
 
-OBJECT::TYPE CPlayer::vGetObjectType()
+OBJECT::TYPE CPlayer::vGetObjectType() const
 {
 	return m_object_type;
 };

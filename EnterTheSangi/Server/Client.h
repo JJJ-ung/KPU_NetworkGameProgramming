@@ -22,7 +22,7 @@ public:
 	char GetID();
 	CLIENT_STATE GetState();
 	SOCKET GetSocket();
-	CPlayer GetPlayer();
+	CPlayer& GetPlayer();
 	char* GetBuf();
 	char* GetName();
 

@@ -39,7 +39,8 @@ public:
 	void CollisionCheckTerrainBullet();
 	void CollisionCheckPlayerBullet();
 	void CollisionCheckPlayerChest();
-	bool CollisionCheck(CGameObject* object_1, CGameObject* object_2);
+	template<class T1, class T2 >
+	bool CollisionCheck(T1& object_1, T2& object_2);
 
 	char GetNewID();
 	bool IsAllClientsReady();
@@ -57,6 +58,7 @@ private:
 	SCENE::ID                m_game_state;
 	std::mutex               m_state_lock;
 
-	//unordered_set<CChest>    m_chests;
-	//unordered_set<CBullet>   m_bullets;
+	list<CChest>             m_chests;
+	list<CBullet>            m_bullets;
+
 };

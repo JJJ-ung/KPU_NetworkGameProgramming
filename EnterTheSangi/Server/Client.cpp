@@ -48,7 +48,7 @@ char* CClient::GetBuf()
 	return m_buff;
 }
 
-CPlayer CClient::GetPlayer()
+CPlayer& CClient::GetPlayer()
 {
 	return m_player;
 }
