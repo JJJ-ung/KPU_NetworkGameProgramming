@@ -2,7 +2,10 @@
 #include "Client.h"
 
 
-CClient::CClient() {};
+CClient::CClient()
+{
+	m_state = ST_FREE;
+};
 
 CClient::CClient(const CClient& client) {};
 
