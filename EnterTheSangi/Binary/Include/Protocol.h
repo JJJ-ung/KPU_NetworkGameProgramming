@@ -26,8 +26,9 @@ const char SC_PACKET_LOGIN_OTHER_CLIENT = 2;
 const char SC_PACKET_REMOVE_OBJECT = 3;
 const char SC_PACKET_CHANGE_COLOR = 4;
 const char SC_PACKET_READY = 5;
-const char SC_PACKET_TYPE_END = 6;
-const char SC_PACKET_ALL_READY = 7;
+const char SC_PACKET_ALL_READY = 6;
+const char SC_PACKET_TYPE_END = 7;
+
 
 //--------------------------------------------------
 //         client to server packet 
@@ -100,6 +101,12 @@ struct sc_packet_ready    //준비 설정, 해제 둘 다 해당 패킷 사용
 	char           type;
 	char           id;
 	bool           is_ready;
+};
+
+struct sc_packet_all_ready // 모든 플레이어가 준비 완료임을 알림
+{
+	unsigned char	size;
+	char			type;
 };
 
 struct sc_packet_game_start // 3명이 모두 준비를 마쳐 게임을 시작
