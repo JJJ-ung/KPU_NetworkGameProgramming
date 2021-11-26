@@ -15,7 +15,7 @@ public:
 	D3DXVECTOR3& Get_Position() { return m_vPosition; }
 
 public:
-	virtual HRESULT Ready_GameObject(UINT iPlayerID, bool bLocalPlayer, string strName);
+	virtual HRESULT Ready_GameObject(UINT iPlayerID, bool bLocalPlayer, string strName, D3DXVECTOR3 vBody, D3DXVECTOR3 vCloth);
 	virtual INT Update_GameObject(float TimeDelta);
 	virtual INT LateUpdate_GameObject(float TimeDelta);
 	virtual HRESULT Render_GameObject();
@@ -33,6 +33,7 @@ private:
 	D3DXVECTOR3 m_vPosition = {};
 	D3DXVECTOR3 m_vCenter = {};
 	D3DXMATRIX m_matView = {};
+	D3DXVECTOR3 m_vColor[2] = {};
 
 private:
 	UINT m_iPlayerID = 0;
@@ -46,7 +47,7 @@ private:
 	CustomPlayer* m_pCustomPlayer = nullptr;
 
 public:
-	static PostCard* Create(LPDIRECT3DDEVICE9 pGraphic_Device, UINT iPlayerID, bool bLocalPlayer, string strName);
+	static PostCard* Create(LPDIRECT3DDEVICE9 pGraphic_Device, UINT iPlayerID, bool bLocalPlayer, string strName, D3DXVECTOR3 vBody, D3DXVECTOR3 vCloth);
 	virtual void Free();
 };
 

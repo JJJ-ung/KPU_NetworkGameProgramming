@@ -1,5 +1,5 @@
 matrix		g_matWorld, g_matView, g_matProj;
-float		g_fAlpha;
+float		g_fAlpha = 1.f;
 texture		g_BaseTexture;
 sampler BaseSampler = sampler_state
 {

@@ -28,13 +28,7 @@ HRESULT Scene_Customize::Ready_Scene(sc_packet_login_ok tLogin)
 	if (!m_pNetworkMgr) 
 		return E_FAIL;
 
-	//for(int i = 0; i < tLogin.id; ++i)
-	//{
-	//	if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::PLAYER, m_pPostCard[i] = PostCard::Create(m_pGraphic_Device, i, false, ""))))
-	//		return E_FAIL;
-	//}
-
-	if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::PLAYER, m_pPostCard[tLogin.id] = PostCard::Create(m_pGraphic_Device, tLogin.id, true, m_pGameMgr->Get_ClientPlayerName()))))
+	if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::PLAYER, m_pPostCard[tLogin.id] = PostCard::Create(m_pGraphic_Device, tLogin.id, true, m_pGameMgr->Get_ClientPlayerName(), tLogin.body_color, tLogin.cloth_color))))
 		return E_FAIL;
 
 	return Scene::Ready_Scene();
@@ -42,7 +36,6 @@ HRESULT Scene_Customize::Ready_Scene(sc_packet_login_ok tLogin)
 
 int Scene_Customize::Update_Scene(float time_delta)
 {
-	//cout << "Client" << endl;
 	return Scene::Update_Scene(time_delta);
 }
 
@@ -77,7 +70,7 @@ HRESULT Scene_Customize::Add_OtherPlayer(sc_packet_login_other_client* tRecv)
 	if (m_pPostCard[tRecv->id])
 		return E_FAIL;
 
-	if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::PLAYER, m_pPostCard[tRecv->id] = PostCard::Create(m_pGraphic_Device, tRecv->id, false, tRecv->name))))
+	if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::PLAYER, m_pPostCard[tRecv->id] = PostCard::Create(m_pGraphic_Device, tRecv->id, false, tRecv->name, tRecv->body_color, tRecv->cloth_color))))
 		return E_FAIL;
 
 	return m_pPostCard[tRecv->id]->Setup_Ready(tRecv->is_ready);
@@ -118,26 +111,7 @@ HRESULT Scene_Customize::Setup_Recv(char c, void* recv)
 
 	return Scene::Setup_Recv(c, recv);
 }
-//
-//unsigned Scene_Customize::Thread_Recv(void* pArg)
-//{
-//	Scene_Customize* pScene = (Scene_Customize*)pArg;
-//
-//	EnterCriticalSection(pScene->Get_Crt());
-//
-//	while(!pScene->m_bFinish)
-//	{
-//		cout << "Thread" << endl;
-//		void* p = malloc(BUF_SIZE);
-//		char c = pScene->m_pNetworkMgr->Recv_ServerInfo(p);
-//		delete p;
-//	}
-//
-//	LeaveCriticalSection(pScene->Get_Crt());
-//
-//	return 0;
-//}
-//
+
 Scene_Customize* Scene_Customize::Create(LPDIRECT3DDEVICE9 pGraphic_Device, sc_packet_login_ok tLogin)
 {
 	Scene_Customize* pInstance = new Scene_Customize(pGraphic_Device);

@@ -70,6 +70,15 @@ HRESULT ColorButton::Ready_GameObject(UINT iPlayerID, bool bActive)
 
 INT ColorButton::Update_GameObject(float time_delta)
 {
+	if(m_pInputMgr->KeyDown(KEY_SPACE))
+	{
+		for (int i = 0; i < 3; ++i)
+		{
+			m_vBodyColors[i].color = D3DXVECTOR4(rand() % 5 * 0.2f, rand() % 5 * 0.2f, rand() % 5 * 0.2f, 0.f);
+			m_vClothColors[i].color = D3DXVECTOR4(rand() % 5 * 0.2f, rand() % 5 * 0.2f, rand() % 5 * 0.2f, 0.f);
+		}
+	}
+
 	return GameObject::Update_GameObject(time_delta);
 }
 

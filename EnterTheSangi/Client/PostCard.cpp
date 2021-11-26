@@ -17,7 +17,7 @@ PostCard::~PostCard()
 	Free();
 }
 
-HRESULT PostCard::Ready_GameObject(UINT iPlayerID, bool bLocalPlayer, string strName)
+HRESULT PostCard::Ready_GameObject(UINT iPlayerID, bool bLocalPlayer, string strName, D3DXVECTOR3 vBody, D3DXVECTOR3 vCloth)
 {
 	m_pRenderer = Renderer::GetInstance();
 	if (!m_pRenderer) return E_FAIL;
@@ -54,20 +54,12 @@ HRESULT PostCard::Ready_GameObject(UINT iPlayerID, bool bLocalPlayer, string str
 
 	m_bLocal = bLocalPlayer;
 
+	m_vColor[0] = vBody;
+	m_vColor[1] = vCloth;
+
 	m_vCenter = D3DXVECTOR3(m_pTexture->Get_TextureInfo().Width * 0.5f, m_pTexture->Get_TextureInfo().Height * 0.5f, 0.f);
 
 	m_vPosition = D3DXVECTOR3(420.f * (int)(iPlayerID - 1), 720.f, 0.f);
-
-	//if(!bLocalPlayer)
-	//{
-	//	// check is spawned
-	//	m_vPosition.y = 0.f;
-	//	m_bAnimation = false;
-	//	if (FAILED(m_pGameMgr->Add_GameObject((OBJECT::TYPE)5, m_pCustomPlayer = CustomPlayer::Create(m_pDevice, m_iPlayerID, m_strName))))
-	//		return E_FAIL;
-	//	if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::UI, ColorButton::Create(m_pDevice, m_iPlayerID, false))))
-	//		return E_FAIL;
-	//}
 
 	return GameObject::Ready_GameObject();
 }
@@ -84,7 +76,7 @@ INT PostCard::Update_GameObject(float time_delta)
 
 		if (abs(m_vPosition.y) < 20.f)
 		{
-			if (FAILED(m_pGameMgr->Add_GameObject((OBJECT::TYPE)5, m_pCustomPlayer = CustomPlayer::Create(m_pDevice, m_iPlayerID, m_strName))))
+			if (FAILED(m_pGameMgr->Add_GameObject((OBJECT::TYPE)5, m_pCustomPlayer = CustomPlayer::Create(m_pDevice, m_iPlayerID, m_strName, m_vColor[0], m_vColor[1]))))
 				return E_FAIL;
 			if(m_bLocal)
 			{
@@ -190,10 +182,10 @@ HRESULT PostCard::Setup_Ready(bool bReady)
 	return NOERROR;
 }
 
-PostCard* PostCard::Create(LPDIRECT3DDEVICE9 pGraphic_Device, UINT iPlayerID, bool bLocalPlayer, string strName)
+PostCard* PostCard::Create(LPDIRECT3DDEVICE9 pGraphic_Device, UINT iPlayerID, bool bLocalPlayer, string strName, D3DXVECTOR3 vBody, D3DXVECTOR3 vCloth)
 {
 	PostCard* pInstance = new PostCard(pGraphic_Device);
-	if (FAILED(pInstance->Ready_GameObject(iPlayerID, bLocalPlayer, strName)))
+	if (FAILED(pInstance->Ready_GameObject(iPlayerID, bLocalPlayer, strName, vBody, vCloth)))
 		SafeDelete(pInstance);
 	return pInstance;
 }
