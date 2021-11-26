@@ -107,16 +107,7 @@ struct sc_packet_all_ready // 모든 플레이어가 준비 완료임을 알림
 {
 	unsigned char	size;
 	char			type;
-};
-
-struct sc_packet_game_start // 3명이 모두 준비를 마쳐 게임을 시작
-{
-	unsigned char  size;
-	char           type;
-	D3DXVECTOR2    position;
-	D3DXVECTOR2    look;
-	//무기 정보
-	//
+	D3DXVECTOR2		position;	// 맵에서 초기 위치만 제공? 해주는게 좋을듯?
 };
 
 struct sc_packet_game_state  //매 프레임마다 게임 전체 정보 전달

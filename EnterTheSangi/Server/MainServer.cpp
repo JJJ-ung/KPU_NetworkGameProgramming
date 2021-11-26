@@ -359,6 +359,7 @@ void CMainServer::ProcessPacket(char client_id)
             sc_packet_all_ready sp;
             sp.size = sizeof(sc_packet_all_ready);
             sp.type = SC_PACKET_ALL_READY;
+            sp.position = D3DXVECTOR2(rand() % 100, rand() % 100); // <- 아직 맵을 몰라서 임시값 넣은거임!
             for (auto& cl : m_clients)
                 send(cl.GetSocket(), (char*)&sp, sizeof(sc_packet_all_ready), 0);
 
@@ -566,5 +567,17 @@ void CMainServer::Disconnect(char id)
     m_clients[id].StateLock();
     closesocket(m_clients[id].GetSocket());
     m_clients[id].SetState(ST_FREE);
+    for (auto& cl : m_clients)
+    {
+        if (cl.GetID() == id)
+            continue;
+
+        sc_packet_remove_object sp;
+        sp.id = id;
+        sp.size = sizeof(sc_packet_remove_object);
+        sp.type = SC_PACKET_REMOVE_OBJECT;
+
+        send(cl.GetSocket(), (char*)&sp, sizeof(sc_packet_remove_object), 0); // 연결을 종료하면 클라쪽에서도 안보여야 정상일듯?
+    }
     m_clients[id].StateUnlock();
 }
