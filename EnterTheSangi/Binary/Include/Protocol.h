@@ -27,6 +27,7 @@ const char SC_PACKET_REMOVE_OBJECT = 3;
 const char SC_PACKET_CHANGE_COLOR = 4;
 const char SC_PACKET_READY = 5;
 const char SC_PACKET_TYPE_END = 6;
+const char SC_PACKET_ALL_READY = 7;
 
 //--------------------------------------------------
 //         client to server packet 

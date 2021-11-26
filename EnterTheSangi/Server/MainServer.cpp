@@ -351,6 +351,12 @@ void CMainServer::ProcessPacket(char client_id)
         if (true == IsAllClientsReady())
         {
             m_state_lock.lock();
+            sc_packet_all_ready sp;
+            sp.size = sizeof(sc_packet_all_ready);
+            sp.type = SC_PACKET_ALL_READY;
+            for (auto& cl : m_clients)
+                send(cl.GetSocket(), (char*)&sp, sizeof(sc_packet_all_ready), 0);
+
             m_game_state = SCENE::STAGE;
             m_state_lock.unlock();
 
