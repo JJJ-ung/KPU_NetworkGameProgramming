@@ -30,7 +30,11 @@ void CMainServer::Init(const int server_port)
 
 
     for (int i = 0; i < MAX_CLIENTS; ++i)
+    {
         m_clients[i].SetID(i);
+        m_clients[i].GetPlayer().SetBodyColor(D3DXVECTOR3(rand() % 5 * 0.2f, rand() % 5 * 0.2f, rand() % 5 * 0.2f));
+        m_clients[i].GetPlayer().SetClothColor(D3DXVECTOR3(rand() % 5 * 0.2f, rand() % 5 * 0.2f, rand() % 5 * 0.2f));
+    }
 
     for (auto& cl : m_clients)
     {
@@ -194,7 +198,8 @@ void CMainServer::ProcessPacket(char client_id)
         sp.type = SC_PACKET_LOGIN_OK;
         sp.id = client_id;
         sp.is_ready = false;
-
+        sp.body_color = m_clients[client_id].GetPlayer().GetBodyColor();
+        sp.cloth_color = m_clients[client_id].GetPlayer().GetClothColor();
 
         send(m_clients[client_id].GetSocket(), (char*)&sp, sizeof(sc_packet_login_ok), 0);
         cout << "Client [" << int(client_id) << "] : " << "login ok send!\n";
