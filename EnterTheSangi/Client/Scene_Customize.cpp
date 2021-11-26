@@ -84,6 +84,8 @@ HRESULT Scene_Customize::Add_OtherPlayer(sc_packet_login_other_client* tRecv)
 	if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::PLAYER, m_pPostCard[tRecv->id] = PostCard::Create(m_pGraphic_Device, tRecv->id, false, tRecv->name))))
 		return E_FAIL;
 
+	m_pPostCard[tRecv->id]->Setup_Ready(tRecv->is_ready);
+
 	return NOERROR;
 }
 
