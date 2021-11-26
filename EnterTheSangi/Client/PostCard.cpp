@@ -132,6 +132,9 @@ HRESULT PostCard::Render_GameObject()
 	m_pDevice->GetTransform(D3DTS_PROJECTION, &matTmp);
 	pEffect->SetMatrix("g_matProj", &matTmp);
 
+	float f = 1.f;
+	m_pShader->Set_Value("g_fAlpha", &f, sizeof(float));
+
 	pEffect->Begin(nullptr, 0);
 	pEffect->BeginPass(0);
 
@@ -155,6 +158,8 @@ HRESULT PostCard::Render_GameObject()
 
 		m_pDevice->GetTransform(D3DTS_PROJECTION, &matTmp);
 		pEffect->SetMatrix("g_matProj", &matTmp);
+
+		m_pShader->Set_Value("g_fAlpha", &f, sizeof(float));
 
 		pEffect->Begin(nullptr, 0);
 		pEffect->BeginPass(0);
