@@ -23,7 +23,7 @@ void CMainServer::Init(const int server_port)
     serveraddr.sin_family = AF_INET;
     serveraddr.sin_addr.s_addr = htonl(INADDR_ANY);
     serveraddr.sin_port = htons(server_port);
-    rt=bind(m_listen_socket, (SOCKADDR*)&serveraddr, sizeof(serveraddr));
+    rt = bind(m_listen_socket, (SOCKADDR*)&serveraddr, sizeof(serveraddr));
     if (rt == SOCKET_ERROR) {
         //err_quit("bind()")
     };
@@ -38,9 +38,9 @@ void CMainServer::Init(const int server_port)
     }
 
     m_game_state = SCENE::ID::CUSTOMIZE;
-    for(int i=0;i<MAX_CLIENTS;++i)
+    for (int i = 0; i < MAX_CLIENTS; ++i)
         m_client_event[i] = CreateEvent(NULL, true, true, NULL);
-    m_server_event= CreateEvent(NULL, true, false, NULL);
+    m_server_event = CreateEvent(NULL, true, false, NULL);
 };
 
 void CMainServer::Activate()
@@ -69,16 +69,16 @@ void CMainServer::Activate()
 
 };
 
-void CMainServer::ClientThread(char id) 
+void CMainServer::ClientThread(char id)
 {
     int ret;
     for (;;)
     {
         //In Robby
-		m_state_lock.lock();
-		while (m_game_state == SCENE::ID::CUSTOMIZE)
-		{
-			m_state_lock.unlock();
+        m_state_lock.lock();
+        while (m_game_state == SCENE::ID::CUSTOMIZE)
+        {
+            m_state_lock.unlock();
 
             if (m_clients[id].GetState() != ST_FREE) {
                 ret = DoRecv(id);
@@ -95,7 +95,7 @@ void CMainServer::ClientThread(char id)
                 }
                 ProcessPacket(id);
             }
-			m_state_lock.lock();
+            m_state_lock.lock();
         }
         m_state_lock.unlock();
 
@@ -110,7 +110,7 @@ void CMainServer::ClientThread(char id)
             ret = DoRecv(id);
             if (ret == SOCKET_ERROR)
             {
-                
+
                 m_state_lock.lock();
                 continue;
             }
@@ -133,7 +133,7 @@ void CMainServer::ClientThread(char id)
         //수신 성공시 suspend thread
         //모든 클라이언트로부터 recv 혹은 timeout시 서버 연산
         //이후 resume thread
-       
+
 
     }
 }
@@ -141,17 +141,17 @@ void CMainServer::ClientThread(char id)
 void CMainServer::ServerThread()
 {
     int ret;
-	for (;;)
-	{  //In Robby
-		m_state_lock.lock();
-		while (m_game_state == SCENE::ID::CUSTOMIZE)
-		{
-			m_state_lock.unlock();
-			DoAccept();
-			m_state_lock.lock();
-		}
-		m_state_lock.unlock();
-        
+    for (;;)
+    {  //In Robby
+        m_state_lock.lock();
+        while (m_game_state == SCENE::ID::CUSTOMIZE)
+        {
+            m_state_lock.unlock();
+            DoAccept();
+            m_state_lock.lock();
+        }
+        m_state_lock.unlock();
+
         m_server_timer = chrono::high_resolution_clock::now() + 1s / 60 * 2;
         //In Game
         m_state_lock.lock();
@@ -174,7 +174,7 @@ void CMainServer::ServerThread()
             m_state_lock.lock();
         }
         m_state_lock.unlock();
-	}
+    }
 };
 
 void CMainServer::ProcessPacket(char client_id)
@@ -194,8 +194,8 @@ void CMainServer::ProcessPacket(char client_id)
         sp.type = SC_PACKET_LOGIN_OK;
         sp.id = client_id;
         sp.is_ready = false;
-        
-        
+
+
         send(m_clients[client_id].GetSocket(), (char*)&sp, sizeof(sc_packet_login_ok), 0);
         cout << "Client [" << int(client_id) << "] : " << "login ok send!\n";
         m_clients[client_id].StateLock();
@@ -213,52 +213,62 @@ void CMainServer::ProcessPacket(char client_id)
         packet.cloth_color = m_clients[client_id].GetPlayer().GetClothColor();
 
         packet.is_ready = false; //실은 스테이트 락 걸고 스테이트에서 받아와야함
-                
+
         for (auto& other : m_clients)
         {
             if (other.GetID() == client_id)
                 continue;
 
             other.StateLock();
-            if (ST_INROBBY != other.GetState())
+            if (ST_INROBBY == other.GetState() || ST_READY == other.GetState())
+            {
+                other.StateUnlock();
+
+                ttt = send(other.GetSocket(), (char*)&packet, sizeof(sc_packet_login_other_client), 0);
+                cout << "me -> other : " << ttt << endl;
+            }
+            else
             {
                 other.StateUnlock();
                 continue;
             }
-            other.StateUnlock();
-            
-            ttt = send(other.GetSocket(), (char*)&packet, sizeof(sc_packet_login_other_client), 0);
-            cout << "me -> other : " << ttt << endl;
         }
 
         // 접속한 대상에게 다른 클라이언트 정보도 다 보냄!
         for (auto& cl : m_clients)
         {
+            sc_packet_login_other_client o_packet;
             if (cl.GetID() == client_id)
                 continue;
 
             cl.StateLock();
-            if (ST_INROBBY != cl.GetState())
+            if (ST_INROBBY == cl.GetState() || ST_READY == cl.GetState())
+            {
+                cl.StateUnlock();
+
+                cl.StateLock();
+                if (m_clients[cl.GetID()].GetState() == ST_READY)
+                    o_packet.is_ready = true;
+                else if (m_clients[cl.GetID()].GetState() == ST_INROBBY)
+                    o_packet.is_ready = false;
+                else cout << "STATE ERROR" << endl;
+                cl.StateUnlock();
+
+                o_packet.id = cl.GetID();
+                strcpy_s(o_packet.name, cl.GetName());
+                o_packet.size = sizeof(sc_packet_login_other_client);
+                o_packet.body_color = cl.GetPlayer().GetBodyColor();
+                o_packet.cloth_color = cl.GetPlayer().GetClothColor();
+                o_packet.type = SC_PACKET_LOGIN_OTHER_CLIENT;
+
+                ttt = send(m_clients[client_id].GetSocket(), (char*)&o_packet, sizeof(sc_packet_login_other_client), 0);
+                cout << "other -> me : " << ttt << endl;
+            }
+            else
             {
                 cl.StateUnlock();
                 continue;
             }
-            cl.StateUnlock();
-            sp.id = cl.GetID();
-            sp.type = SC_PACKET_LOGIN_OTHER_CLIENT;
-            sp.size = sizeof(sc_packet_login_other_client);
-            sp.body_color = m_clients[sp.id].GetPlayer().GetBodyColor();
-            sp.cloth_color = m_clients[sp.id].GetPlayer().GetClothColor();
-            cl.StateLock();
-            if (m_clients[sp.id].GetState() == ST_READY)
-                sp.is_ready = true;
-            else if (m_clients[sp.id].GetState() == ST_INROBBY)
-                sp.is_ready = false;
-            else cout << "STATE ERROR" << endl;
-            cl.StateUnlock();
-
-            ttt = send(m_clients[client_id].GetSocket(), (char*)&sp, sizeof(sc_packet_login_other_client), 0);
-            cout << "other -> me : " << ttt << endl;
         }
 
     }
@@ -271,7 +281,7 @@ void CMainServer::ProcessPacket(char client_id)
         cs_packet_change_color rp;
         memcpy(&rp, m_clients[client_id].GetBuf(), sizeof(cs_packet_change_color));
 
-       // 서버에 id에 해당하는 플레이어 커마정보 저장
+        // 서버에 id에 해당하는 플레이어 커마정보 저장
         m_clients[client_id].GetPlayer().SetBodyColor(rp.body_color);
         m_clients[client_id].GetPlayer().SetClothColor(rp.cloth_color);
 
@@ -280,21 +290,21 @@ void CMainServer::ProcessPacket(char client_id)
         sp.id = client_id;
         sp.body_color = rp.body_color;
         sp.cloth_color = rp.cloth_color;
-       
-        for (auto& other : m_clients) 
-		{
-			other.StateLock();
-			CLIENT_STATE temp_state = other.GetState();
-			other.StateUnlock();
-			if ((ST_INROBBY == temp_state) || ((ST_READY == temp_state)))
-				send(other.GetSocket(), (char*)&sp, sizeof(sc_packet_change_color), 0);
-		}
-	}
+
+        for (auto& other : m_clients)
+        {
+            other.StateLock();
+            CLIENT_STATE temp_state = other.GetState();
+            other.StateUnlock();
+            if ((ST_INROBBY == temp_state) || ((ST_READY == temp_state)))
+                send(other.GetSocket(), (char*)&sp, sizeof(sc_packet_change_color), 0);
+        }
+    }
 
     else if (packet_type == CS_PACKET_READY)
     {
         cout << "Client [" << int(client_id) << "] : " << "Ready \n";
-      
+
         cs_packet_ready rp;
         memcpy(&rp, m_clients[client_id].GetBuf(), sizeof(cs_packet_ready));
 
@@ -316,7 +326,7 @@ void CMainServer::ProcessPacket(char client_id)
                 cout << "ready_error_no2" << endl;
             m_clients[client_id].StateUnlock();
         }
-        
+
         sc_packet_ready sp;
         sp.type = SC_PACKET_READY;
         sp.size = sizeof(sc_packet_ready);
@@ -355,10 +365,10 @@ void CMainServer::ProcessPacket(char client_id)
 void CMainServer::DoSend()
 {
     sc_packet_game_state sp;
-    
+
     for (auto& cl : m_clients)
     {
-        
+
     }
 
     // 여기서 플레이어들 정보 취합후 일괄 전송
@@ -368,24 +378,24 @@ void CMainServer::DoSend()
 
 int CMainServer::DoRecv(char id)
 {
-	char* buf = m_clients[id].GetBuf();
-	int received;
-	int left;
-	bool first_recv = true;
-	do
+    char* buf = m_clients[id].GetBuf();
+    int received;
+    int left;
+    bool first_recv = true;
+    do
     {
-       received = recv(m_clients[id].GetSocket(), buf, BUF_SIZE, 0);
-       if (first_recv == true)
-       {
-           left = buf[0];
-           first_recv = false;
-       }
-       if (received == SOCKET_ERROR)
-           return SOCKET_ERROR;
-       else if (received == 0)
-           break;
-       left -= received;
-       buf += received;
+        received = recv(m_clients[id].GetSocket(), buf, BUF_SIZE, 0);
+        if (first_recv == true)
+        {
+            left = buf[0];
+            first_recv = false;
+        }
+        if (received == SOCKET_ERROR)
+            return SOCKET_ERROR;
+        else if (received == 0)
+            break;
+        left -= received;
+        buf += received;
     } while (left > 0);
 };
 
@@ -398,14 +408,14 @@ int CMainServer::DoAccept()
     int addr_len = sizeof(client_addr);
     client_socket = accept(m_listen_socket, (SOCKADDR*)&client_addr, &addr_len);
     if (client_socket == INVALID_SOCKET) return -1;
- 
+
     char new_id = GetNewID();
     if (new_id != -1)
-    {   
+    {
         m_clients[new_id].SetSocket(client_socket);
-        
+
         if (m_client_threads.size() < 3) {
-            if(int(new_id) >= m_client_threads.size())
+            if (int(new_id) >= m_client_threads.size())
                 m_client_threads.emplace_back(&CMainServer::ClientThread, this, new_id);
         }
         cout << "[" << int(new_id) << "] : client incoming \n";
@@ -418,9 +428,9 @@ int CMainServer::DoAccept()
     }
 };
 
-void CMainServer::ServerProcess(){
+void CMainServer::ServerProcess() {
 
-    CollisionCheckTerrainPlayer();    
+    CollisionCheckTerrainPlayer();
     CollisionCheckPlayerBullet();
     CollisionCheckTerrainBullet();
     CollisionCheckPlayerChest();
@@ -443,25 +453,25 @@ void CMainServer::CollisionCheckTerrainBullet()
 
 void CMainServer::CollisionCheckPlayerBullet()
 {
-	for (auto& client : m_clients)
-	{
-		CPlayer& player = client.GetPlayer();
-		for (auto& bullet : m_bullets)
-		{
-			if (CollisionCheck(bullet, player) == true)
-			{
-				//플레이어 체력 감소
+    for (auto& client : m_clients)
+    {
+        CPlayer& player = client.GetPlayer();
+        for (auto& bullet : m_bullets)
+        {
+            if (CollisionCheck(bullet, player) == true)
+            {
+                //플레이어 체력 감소
 
-				//플레이어 사망 판정
+                //플레이어 사망 판정
 
-				//불릿 삭제
-			}
-			else
-			{
-				continue;
-			}
-		}
-	}
+                //불릿 삭제
+            }
+            else
+            {
+                continue;
+            }
+        }
+    }
 }
 
 void CMainServer::CollisionCheckPlayerChest()
@@ -490,14 +500,14 @@ void CMainServer::CollisionCheckPlayerChest()
 template<class T1, class T2 >
 bool CMainServer::CollisionCheck(T1& object_1, T2& object_2)
 {
-   if (abs( object_1.GetPosition().x- object_2.GetPosition().x)<= 
-       (object_1.vGetWidthHf()+ object_2.vGetWidthHf()))
-       return true;
-   if (abs(object_1.GetPosition().y - object_2.GetPosition().y) <=
-       (object_1.vGetHeightHf() + object_2.vGetHeightHf()))
-       return true;
+    if (abs(object_1.GetPosition().x - object_2.GetPosition().x) <=
+        (object_1.vGetWidthHf() + object_2.vGetWidthHf()))
+        return true;
+    if (abs(object_1.GetPosition().y - object_2.GetPosition().y) <=
+        (object_1.vGetHeightHf() + object_2.vGetHeightHf()))
+        return true;
 
-   return false;
+    return false;
 }
 
 char CMainServer::GetNewID()
@@ -514,7 +524,7 @@ char CMainServer::GetNewID()
         m_clients[i].StateUnlock();
     }
     cout << "Maximum Number of Clients Overflow!!\n";
-   
+
     return -1;
 
 
