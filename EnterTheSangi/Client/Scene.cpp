@@ -27,6 +27,11 @@ HRESULT Scene::Render_Scene()
 	return NOERROR;
 }
 
+HRESULT Scene::Setup_Recv(char type, void* pRecv)
+{
+	return NOERROR;
+}
+
 void Scene::Free()
 {
 }

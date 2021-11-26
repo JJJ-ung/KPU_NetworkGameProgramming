@@ -1,5 +1,6 @@
 #include "framework.h"
 #include "NetworkMgr.h"
+#include "GameMgr.h"
 
 IMPLEMENT_SINGLETON(NetworkMgr)
 
@@ -26,14 +27,15 @@ HRESULT NetworkMgr::Ready_WinSock()
     if (connect(m_socket, (SOCKADDR*)&m_addr, sizeof(m_addr)) == SOCKET_ERROR)
         return E_FAIL;
 
-    cout << "Network Mgr Initailize Succeed!" << endl;
+    cout << "Winsock Initailize Succeed!" << endl;
 
-    return NOERROR;
-}
+    m_pGameMgr = GameMgr::GetInstance();
+    if (!m_pGameMgr) return E_FAIL;
 
-HRESULT NetworkMgr::Setup_Networking()
-{
-    // 기존 activate
+    InitializeCriticalSection(&m_Crt);
+    m_hThread = (HANDLE)_beginthreadex(NULL, 0, Thread_Recv, this, 0, NULL);
+
+    cout << "Receive Thread Initailize Succeed!" << endl;
 
     return NOERROR;
 }
@@ -84,98 +86,71 @@ HRESULT NetworkMgr::Send_ReadyInfo(bool ready)
     return Send_ClientInfo(CS_PACKET_READY, (void*)&t);
 }
 
-char NetworkMgr::Recv_ServerInfo(void* p)
+unsigned NetworkMgr::Thread_Recv(void* pArg)
 {
-    if (!p)
-        return -1;
+    NetworkMgr* pNetworkMgr = (NetworkMgr*)pArg;
 
-    char buf[BUF_SIZE];
+    EnterCriticalSection(pNetworkMgr->Get_Crt());
 
-    /*if(FAILED(recv(m_socket, buf, BUF_SIZE, 0)))
-       return -1;*/
-
-    char* ptr = buf;
-    int received;
-    int left;
-    received = recv(m_socket, ptr, sizeof(char), 0);
-    left = buf[0] - received;
-    ptr += received;
-    do
+    while (!pNetworkMgr->m_bFinish)
     {
-        received = recv(m_socket, ptr, left, 0);
-        if (received == SOCKET_ERROR)
-            return SOCKET_ERROR;
-        else if (received == 0)
-            break;
-        left -= received;
+        cout << "Thread" << endl;
+        char buf[BUF_SIZE];
+
+        int left;
+        int received;
+        char* ptr = buf;
+
+        received = recv(pNetworkMgr->m_socket, ptr, sizeof(char), 0);
+        left = buf[0] - received;
         ptr += received;
-    } while (left > 0);
+        do
+        {
+            received = recv(pNetworkMgr->m_socket, ptr, left, 0);
+            if (received == SOCKET_ERROR)
+                return SOCKET_ERROR;
+            else if (received == 0)
+                break;
+            left -= received;
+            ptr += received;
+        } while (left > 0);
 
-    switch (buf[1])
-    {
-    case SC_PACKET_LOGIN_OK: // 서버에서 받아온 로그인 ok신호!!!
-        cout << "SC_PACKET_LOGIN_OK" << endl;
-        memcpy(p, &buf, sizeof(sc_packet_login_ok));
-        break;
-    case SC_PACKET_CHANGE_COLOR: // 서버에서 받아온 색깔!!!!
-        cout << "SC_PACKET_CHANGE_COLOR" << endl;
-        memcpy(p, &buf, sizeof(sc_packet_change_color));
-        break;
-    case SC_PACKET_LOGIN_OTHER_CLIENT:  // 나 말고 다른 플레이어 정보 받아옴!!!
-        cout << "SC_PACKET_LOGIN_OTHER_CLIENT" << endl;
-        memcpy(p, &buf, sizeof(sc_packet_login_other_client));
-        break;
-    case SC_PACKET_REMOVE_OBJECT:  // 나 말고 다른 플레이어 정보 받아옴!!!
-       //memcpy(p, &buf, sizeof(sc_packet_login_other_client));
-        cout << "SC_PACKET_REMOVE_OBJECT" << endl;
-        break;
-    case SC_PACKET_READY:  // 나 말고 다른 플레이어 정보 받아옴!!!
-        cout << "SC_PACKET_READY" << endl;
-        memcpy(p, &buf, sizeof(sc_packet_ready));
-        break;
-    default:
-        break;
+        switch (buf[1])
+        {
+        case SC_PACKET_LOGIN_OK:
+            cout << "SC_PACKET_LOGIN_OK" << endl;
+            break;
+        case SC_PACKET_CHANGE_COLOR:
+            cout << "SC_PACKET_CHANGE_COLOR" << endl;
+            break;
+        case SC_PACKET_LOGIN_OTHER_CLIENT:
+            cout << "SC_PACKET_LOGIN_OTHER_CLIENT" << endl;
+            break;
+        case SC_PACKET_REMOVE_OBJECT:
+            break;
+        case SC_PACKET_READY: 
+            cout << "SC_PACKET_READY" << endl;
+            break;
+        default:
+            break;
+        }
+
+        pNetworkMgr->m_pGameMgr->Setup_Recv(buf[1], buf);
     }
 
-    return buf[1];
-}
+    LeaveCriticalSection(pNetworkMgr->Get_Crt());
 
-void NetworkMgr::Render_Error(const char* msg)
-{
-    LPVOID lpMsgBuf;
-
-    FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
-        NULL, WSAGetLastError(),
-        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-        (LPTSTR)&lpMsgBuf, 0, NULL);
-
-    cout << "[" << msg << "] : " << (char*)lpMsgBuf << endl;
-    LocalFree(lpMsgBuf);
-}
-
-int NetworkMgr::recvn(SOCKET s, char* buf, int len, int flags)
-{
-    int received;
-    char* ptr = buf;
-    int left = len;
-
-    while (left > 0)
-    {
-        received = recv(s, ptr, left, flags);
-        if (received == SOCKET_ERROR)
-            return SOCKET_ERROR;
-        else if (received == 0)
-            break;
-
-        left -= received;
-        ptr += received;
-    }
-
-    return (len - left);
+    return 0;
 }
 
 void NetworkMgr::Free()
 {
+    m_bFinish = true;
+    WaitForSingleObject(m_hThread, INFINITE);
+    CloseHandle(m_hThread);
+    DeleteCriticalSection(&m_Crt);
+    cout << "Thread Closed" << endl;
     closesocket(m_socket);
     WSACleanup();
+    cout << "Winsock Closed" << endl;
 }

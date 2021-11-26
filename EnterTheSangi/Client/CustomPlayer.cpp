@@ -14,6 +14,7 @@ CustomPlayer::CustomPlayer(LPDIRECT3DDEVICE9 pGraphic_Device)
 
 CustomPlayer::~CustomPlayer()
 {
+	Free();
 }
 
 HRESULT CustomPlayer::Ready_GameObject(UINT iPlayerID, string strName)

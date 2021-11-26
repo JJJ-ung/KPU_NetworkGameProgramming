@@ -35,6 +35,9 @@ public:
 	HRESULT Clear_Scene();
 	HRESULT Clear_ObjectList(OBJECT::TYPE eType);
 
+public:
+	HRESULT Setup_Recv(char type, void* pRecv);
+
 private:
 	Scene* m_pCurrScene = nullptr;
 

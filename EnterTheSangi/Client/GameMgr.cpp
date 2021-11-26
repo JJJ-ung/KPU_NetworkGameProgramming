@@ -135,6 +135,14 @@ HRESULT GameMgr::Clear_ObjectList(OBJECT::TYPE eType)
 	return NOERROR;
 }
 
+HRESULT GameMgr::Setup_Recv(char type, void* pRecv)
+{
+	if (!m_pCurrScene)
+		return E_FAIL;
+
+	return m_pCurrScene->Setup_Recv(type, pRecv);
+}
+
 void GameMgr::Free()
 {
 	SafeDelete(m_pCurrScene);

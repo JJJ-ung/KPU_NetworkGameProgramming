@@ -14,6 +14,9 @@ public:
 	virtual int Update_Scene(float TimeDelta);
 	virtual HRESULT Render_Scene();
 
+public:
+	virtual HRESULT Setup_Recv(char type, void* pRecv);
+
 protected:
 	bool m_bChangeScene = false;
 

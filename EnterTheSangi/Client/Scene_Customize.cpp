@@ -37,10 +37,6 @@ HRESULT Scene_Customize::Ready_Scene(sc_packet_login_ok tLogin)
 	if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::PLAYER, m_pPostCard[tLogin.id] = PostCard::Create(m_pGraphic_Device, tLogin.id, true, m_pGameMgr->Get_ClientPlayerName()))))
 		return E_FAIL;
 
-	InitializeCriticalSection(&m_Crt);
-
-	m_hThread = (HANDLE)_beginthreadex(NULL, 0, Thread_Recv, this, 0, NULL);
-
 	return Scene::Ready_Scene();
 }
 
@@ -100,42 +96,48 @@ HRESULT Scene_Customize::Update_PlayerReady(sc_packet_ready* tRecv)
 	return m_pPostCard[tRecv->id]->Setup_Ready(tRecv->is_ready);
 }
 
-unsigned Scene_Customize::Thread_Recv(void* pArg)
+HRESULT Scene_Customize::Setup_Recv(char c, void* recv)
 {
-	Scene_Customize* pScene = (Scene_Customize*)pArg;
-
-	EnterCriticalSection(pScene->Get_Crt());
-
-	while(!pScene->m_bFinish)
+	switch (c)
 	{
-		cout << "Thread" << endl;
-		void* p = malloc(BUF_SIZE);
-		char c = pScene->m_pNetworkMgr->Recv_ServerInfo(p);
-		switch (c)
-		{
-		case SC_PACKET_CHANGE_COLOR:
-			if (FAILED(pScene->Update_PlayerColor((sc_packet_change_color*)p)))
-				return E_FAIL;
-			break;
-		case SC_PACKET_LOGIN_OTHER_CLIENT:
-			if (FAILED(pScene->Add_OtherPlayer((sc_packet_login_other_client*)p)))
-				return E_FAIL;
-			break;
-		case SC_PACKET_READY:
-			if (FAILED(pScene->Update_PlayerReady((sc_packet_ready*)p)))
-				return E_FAIL;
-			break;
-		default:
-			break;
-		}
-		delete p;
+	case SC_PACKET_CHANGE_COLOR:
+		if (FAILED(Update_PlayerColor((sc_packet_change_color*)recv)))
+			return E_FAIL;
+		break;
+	case SC_PACKET_LOGIN_OTHER_CLIENT:
+		if (FAILED(Add_OtherPlayer((sc_packet_login_other_client*)recv)))
+			return E_FAIL;
+		break;
+	case SC_PACKET_READY:
+		if (FAILED(Update_PlayerReady((sc_packet_ready*)recv)))
+			return E_FAIL;
+		break;
+	default:
+		break;
 	}
 
-	LeaveCriticalSection(pScene->Get_Crt());
-
-	return 0;
+	return Scene::Setup_Recv(c, recv);
 }
-
+//
+//unsigned Scene_Customize::Thread_Recv(void* pArg)
+//{
+//	Scene_Customize* pScene = (Scene_Customize*)pArg;
+//
+//	EnterCriticalSection(pScene->Get_Crt());
+//
+//	while(!pScene->m_bFinish)
+//	{
+//		cout << "Thread" << endl;
+//		void* p = malloc(BUF_SIZE);
+//		char c = pScene->m_pNetworkMgr->Recv_ServerInfo(p);
+//		delete p;
+//	}
+//
+//	LeaveCriticalSection(pScene->Get_Crt());
+//
+//	return 0;
+//}
+//
 Scene_Customize* Scene_Customize::Create(LPDIRECT3DDEVICE9 pGraphic_Device, sc_packet_login_ok tLogin)
 {
 	Scene_Customize* pInstance = new Scene_Customize(pGraphic_Device);
@@ -151,9 +153,6 @@ Scene_Customize* Scene_Customize::Create(LPDIRECT3DDEVICE9 pGraphic_Device, sc_p
 
 void Scene_Customize::Free()
 {
-	WaitForSingleObject(m_hThread, INFINITE);
-	CloseHandle(m_hThread);
-	DeleteCriticalSection(&m_Crt);
 	cout << "Customize Thread Closed" << endl;
 	Scene::Free();
 }

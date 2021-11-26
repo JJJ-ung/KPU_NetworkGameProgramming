@@ -19,17 +19,10 @@ public:
 	HRESULT Update_PlayerReady(sc_packet_ready* tRecv);
 
 public:
-	CRITICAL_SECTION* Get_Crt(void) { return &m_Crt; }
-	BOOL Get_Finish(void) const { return m_bFinish; }
-	static unsigned int CALLBACK Thread_Recv(void* pArg);
+	virtual HRESULT Setup_Recv(char type, void* pRecv);
 
 private:
 	PostCard* m_pPostCard[3] = {};
-
-private:
-	HANDLE								m_hThread;
-	CRITICAL_SECTION			m_Crt;
-	BOOL									m_bFinish = false;
 
 public:
 	static Scene_Customize* Create(LPDIRECT3DDEVICE9 pGraphic_Device, sc_packet_login_ok tLogin);

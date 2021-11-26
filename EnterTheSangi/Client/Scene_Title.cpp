@@ -65,27 +65,37 @@ HRESULT Scene_Title::Render_Scene()
 {
 	if(m_pInputMgr->KeyDown(KEY_ENTER))
 	{
+		if (m_bPressedOK)
+			return NOERROR;
+
 		if (m_strName.length() < 2)
 			return NOERROR;
 
 		m_pGameMgr->Get_ClientPlayerName() = m_strName;
 		m_pNetworkMgr->Send_LoginInfo(m_strName.c_str());
 
-		while(true)
-		{
-			sc_packet_login_ok login;
-			if(m_pNetworkMgr->Recv_ServerInfo(&login) == SC_PACKET_LOGIN_OK)
-			{
-				m_pGameMgr->Clear_Scene();
-				Scene_Customize* pScene = Scene_Customize::Create(m_pGraphic_Device, login);
-				if (FAILED(m_pGameMgr->Set_CurrScene(pScene)))
-					return -1;
-				break;
-			}
-		}
+		m_bPressedOK = true;
 	}
 
 	return Scene::Render_Scene(); 
+}
+
+HRESULT Scene_Title::Setup_Recv(char c, void* recv)
+{
+	if(c == SC_PACKET_LOGIN_OK)
+	{
+		m_pGameMgr->Clear_Scene();
+		sc_packet_login_ok login;
+		memcpy(&login, recv, sizeof(sc_packet_login_ok));
+		Scene_Customize* pScene = Scene_Customize::Create(m_pGraphic_Device, login);
+		if (FAILED(m_pGameMgr->Set_CurrScene(pScene)))
+		{
+			cout << "Failed To Change Scene" << endl;
+			return E_FAIL;
+		}
+	}
+
+	return Scene::Setup_Recv(c, recv);
 }
 
 Scene_Title* Scene_Title::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
