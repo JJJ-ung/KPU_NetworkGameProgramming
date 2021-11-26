@@ -98,7 +98,7 @@ char NetworkMgr::Recv_ServerInfo(void* p)
     int received;
     int left;
     received = recv(m_socket, ptr, sizeof(char), 0);
-    left = *ptr - received;
+    left = buf[0] - received;
     ptr += received;
     do
     {

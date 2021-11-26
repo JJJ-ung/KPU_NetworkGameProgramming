@@ -286,6 +286,7 @@ void CMainServer::ProcessPacket(char client_id)
         m_clients[client_id].GetPlayer().SetClothColor(rp.cloth_color);
 
         sc_packet_change_color sp;
+        sp.size = sizeof(sc_packet_change_color);
         sp.type = SC_PACKET_CHANGE_COLOR;
         sp.id = client_id;
         sp.body_color = rp.body_color;
@@ -296,8 +297,10 @@ void CMainServer::ProcessPacket(char client_id)
             other.StateLock();
             CLIENT_STATE temp_state = other.GetState();
             other.StateUnlock();
-            if ((ST_INROBBY == temp_state) || ((ST_READY == temp_state)))
+            if ((ST_INROBBY == temp_state) || ((ST_READY == temp_state))) {
                 send(other.GetSocket(), (char*)&sp, sizeof(sc_packet_change_color), 0);
+                cout << "Client [" << int(client_id) << "] send change color ->  Client [" << int(other.GetID()) << "]\n";
+            }
         }
     }
 
