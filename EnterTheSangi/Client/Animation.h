@@ -11,7 +11,7 @@ public:
 public:
 	virtual HRESULT Ready_Component(Texture* pTexture, float fSpeed, bool bSetCenter, float fStartFrame);
 	virtual INT Update_Component(float TimeDelta);
-	virtual INT LateUpdate_Component(float TimeDelta);
+	bool Update_Animation(float TimeDelta);
 
 public:
 	HRESULT Set_Texture(LPD3DXEFFECT pEffect, const char* pConstantName);

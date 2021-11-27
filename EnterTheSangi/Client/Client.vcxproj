@@ -219,7 +219,6 @@
     <ClCompile Include="Scene_Title.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShaderMgr.cpp" />
-    <ClCompile Include="StateMachine.cpp" />
     <ClCompile Include="StaticSprite.cpp" />
     <ClCompile Include="Target.cpp" />
     <ClCompile Include="TargetMgr.cpp" />

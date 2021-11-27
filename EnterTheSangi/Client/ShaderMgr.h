@@ -1,5 +1,5 @@
 #pragma once
-#include "Shader.h"
+class Shader;
 class ShaderMgr
 {
 	DECLARE_SINGLETON(ShaderMgr)

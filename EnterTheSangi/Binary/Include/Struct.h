@@ -35,10 +35,26 @@ struct svector2
 
 typedef struct tagCustomInfo
 {
+public:
+	tagCustomInfo() {}
+	tagCustomInfo(D3DXVECTOR3 cloth, D3DXVECTOR3 body)
+		:vCloth(cloth), vBody(body) {}
 	D3DXVECTOR3 vCloth{};
 	D3DXVECTOR3 vBody{};
 }CUSTOMIZE;
 
+typedef struct tagClientInfo
+{
+public:
+	tagClientInfo() { }
+	tagClientInfo(bool local, UINT idx, string str, D3DXVECTOR3 cloth, D3DXVECTOR3 body, D3DXVECTOR3 pos)
+		:islocal(local), index(idx), name(str), custom(cloth, body), startpos(pos)	{}
+	bool islocal;
+	UINT index;
+	string name;
+	CUSTOMIZE custom;
+	D3DXVECTOR3 startpos;
+}CLIENT;
 
 // For Server
 

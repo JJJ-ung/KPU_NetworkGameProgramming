@@ -33,6 +33,9 @@ public:
 public:
 	bool& Get_TextMode() { return m_bTextMode; }
 	string& Get_Text() { return m_strText; }
+	float& Get_Angle() { return m_fAngle; }
+	const float Get_Angle_Abs() { return abs(m_fAngle); }
+	D3DXVECTOR3& Get_MousePoint() { return m_vMousePoint; }
 
 private:
 	InputMgr();
@@ -68,6 +71,11 @@ private:
 private:
 	bool									m_bTextMode = false;
 	string								m_strText = "";
+
+private:
+	float								m_fAngle = 0.f;
+	POINT								m_tMousePoint = {};
+	D3DXVECTOR3				m_vMousePoint = {};
 
 public:
 	ULONG m_dwCurKey = 0;

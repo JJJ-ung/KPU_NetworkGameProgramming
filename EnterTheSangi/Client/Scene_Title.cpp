@@ -1,12 +1,15 @@
 #include "framework.h"
 #include "Scene_Title.h"
 #include "Scene_Customize.h"
+#include "Scene_Test.h"
 #include "InputMgr.h"
 #include "NetworkMgr.h"
 #include "StaticSprite.h"
 #include "AnimatedSprite.h"
 #include "Font.h"
 #include "NetworkMgr.h"
+
+#define TEST
 
 Scene_Title::Scene_Title(LPDIRECT3DDEVICE9 pGraphic_Device)
 	:Scene(pGraphic_Device)
@@ -45,7 +48,6 @@ HRESULT Scene_Title::Ready_Scene()
 		return E_FAIL;
 	m_pName->Update_Position(D3DXVECTOR3(80.f, 620.f, 0.f));
 
-//	cout << "TitleEnd" << endl;
 
 	return Scene::Ready_Scene();
 }
@@ -87,12 +89,21 @@ HRESULT Scene_Title::Setup_Recv(char c, void* recv)
 		m_pGameMgr->Clear_Scene();
 		sc_packet_login_ok login;
 		memcpy(&login, recv, sizeof(sc_packet_login_ok));
+#ifdef TEST
+		Scene_Test* pScene = Scene_Test::Create(m_pGraphic_Device);
+		if (FAILED(m_pGameMgr->Set_CurrScene(pScene)))
+		{
+			cout << "Failed To Change Scene" << endl;
+			return E_FAIL;
+		}
+#elif
 		Scene_Customize* pScene = Scene_Customize::Create(m_pGraphic_Device, login);
 		if (FAILED(m_pGameMgr->Set_CurrScene(pScene)))
 		{
 			cout << "Failed To Change Scene" << endl;
 			return E_FAIL;
 		}
+#endif
 	}
 
 	return Scene::Setup_Recv(c, recv);

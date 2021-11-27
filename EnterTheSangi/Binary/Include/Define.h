@@ -42,6 +42,18 @@ private:									\
 #define IMPLEMENT_SINGLETON(ClassName)		\
 ClassName* ClassName::m_pInstance = nullptr;
 
+#define DECLARE_STATE(STATENAME, OWNER)                     \
+NO_COPY(STATENAME)                              \
+public:                                             \
+   static   STATENAME* Instance();                        \
+
+#define IMPLEMENT_STATE(STATENAME)                        \
+STATENAME* STATENAME::Instance()                        \
+{                                                \
+   static STATENAME instance;                           \
+   return &instance;                                 \
+}
+
 #define MSG_BOX(MESSAGE) MessageBox(0, TEXT(MESSAGE), TEXT("System Message"), MB_OK)
 
 #ifdef _DEBUG

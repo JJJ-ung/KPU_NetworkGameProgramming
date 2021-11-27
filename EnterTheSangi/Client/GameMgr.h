@@ -13,8 +13,7 @@ private:
 public:
 	D3DXVECTOR3& Get_PlayerPos() { return m_vPlayerPos; }
 	string& Get_ClientPlayerName() { return m_strClientPlayerName; }
-	vector< sc_packet_login_other_client>& Get_ClientInfo() { return m_vecClientInfo; }
-
+	vector<CLIENT>& Get_ClientInfos() { return m_vecClients; }
 public:
 	HRESULT Set_CurrScene(Scene* pScene);
 	HRESULT Add_GameObject(OBJECT::TYPE eType, GameObject* pObj);
@@ -47,11 +46,9 @@ private:
 	OBJLST m_lstPrototype[OBJECT::END];
 
 private:
-	D3DXVECTOR3 m_vPlayerPos{ 0.f, 0.f, 0.f };
-
-private:
+	vector<CLIENT> m_vecClients;
 	string m_strClientPlayerName = "";
-	vector< sc_packet_login_other_client> m_vecClientInfo;
+	D3DXVECTOR3 m_vPlayerPos{ 0.f, 0.f, 0.f };
 
 private:
 	void Free();

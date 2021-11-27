@@ -1,6 +1,9 @@
 #include "framework.h"
 #include "Font.h"
+#include "Shader.h"
 #include "Texture.h"
+#include "ShaderMgr.h"
+#include "ResourceMgr.h"
 
 Font::Font(LPDIRECT3DDEVICE9 pGraphic_Device)
 	:GameObject(pGraphic_Device)
@@ -12,7 +15,7 @@ Font::~Font()
 	Free();
 }
 
-HRESULT Font::Ready_GameObject(string strName, float fSize, bool align)
+HRESULT Font::Ready_GameObject(string strName, float fSize, bool align, bool view)
 {
 	m_pRenderer = Renderer::GetInstance();
 	if (!m_pRenderer) return E_FAIL;
@@ -35,6 +38,7 @@ HRESULT Font::Ready_GameObject(string strName, float fSize, bool align)
 	m_bAlign = align;
 	m_fSize = fSize;
 	m_strLine = strName;
+	m_bViewMat = view;
 	Convert_Line(strName);
 
 	D3DXMatrixIdentity(&m_matView);
@@ -71,9 +75,16 @@ HRESULT Font::Render_GameObject()
 		matWorld = matScale * matTrans;
 		pEffect->SetMatrix("g_matWorld", &matWorld);
 
-		pEffect->SetMatrix("g_matView", &m_matView);
-
 		D3DXMATRIX		matTmp;
+
+		if(m_bViewMat)
+		{
+			m_pDevice->GetTransform(D3DTS_TEXTURE0, &matTmp);
+			pEffect->SetMatrix("g_matView", &matTmp);
+		}
+		else
+			pEffect->SetMatrix("g_matView", &m_matView);
+
 		m_pDevice->GetTransform(D3DTS_PROJECTION, &matTmp);
 		pEffect->SetMatrix("g_matProj", &matTmp);
 
@@ -134,10 +145,10 @@ HRESULT Font::Update_Position(D3DXVECTOR3 vPos, D3DXVECTOR3 vOffset)
 	return NOERROR;
 }
 
-Font* Font::Create(LPDIRECT3DDEVICE9 pGraphicDev, string strName, float fSize, bool align)
+Font* Font::Create(LPDIRECT3DDEVICE9 pGraphicDev, string strName, float fSize, bool align, bool view)
 {
 	Font* pInstance = new Font(pGraphicDev);
-	if (FAILED(pInstance->Ready_GameObject(strName, fSize, align)))
+	if (FAILED(pInstance->Ready_GameObject(strName, fSize, align, view)))
 		SafeDelete(pInstance);
 	return pInstance;
 }

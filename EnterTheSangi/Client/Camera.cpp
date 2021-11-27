@@ -1,5 +1,6 @@
 #include "framework.h"
 #include "Camera.h"
+#include "InputMgr.h"
 
 Camera::Camera(LPDIRECT3DDEVICE9 pGraphic_Device)
 	:GameObject(pGraphic_Device)
@@ -14,8 +15,8 @@ HRESULT Camera::Ready_GameObject()
 {
 	D3DXMatrixIdentity(&m_matView);
 
-	m_vEye = D3DXVECTOR3(1280.f * -0.5f, 720.f * -0.5f, -1.f);
-	m_vAt = D3DXVECTOR3(1280.f * -0.5f, 720.f * -0.5f, 0.f);
+	m_vAt = m_vAspect;
+	m_vEye = m_vAt + m_vAspectEye;
 	m_vUP = D3DXVECTOR3(0.f, 1.f, 0.f);
 	D3DXMatrixLookAtLH(&m_matView, &m_vEye, &m_vAt, &m_vUP);
 
@@ -26,13 +27,17 @@ HRESULT Camera::Ready_GameObject()
 	m_pGameMgr = GameMgr::GetInstance();
 	if (!m_pGameMgr) return E_FAIL;
 
+	m_pInputMgr = InputMgr::GetInstance();
+	if (!m_pInputMgr) return E_FAIL;
+
 	return NOERROR;
 }
 
 INT Camera::Update_GameObject(float TimeDelta)
 {
-	m_vEye = m_pGameMgr->Get_PlayerPos() + D3DXVECTOR3(1280.f * -0.5f, 720.f * -0.5f, -1.f);
-	m_vAt = m_pGameMgr->Get_PlayerPos() + D3DXVECTOR3(1280.f * -0.5f, 720.f * -0.5f, 0.f);
+	m_vAt = m_pGameMgr->Get_PlayerPos()+ m_vAspect;
+	m_vAt += m_pInputMgr->Get_MousePoint() * 0.2f;
+	m_vEye = m_vAt + m_vAspectEye;
 
 	return 0;
 }

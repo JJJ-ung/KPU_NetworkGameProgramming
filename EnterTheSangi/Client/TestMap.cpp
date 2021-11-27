@@ -2,6 +2,8 @@
 #include "TestMap.h"
 
 #include "Texture.h"
+#include "Shader.h"
+#include "ShaderMgr.h"
 
 TestMap::TestMap(LPDIRECT3DDEVICE9 pGraphic_Device)
 	:GameObject(pGraphic_Device)

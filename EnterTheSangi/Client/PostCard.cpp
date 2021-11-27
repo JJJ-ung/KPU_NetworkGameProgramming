@@ -6,6 +6,8 @@
 #include "Texture.h"
 #include "CustomPlayer.h"
 #include "ColorButton.h"
+#include "Shader.h"
+#include "ShaderMgr.h"
 
 PostCard::PostCard(LPDIRECT3DDEVICE9 pGraphic_Device)
 	:GameObject(pGraphic_Device)
