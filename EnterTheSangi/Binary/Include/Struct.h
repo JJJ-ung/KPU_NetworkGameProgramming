@@ -25,6 +25,11 @@ typedef struct tagIndex32
 }INDEX32;
 
 
+struct svector2
+{
+	unsigned short x;
+	unsigned short y;
+};
 
 // For Client
 
@@ -36,13 +41,6 @@ typedef struct tagCustomInfo
 
 
 // For Server
-
-struct short_vector2_for_packet
-{
-	//원래 값의 1/10
-	short x;
-	short y;
-}typedef svector2;
 
 struct player_info_for_packet
 {

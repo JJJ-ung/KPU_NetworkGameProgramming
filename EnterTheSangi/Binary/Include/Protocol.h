@@ -1,4 +1,5 @@
 #pragma once
+#include "struct.h"
 #include <d3dx9.h>
 #include <vector>
 
@@ -11,14 +12,15 @@ const int SERVER_PORT = 5000;
 const int MAX_CLIENTS = 3;
 //constexpr unsigned int MAX_BUF_SIZE = 256;
 #define  MAX_NAME_SIZE 16
-#define	 BUF_SIZE 256
+#define    BUF_SIZE 256
 
 
 // client to server packet
 const char CS_PACKET_LOGIN = 1;
 const char CS_PACKET_CHANGE_COLOR = 2;
 const char CS_PACKET_READY = 3;
-const char CS_PACKET_TYPE_END = 4;
+const char CS_PACKET_PLAYER_INFO = 4;
+const char CS_PACKET_TYPE_END = 5;
 
 //server to client packet
 const char SC_PACKET_LOGIN_OK = 1;
@@ -52,7 +54,17 @@ struct cs_packet_ready
 {
 	unsigned char  size;
 	char           type;
-	bool           is_ready; 
+	bool           is_ready;
+
+};
+
+struct cs_packet_player_info
+{
+	unsigned char  size;
+	char           type;
+	STATE::TYPE    m_state;
+	svector2       m_position;
+	svector2       m_look;
 };
 
 //--------------------------------------------------
@@ -62,7 +74,7 @@ struct sc_packet_login_ok
 {
 	unsigned char  size;
 	char           type;
-	char           id;          
+	char           id;
 	D3DXVECTOR3    body_color;   //커스터마이징 초기값
 	D3DXVECTOR3    cloth_color;  //커스터마이징 초기값
 	bool           is_ready;
@@ -74,8 +86,8 @@ struct sc_packet_login_other_client
 	char           type;
 	char           id;
 	char           name[MAX_NAME_SIZE];
-	D3DXVECTOR3    body_color;  
-	D3DXVECTOR3    cloth_color;  
+	D3DXVECTOR3    body_color;
+	D3DXVECTOR3    cloth_color;
 	bool           is_ready;
 };
 
@@ -105,9 +117,8 @@ struct sc_packet_ready    //준비 설정, 해제 둘 다 해당 패킷 사용
 
 struct sc_packet_all_ready // 모든 플레이어가 준비 완료임을 알림
 {
-	unsigned char	size;
-	char			type;
-	D3DXVECTOR2		position;	// 맵에서 초기 위치만 제공? 해주는게 좋을듯?
+	unsigned char   size;
+	char            type;
 };
 
 struct sc_packet_game_state  //매 프레임마다 게임 전체 정보 전달

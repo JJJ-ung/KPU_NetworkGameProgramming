@@ -358,8 +358,7 @@ void CMainServer::ProcessPacket(char client_id)
             m_state_lock.lock();
             sc_packet_all_ready sp;
             sp.size = sizeof(sc_packet_all_ready);
-            sp.type = SC_PACKET_ALL_READY;
-            sp.position = D3DXVECTOR2(rand() % 100, rand() % 100); // <- 아직 맵을 몰라서 임시값 넣은거임!
+            sp.type = SC_PACKET_ALL_READY;     
             for (auto& cl : m_clients)
                 send(cl.GetSocket(), (char*)&sp, sizeof(sc_packet_all_ready), 0);
 
