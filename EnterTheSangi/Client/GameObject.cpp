@@ -36,6 +36,11 @@ INT GameObject::Update_Networking()
 	return 0;
 }
 
+INT GameObject::Recv_Networking()
+{
+	return 0;
+}
+
 D3DXMATRIX GameObject::Get_Transform(_D3DTRANSFORMSTATETYPE eType)
 {
 	D3DXMATRIX mat;

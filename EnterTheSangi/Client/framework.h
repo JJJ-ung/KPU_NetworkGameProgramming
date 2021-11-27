@@ -41,21 +41,6 @@
 
 using namespace std;
 using namespace chrono;
-//
-//#ifdef _DEBUG
-//
-//#define _CRTDBG_MAP_ALLOC
-//#include <stdlib.h>
-//#include <crtdbg.h>
-//
-//#ifndef DBG_NEW 
-//#define DBG_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ ) 
-//#define new DBG_NEW 
-//#endif  // _DEBUG  
-//
-//#include <dxgidebug.h>
-//
-//#endif
 
 #include "Define.h"
 #include "Enum.h"
@@ -68,4 +53,4 @@ using namespace chrono;
 #pragma comment(linker,"/entry:wWinMainCRTStartup /subsystem:console")
 #endif
 
-//#define TEST
+#define TEST

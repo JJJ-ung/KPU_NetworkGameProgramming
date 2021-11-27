@@ -189,6 +189,7 @@
     <ClInclude Include="TestMap.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TimerMgr.h" />
+    <ClInclude Include="Weapon.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AnimatedSprite.cpp" />
@@ -225,6 +226,7 @@
     <ClCompile Include="TestMap.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TimerMgr.cpp" />
+    <ClCompile Include="Weapon.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc" />

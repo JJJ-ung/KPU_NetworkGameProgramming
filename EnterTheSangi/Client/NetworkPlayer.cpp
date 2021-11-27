@@ -20,7 +20,35 @@ NetworkPlayer::~NetworkPlayer()
 
 HRESULT NetworkPlayer::Ready_GameObject(CLIENT t)
 {
-	return Player::Ready_GameObject(t);
+	m_pRenderer = Renderer::GetInstance();
+	if (!m_pRenderer) return E_FAIL;
+
+	m_pResourceMgr = ResourceMgr::GetInstance();
+	if (!m_pResourceMgr) return E_FAIL;
+
+	m_pShader = ShaderMgr::GetInstance()->Get_ShaderReference(L"Player");
+	if (!m_pShader) return E_FAIL;
+
+	m_pInputMgr = InputMgr::GetInstance();
+	if (!m_pInputMgr) return E_FAIL;
+
+	m_pGameMgr = GameMgr::GetInstance();
+	if (!m_pGameMgr) return E_FAIL;
+
+	m_pNetworkMgr = NetworkMgr::GetInstance();
+	if (!m_pNetworkMgr) return E_FAIL;
+
+	if (FAILED(Ready_AnimationInfo()))
+		return E_FAIL;
+
+	m_tClientInfo = t;
+
+	if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::UI, m_pNameTag = Font::Create(m_pDevice, t.name, 0.5f, true, true))))
+		return E_FAIL;
+	if (!m_pNameTag) return E_FAIL;
+	m_pNameTag->Update_Position(m_vPosition, D3DXVECTOR3(0.f, 48.f, 0.f));
+
+	return NOERROR;
 }
 
 INT NetworkPlayer::Update_GameObject(float time_delta)
@@ -73,6 +101,13 @@ HRESULT NetworkPlayer::Render_GameObject()
 	pEffect->End();
 
 	return GameObject::Render_GameObject();
+}
+
+INT NetworkPlayer::Recv_Networking()
+{
+	// 받아 온 정보 업뎃
+
+	return Player::Recv_Networking();
 }
 
 NetworkPlayer* NetworkPlayer::Create(LPDIRECT3DDEVICE9 pGraphic_Device, CLIENT t)

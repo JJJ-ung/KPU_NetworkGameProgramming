@@ -1,0 +1,2 @@
+Weapon ../Binary/Resources/Weapon/Weapon_%d.png 14
+Bullet ../Binary/Resources/Bullet/Bullet_%d.png 14

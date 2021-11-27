@@ -89,20 +89,8 @@
     <Filter Include="01 GameObject\99 TestMap">
       <UniqueIdentifier>{b97b8ec0-052a-4efa-97fc-b25b1d4c7dff}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01 GameObject\03 UI">
-      <UniqueIdentifier>{547d8434-8ce1-4170-9e82-980db35c54e1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01 GameObject\03 UI\01 AnimatedSprite">
-      <UniqueIdentifier>{248911ff-2cc6-464a-b524-fa057f156229}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01 GameObject\03 UI\00 StaticSprite">
-      <UniqueIdentifier>{7f17eb75-e1aa-423f-8294-ed2c2c5daa74}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01 GameObject\00 Player\NetworkPlayer">
       <UniqueIdentifier>{0e8679a5-f719-4e3f-adbb-4ae691bc76f0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01 GameObject\03 UI\02 Font">
-      <UniqueIdentifier>{454b9047-4acc-4edb-b874-ca5e0e873a56}</UniqueIdentifier>
     </Filter>
     <Filter Include="01 GameObject\00 Player\PlayerState">
       <UniqueIdentifier>{e6cc0baa-47ec-4149-8527-0134ae6aa740}</UniqueIdentifier>
@@ -110,23 +98,38 @@
     <Filter Include="03 Scene\99 Test">
       <UniqueIdentifier>{b21067e9-3732-4c0b-96e5-296ad1361f8a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01 GameObject\03 UI\99 Customize">
-      <UniqueIdentifier>{3507471a-42f0-4916-bb76-04114d361afd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01 GameObject\03 UI\99 Customize\ColorButton">
-      <UniqueIdentifier>{f5fa395d-41c6-4882-b0e9-1f4d09080589}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01 GameObject\03 UI\99 Customize\CustomPlayer">
-      <UniqueIdentifier>{007a63d7-6fc8-4b05-ad5e-a3113f2a466c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01 GameObject\03 UI\99 Customize\Postcard">
-      <UniqueIdentifier>{03413aeb-5068-4a6c-935b-b303249f346d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="03 Scene\02 Customize">
       <UniqueIdentifier>{d83d14c9-5b07-4f84-9d11-360a7e163f45}</UniqueIdentifier>
     </Filter>
     <Filter Include="02 Component\03 StateMachine">
       <UniqueIdentifier>{8c8c2f3f-0b3f-4932-8087-818b47168b50}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01 GameObject\04 UI">
+      <UniqueIdentifier>{547d8434-8ce1-4170-9e82-980db35c54e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01 GameObject\04 UI\01 AnimatedSprite">
+      <UniqueIdentifier>{248911ff-2cc6-464a-b524-fa057f156229}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01 GameObject\04 UI\00 StaticSprite">
+      <UniqueIdentifier>{7f17eb75-e1aa-423f-8294-ed2c2c5daa74}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01 GameObject\04 UI\02 Font">
+      <UniqueIdentifier>{454b9047-4acc-4edb-b874-ca5e0e873a56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01 GameObject\04 UI\99 Customize">
+      <UniqueIdentifier>{3507471a-42f0-4916-bb76-04114d361afd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01 GameObject\04 UI\99 Customize\ColorButton">
+      <UniqueIdentifier>{f5fa395d-41c6-4882-b0e9-1f4d09080589}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01 GameObject\04 UI\99 Customize\CustomPlayer">
+      <UniqueIdentifier>{007a63d7-6fc8-4b05-ad5e-a3113f2a466c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01 GameObject\04 UI\99 Customize\Postcard">
+      <UniqueIdentifier>{03413aeb-5068-4a6c-935b-b303249f346d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01 GameObject\03 Chest">
+      <UniqueIdentifier>{fb95d0c2-dd19-4a61-a755-297dde516398}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -206,13 +209,13 @@
       <Filter>01 GameObject\99 TestMap</Filter>
     </ClInclude>
     <ClInclude Include="AnimatedSprite.h">
-      <Filter>01 GameObject\03 UI\01 AnimatedSprite</Filter>
+      <Filter>01 GameObject\04 UI\01 AnimatedSprite</Filter>
     </ClInclude>
     <ClInclude Include="Scene_Test.h">
       <Filter>03 Scene\99 Test</Filter>
     </ClInclude>
     <ClInclude Include="StaticSprite.h">
-      <Filter>01 GameObject\03 UI\00 StaticSprite</Filter>
+      <Filter>01 GameObject\04 UI\00 StaticSprite</Filter>
     </ClInclude>
     <ClInclude Include="InputMgr.h">
       <Filter>98 Managers\02 InputMgr</Filter>
@@ -224,7 +227,7 @@
       <Filter>01 GameObject\00 Player\NetworkPlayer</Filter>
     </ClInclude>
     <ClInclude Include="Font.h">
-      <Filter>01 GameObject\03 UI\02 Font</Filter>
+      <Filter>01 GameObject\04 UI\02 Font</Filter>
     </ClInclude>
     <ClInclude Include="PlayerState.h">
       <Filter>01 GameObject\00 Player\PlayerState</Filter>
@@ -233,16 +236,19 @@
       <Filter>03 Scene\02 Customize</Filter>
     </ClInclude>
     <ClInclude Include="PostCard.h">
-      <Filter>01 GameObject\03 UI\99 Customize\Postcard</Filter>
+      <Filter>01 GameObject\04 UI\99 Customize\Postcard</Filter>
     </ClInclude>
     <ClInclude Include="CustomPlayer.h">
-      <Filter>01 GameObject\03 UI\99 Customize\CustomPlayer</Filter>
+      <Filter>01 GameObject\04 UI\99 Customize\CustomPlayer</Filter>
     </ClInclude>
     <ClInclude Include="ColorButton.h">
-      <Filter>01 GameObject\03 UI\99 Customize\ColorButton</Filter>
+      <Filter>01 GameObject\04 UI\99 Customize\ColorButton</Filter>
     </ClInclude>
     <ClInclude Include="StateMachine.h">
       <Filter>02 Component\03 StateMachine</Filter>
+    </ClInclude>
+    <ClInclude Include="Weapon.h">
+      <Filter>01 GameObject\01 Weapon</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -323,13 +329,13 @@
       <Filter>01 GameObject\99 TestMap</Filter>
     </ClCompile>
     <ClCompile Include="AnimatedSprite.cpp">
-      <Filter>01 GameObject\03 UI\01 AnimatedSprite</Filter>
+      <Filter>01 GameObject\04 UI\01 AnimatedSprite</Filter>
     </ClCompile>
     <ClCompile Include="Scene_Test.cpp">
       <Filter>03 Scene\99 Test</Filter>
     </ClCompile>
     <ClCompile Include="StaticSprite.cpp">
-      <Filter>01 GameObject\03 UI\00 StaticSprite</Filter>
+      <Filter>01 GameObject\04 UI\00 StaticSprite</Filter>
     </ClCompile>
     <ClCompile Include="InputMgr.cpp">
       <Filter>98 Managers\02 InputMgr</Filter>
@@ -341,7 +347,7 @@
       <Filter>01 GameObject\00 Player\NetworkPlayer</Filter>
     </ClCompile>
     <ClCompile Include="Font.cpp">
-      <Filter>01 GameObject\03 UI\02 Font</Filter>
+      <Filter>01 GameObject\04 UI\02 Font</Filter>
     </ClCompile>
     <ClCompile Include="PlayerState.cpp">
       <Filter>01 GameObject\00 Player\PlayerState</Filter>
@@ -353,13 +359,16 @@
       <Filter>03 Scene\02 Customize</Filter>
     </ClCompile>
     <ClCompile Include="PostCard.cpp">
-      <Filter>01 GameObject\03 UI\99 Customize\Postcard</Filter>
+      <Filter>01 GameObject\04 UI\99 Customize\Postcard</Filter>
     </ClCompile>
     <ClCompile Include="CustomPlayer.cpp">
-      <Filter>01 GameObject\03 UI\99 Customize\CustomPlayer</Filter>
+      <Filter>01 GameObject\04 UI\99 Customize\CustomPlayer</Filter>
     </ClCompile>
     <ClCompile Include="ColorButton.cpp">
-      <Filter>01 GameObject\03 UI\99 Customize\ColorButton</Filter>
+      <Filter>01 GameObject\04 UI\99 Customize\ColorButton</Filter>
+    </ClCompile>
+    <ClCompile Include="Weapon.cpp">
+      <Filter>01 GameObject\01 Weapon</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
