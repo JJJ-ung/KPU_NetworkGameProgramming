@@ -1,7 +1,9 @@
 #include "framework.h"
 #include "AnimatedSprite.h"
 
+#include "Shader.h"
 #include "Animation.h"
+#include "ShaderMgr.h"
 #include "ResourceMgr.h"
 
 AnimatedSprite::AnimatedSprite(LPDIRECT3DDEVICE9 pGraphic_Device)

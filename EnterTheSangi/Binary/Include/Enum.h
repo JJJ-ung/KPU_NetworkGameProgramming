@@ -14,7 +14,7 @@ namespace SCENE
 
 namespace OBJECT
 {
-	enum TYPE { MAP, PLAYER, BULLET, CHEST, DOOR, CAMERA, UI, END };
+	enum TYPE { MAP, PLAYER, NETWORK_PLAYER, BULLET, CHEST, DOOR, CAMERA, UI, END };
 }
 
 namespace WEAPON
@@ -35,4 +35,5 @@ namespace DIR
 namespace STATE
 {
 	enum TYPE { IDLE, RUN, DODGE, DEAD, HAPPY };
+	enum DIR { FRONT, BACK, SIDE, BACKSIDE, END };
 }

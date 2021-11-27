@@ -38,28 +38,6 @@ D3DXMATRIX GameObject::Get_Transform(_D3DTRANSFORMSTATETYPE eType)
 	return mat;
 }
 
-HRESULT GameObject::Add_Component(const TCHAR* pComponentTag, Component* pCom)
-{
-	if (nullptr != Find_Component(pComponentTag))
-		return E_FAIL;
-
-	m_Components.insert(COMPONENTS::value_type(pComponentTag, pCom));
-
-	return NOERROR;
-}
-
-Component* GameObject::Find_Component(const TCHAR* pComponentTag)
-{
-	auto	iter = find_if(m_Components.begin(), m_Components.end(), TagFinder(pComponentTag));
-	if (iter == m_Components.end())
-		return nullptr;
-
-	return iter->second;
-}
-
 void GameObject::Free()
 {
-	for (auto& Pair : m_Components)
-		SafeDelete(Pair.second);
-	m_Components.clear();
 }

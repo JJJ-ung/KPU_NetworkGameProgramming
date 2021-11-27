@@ -1,5 +1,6 @@
 #include "framework.h"
 #include "ShaderMgr.h"
+#include "Shader.h"
 
 IMPLEMENT_SINGLETON(ShaderMgr)
 

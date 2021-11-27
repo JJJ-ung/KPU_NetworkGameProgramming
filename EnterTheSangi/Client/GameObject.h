@@ -1,13 +1,12 @@
 #pragma once
-#include "Component.h"
 #include "Renderer.h"
 #include "InputMgr.h"
 #include "GameMgr.h"
-#include "ShaderMgr.h"
 #include "NetworkMgr.h"
 #include "ResourceMgr.h"
 
 class Buffer;
+class Shader;
 class Texture;
 class GameObject
 {
@@ -33,14 +32,6 @@ protected:
 	GameMgr*							m_pGameMgr = nullptr;
 	NetworkMgr*					m_pNetworkMgr = nullptr;
 	ResourceMgr*					m_pResourceMgr = nullptr;
-
-protected:
-	unordered_map<const TCHAR*, Component*>			m_Components;
-	typedef unordered_map<const TCHAR*, Component*>	COMPONENTS;
-
-protected:
-	HRESULT Add_Component(const TCHAR* pComponentTag, Component* pCom);
-	Component* Find_Component(const TCHAR* pComponentTag);
 
 public:
 	virtual void Free();

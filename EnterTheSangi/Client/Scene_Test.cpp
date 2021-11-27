@@ -4,6 +4,9 @@
 #include "Player.h"
 #include "Camera.h"
 #include "TestMap.h"
+#include "NetworkPlayer.h"
+
+#define TEST
 
 Scene_Test::Scene_Test(LPDIRECT3DDEVICE9 pGraphic_Device)
 	:Scene(pGraphic_Device)
@@ -19,11 +22,28 @@ HRESULT Scene_Test::Ready_Scene()
 {
 	cout << "Test" << endl;
 
-	//if (FAILED(m_pGameMgr->Set_PrototypesOnScene(OBJECT::PLAYER)))
-	//	return E_FAIL;
-
-	if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::PLAYER, Player::Create(m_pGraphic_Device, m_pGameMgr->Get_ClientPlayerName()))))
+#ifdef TEST
+	CLIENT t(true, 0, m_pGameMgr->Get_ClientPlayerName(), 
+		D3DXVECTOR3(rand() % 10 * 0.1f, rand() % 10 * 0.1f, rand() % 10 * 0.1f), 
+		D3DXVECTOR3(rand() % 10 * 0.1f, rand() % 10 * 0.1f, rand() % 10 * 0.1f), D3DXVECTOR3());
+	m_pGameMgr->Get_ClientInfos()[0] = t;
+	if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::PLAYER, Player::Create(m_pGraphic_Device, m_pGameMgr->Get_ClientInfos()[0]))))
 		return E_FAIL;
+#elif
+	for(auto t : m_pGameMgr->Get_ClientInfos())
+	{
+		if(t.islocal)
+		{
+			if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::PLAYER, Player::Create(m_pGraphic_Device, t))))
+				return E_FAIL;
+		}
+		else
+		{
+			if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::NETWORK_PLAYER, NetworkPlayer::Create(m_pGraphic_Device, t))))
+				return E_FAIL;
+		}
+	}
+#endif
 
 	if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::CAMERA, Camera::Create(m_pGraphic_Device))))
 		return E_FAIL;

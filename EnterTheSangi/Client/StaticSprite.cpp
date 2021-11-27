@@ -1,7 +1,9 @@
 #include "framework.h"
 #include "StaticSprite.h"
 
+#include "Shader.h"
 #include "Texture.h"
+#include "ShaderMgr.h"
 #include "ResourceMgr.h"
 
 StaticSprite::StaticSprite(LPDIRECT3DDEVICE9 pGraphic_Device)

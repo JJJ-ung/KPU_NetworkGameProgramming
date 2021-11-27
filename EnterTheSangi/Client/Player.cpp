@@ -1,11 +1,11 @@
 #include "framework.h"
 #include "Player.h"
-
-#include "Animation.h"
-#include "ResourceMgr.h"
-#include "Texture.h"
-#include "DeviceMgr.h"
 #include "Font.h"
+#include "Shader.h"
+#include "Texture.h"
+#include "Animation.h"
+#include "ShaderMgr.h"
+#include "ResourceMgr.h"
 
 Player::Player(LPDIRECT3DDEVICE9 pGraphic_Device)
 	:GameObject(pGraphic_Device)
@@ -17,7 +17,7 @@ Player::~Player()
 	Free();
 }
 
-HRESULT Player::Ready_GameObject(string strName)
+HRESULT Player::Ready_GameObject(CLIENT t)
 {
 	m_pRenderer = Renderer::GetInstance();
 	if (!m_pRenderer) return E_FAIL;
@@ -37,14 +37,13 @@ HRESULT Player::Ready_GameObject(string strName)
 	if (FAILED(Ready_AnimationInfo()))
 		return E_FAIL;
 
-	m_pCurrAnimation = m_mapAnimations[L"Idle_Front"];
+	m_tClientInfo = t;
 
-	m_tCustomInfo.vBody = D3DXVECTOR3(rand() % 5 * 0.2f, rand() % 5 * 0.2f, rand() % 5 * 0.2f);
-	m_tCustomInfo.vCloth = D3DXVECTOR3(rand() % 5 * 0.2f, rand() % 5 * 0.2f, rand() % 5 * 0.2f);
+	m_pStateMachine = StateMachine<Player>::Create(this, Player_Idle::Instance());
+	if (!m_pStateMachine)
+		return E_FAIL;
 
-	m_strName = strName;
-
-	if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::UI, m_pNameTag = Font::Create(m_pDevice, m_strName, 0.5f))))
+	if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::UI, m_pNameTag = Font::Create(m_pDevice, t.name, 0.5f, true, true))))
 		return E_FAIL;
 	if (!m_pNameTag) return E_FAIL;
 	m_pNameTag->Update_Position(m_vPosition, D3DXVECTOR3(0.f, 48.f, 0.f));
@@ -54,18 +53,10 @@ HRESULT Player::Ready_GameObject(string strName)
 
 INT Player::Update_GameObject(float time_delta)
 {
-	if (m_pInputMgr->KeyPressing(KEY_W))
-		m_vPosition += D3DXVECTOR3(0.f, time_delta * -200.f, 0.f);
-	if (m_pInputMgr->KeyPressing(KEY_S))
-		m_vPosition += D3DXVECTOR3(0.f, time_delta * 200.f, 0.f);
-	if (m_pInputMgr->KeyPressing(KEY_A))
-		m_vPosition += D3DXVECTOR3(time_delta * -200.f, 0.f, 0.f);
-	if (m_pInputMgr->KeyPressing(KEY_D))
-		m_vPosition += D3DXVECTOR3(time_delta * 200.f, 0.f, 0.f);
+	m_pStateMachine->Update_Component(time_delta);
 
-	m_pGameMgr->Get_PlayerPos() = m_vPosition;
-
-	m_pCurrAnimation->Update_Component(time_delta);
+	D3DXVec3Normalize(&m_vDirection, &m_vDirection);
+	m_vPosition += m_vDirection * m_fSpeed * time_delta;
 
 	m_pNameTag->Update_Position(m_vPosition, D3DXVECTOR3(0.f, -48.f, 0.f));
 
@@ -74,6 +65,13 @@ INT Player::Update_GameObject(float time_delta)
 
 INT Player::LateUpdate_GameObject(float time_delta)
 {
+	m_pGameMgr->Get_PlayerPos() = m_vPosition;
+
+	if (m_pInputMgr->Get_Angle() < 0.f)
+		m_fSide = -1.f;
+	else
+		m_fSide = 1.f;
+
 	m_pRenderer->Add_RenderList(Renderer::RENDER_NONALPHA, this);
 
 	return GameObject::LateUpdate_GameObject(time_delta);
@@ -88,7 +86,7 @@ HRESULT Player::Render_GameObject()
 		return E_FAIL;
 
 	D3DXMATRIX		matScale, matTrans, matWorld;
-	D3DXMatrixScaling(&matScale, 3.f, 3.f, 3.f);
+	D3DXMatrixScaling(&matScale, 3.f * m_fSide, 3.f, 3.f);
 	D3DXMatrixTranslation(&matTrans, m_vPosition.x, m_vPosition.y, m_vPosition.z);
 	matWorld = matScale * matTrans;
 	pEffect->SetMatrix("g_matWorld", &matWorld);
@@ -100,8 +98,8 @@ HRESULT Player::Render_GameObject()
 	m_pDevice->GetTransform(D3DTS_PROJECTION, &matTmp);
 	pEffect->SetMatrix("g_matProj", &matTmp);
 
-	m_pShader->Set_Value("g_vCloth", &m_tCustomInfo.vCloth, sizeof(D3DXVECTOR3));
-	m_pShader->Set_Value("g_vBody", &m_tCustomInfo.vBody, sizeof(D3DXVECTOR3));
+	m_pShader->Set_Value("g_vCloth", &m_tClientInfo.custom.vCloth, sizeof(D3DXVECTOR3));
+	m_pShader->Set_Value("g_vBody", &m_tClientInfo.custom.vBody, sizeof(D3DXVECTOR3));
 
 	pEffect->Begin(nullptr, 0);
 	pEffect->BeginPass(0);
@@ -113,6 +111,54 @@ HRESULT Player::Render_GameObject()
 	pEffect->End();
 
 	return GameObject::Render_GameObject();
+}
+
+bool Player::Update_Animation(float TimeDelta)
+{
+	return m_pCurrAnimation->Update_Animation(TimeDelta);
+}
+
+HRESULT Player::Change_Animation(wstring strTag)
+{
+	if (!m_mapAnimations[strTag])
+		return E_FAIL;
+	if(m_pCurrAnimation == m_mapAnimations[strTag])
+		return NOERROR;
+
+	m_pCurrAnimation = m_mapAnimations[strTag];
+	m_pCurrAnimation->Reset_Animation();
+	return NOERROR;
+}
+
+STATE::DIR Player::Compute_Direction()
+{
+	float f = m_pInputMgr->Get_Angle_Abs();
+
+	if (f < 45.f)
+		return STATE::FRONT;
+	else if (f < 90.f)
+		return STATE::SIDE;
+	else if (f < 135.f)
+		return STATE::BACKSIDE;
+	else
+		return STATE::BACK;
+
+	return STATE::END;
+}
+
+wstring Player::Direction_Tag(wstring strTag)
+{
+	wstring out = strTag;
+	float f = m_pInputMgr->Get_Angle_Abs();
+	if (f < 45.f)
+		out += L"_Front";
+	else if (f < 90.f)
+		out += L"_Side";
+	else if (f < 135.f)
+		out += L"_BackSide";
+	else
+		out += L"_Back";
+	return out;
 }
 
 HRESULT Player::Ready_AnimationInfo()
@@ -143,10 +189,10 @@ HRESULT Player::Ready_AnimationInfo()
 	return NOERROR;
 }
 
-Player* Player::Create(LPDIRECT3DDEVICE9 pGraphic_Device, string strName)
+Player* Player::Create(LPDIRECT3DDEVICE9 pGraphic_Device, CLIENT t)
 {
 	Player* pInstance = new Player(pGraphic_Device);
-	if (FAILED(pInstance->Ready_GameObject(strName)))
+	if (FAILED(pInstance->Ready_GameObject(t)))
 		SafeDelete(pInstance);
 	return pInstance;
 }
@@ -156,6 +202,6 @@ void Player::Free()
 	for(auto iter : m_mapAnimations)
 		SafeDelete(iter.second);
 	m_mapAnimations.clear();
-
+	SafeDelete(m_pStateMachine);
 	GameObject::Free();
 }

@@ -7,6 +7,8 @@ IMPLEMENT_SINGLETON(GameMgr)
 
 GameMgr::GameMgr()
 {
+	for (int i = 0; i < 3; ++i)
+		m_vecClients.emplace_back(CLIENT());
 }
 
 GameMgr::~GameMgr()

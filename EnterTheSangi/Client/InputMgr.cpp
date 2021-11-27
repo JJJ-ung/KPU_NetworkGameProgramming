@@ -85,6 +85,8 @@ HRESULT InputMgr::Init_InputDev()
 
 	m_pMouse->Acquire();
 
+	m_vMousePoint.z = 0.f;
+
 	return NOERROR;
 }
 
@@ -94,6 +96,17 @@ void InputMgr::Update_Key()
 
 	m_pKeyBoard->GetDeviceState(256, m_byKeyState);
 	m_pMouse->GetDeviceState(sizeof(m_tMouseState), &m_tMouseState);
+
+	GetCursorPos(&m_tMousePoint);
+	ScreenToClient(g_hWnd, &m_tMousePoint);
+
+	m_tMousePoint.x += LONG(1280.f * -0.5f);
+	m_tMousePoint.y += LONG(720.f * -0.5f);
+
+	m_vMousePoint.x = (float)m_tMousePoint.x;
+	m_vMousePoint.y = (float)m_tMousePoint.y;
+
+	m_fAngle = D3DXToDegree(atan2(m_tMousePoint.x, m_tMousePoint.y));
 
 	if (GetKeyState(DIK_W) & 0x80)
 		m_dwCurKey |= KEY_W;

@@ -43,9 +43,16 @@ INT Animation::Update_Component(float time_delta)
 	return Component::Update_Component(time_delta);
 }
 
-INT Animation::LateUpdate_Component(float time_delta)
+bool Animation::Update_Animation(float TimeDelta)
 {
-	return Component::LateUpdate_Component(time_delta);
+	m_fFrame += TimeDelta * m_fFrameSpeed;
+	if (m_fFrame >= m_fMaxFrame)
+	{
+		m_fFrame = 0.f;
+		return true;
+	}
+
+	return false;
 }
 
 HRESULT Animation::Set_Texture(LPD3DXEFFECT pEffect, const char* pConstantName)

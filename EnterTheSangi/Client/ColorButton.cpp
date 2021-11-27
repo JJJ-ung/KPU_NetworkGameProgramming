@@ -3,6 +3,8 @@
 #include "Texture.h"
 #include "CustomPlayer.h"
 #include "NetworkMgr.h"
+#include "Shader.h"
+#include "ShaderMgr.h"
 
 ColorButton::ColorButton(LPDIRECT3DDEVICE9 pGraphic_Device)
 	:GameObject(pGraphic_Device)

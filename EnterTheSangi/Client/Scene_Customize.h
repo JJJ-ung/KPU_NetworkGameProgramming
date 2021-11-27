@@ -23,6 +23,7 @@ public:
 
 private:
 	PostCard* m_pPostCard[3] = {};
+	bool m_bSceneChange = false;
 
 public:
 	static Scene_Customize* Create(LPDIRECT3DDEVICE9 pGraphic_Device, sc_packet_login_ok tLogin);

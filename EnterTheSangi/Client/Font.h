@@ -15,7 +15,7 @@ public:
 	D3DXMATRIX& Get_ViewMatrix() { return m_matView; }
 
 public:
-	virtual HRESULT Ready_GameObject(string strName, float fSize, bool align);
+	virtual HRESULT Ready_GameObject(string strName, float fSize, bool align, bool view = false);
 	virtual INT Update_GameObject(float TimeDelta);
 	virtual INT LateUpdate_GameObject(float TimeDelta);
 	virtual HRESULT Render_GameObject();
@@ -34,12 +34,13 @@ private:
 	const float m_fSpace = 23.f;
 	float m_fSize = 1.f;
 	bool m_bAlign = true;
+	bool m_bViewMat = true;
 	D3DXVECTOR3 m_vPos{ 0.f, 0.f, 0.f };
 	D3DXVECTOR3 m_vAlign{ 0.f, 0.f, 0.f };
 	D3DXVECTOR4 m_vColor = { 1.f, 1.f, 1.f, 0.f };
 
 public:
-	static Font* Create(LPDIRECT3DDEVICE9 pGraphicDev, string strName, float fSize = 1.f, bool align = true);
+	static Font* Create(LPDIRECT3DDEVICE9 pGraphicDev, string strName, float fSize = 1.f, bool align = true, bool view = false);
 	virtual void Free(void);
 };
 

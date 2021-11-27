@@ -3,8 +3,8 @@
 
 #include "Animation.h"
 #include "ResourceMgr.h"
-#include "Texture.h"
-#include "DeviceMgr.h"
+#include "Shader.h"
+#include "ShaderMgr.h"
 #include "Font.h"
 
 CustomPlayer::CustomPlayer(LPDIRECT3DDEVICE9 pGraphic_Device)

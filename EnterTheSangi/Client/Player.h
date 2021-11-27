@@ -1,5 +1,6 @@
 #pragma once
 #include "GameObject.h"
+#include "PlayerState.h"
 
 class Font;
 class Animation;
@@ -10,32 +11,43 @@ public:
 	virtual ~Player();
 
 public:
-	void Set_CustomInfo(CUSTOMIZE tCustom) { m_tCustomInfo = tCustom; }
+	float& Get_Speed() { return m_fSpeed; }
+	D3DXVECTOR3& Get_Dir() { return m_vDirection; }
+	StateMachine<Player>* Get_StateMachine() { return m_pStateMachine; }
 
 public:
-	virtual HRESULT Ready_GameObject(string strName);
+	virtual HRESULT Ready_GameObject(CLIENT t);
 	virtual INT Update_GameObject(float TimeDelta);
 	virtual INT LateUpdate_GameObject(float TimeDelta);
 	virtual HRESULT Render_GameObject();
+
+public:
+	bool Update_Animation(float TimeDelta);
+	HRESULT Change_Animation(wstring strTag);
+	STATE::DIR Compute_Direction();
+	wstring Direction_Tag(wstring strTag);
 
 protected:
 	HRESULT Ready_AnimationInfo();
 
 protected:
-	string m_strName = "";
+	float m_fSide = 1.f;
+	float m_fSpeed = 1.f;
 	D3DXVECTOR3 m_vPosition{0.f, 0.f, 0.f};
+	D3DXVECTOR3 m_vDirection{ 0.f, 0.f, 0.f };
 
 protected:
+	CLIENT m_tClientInfo = {};
 	Font* m_pNameTag = nullptr;
 	Animation* m_pCurrAnimation = nullptr;
-	CUSTOMIZE m_tCustomInfo{};
+	StateMachine<Player>* m_pStateMachine = nullptr;
 
 protected:
 	typedef map<wstring, Animation*> MAPANI;
 	map<wstring, Animation*> m_mapAnimations;
 
 public:
-	static Player* Create(LPDIRECT3DDEVICE9 pGraphic_Device, string strName);
+	static Player* Create(LPDIRECT3DDEVICE9 pGraphic_Device, CLIENT t);
 	virtual void Free();
 };
 

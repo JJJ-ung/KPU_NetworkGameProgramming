@@ -18,6 +18,10 @@ private:
 	D3DXVECTOR3 m_vAt = D3DXVECTOR3(0.f, 0.f, 0.f);
 	D3DXVECTOR3 m_vUP = D3DXVECTOR3(0.f, 1.f, 0.f);
 
+private:
+	const D3DXVECTOR3 m_vAspect = D3DXVECTOR3(1280.f * -0.5f, 720.f * -0.5f, 0.f);
+	const D3DXVECTOR3 m_vAspectEye = D3DXVECTOR3(0.f, 0.f, -1.f);
+
 public:
 	static Camera* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
 	virtual void Free();

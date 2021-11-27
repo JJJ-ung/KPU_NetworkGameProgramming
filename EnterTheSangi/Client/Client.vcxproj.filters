@@ -107,14 +107,8 @@
     <Filter Include="01 GameObject\00 Player\PlayerState">
       <UniqueIdentifier>{e6cc0baa-47ec-4149-8527-0134ae6aa740}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02 Component\03 StateMachine">
-      <UniqueIdentifier>{61a56a78-b2cc-42d7-a8a5-34776cabf420}</UniqueIdentifier>
-    </Filter>
     <Filter Include="03 Scene\99 Test">
       <UniqueIdentifier>{b21067e9-3732-4c0b-96e5-296ad1361f8a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01 GameObject\03 UI\03 Button">
-      <UniqueIdentifier>{8d162b14-3f0a-4995-be9c-044ca788e311}</UniqueIdentifier>
     </Filter>
     <Filter Include="01 GameObject\03 UI\99 Customize">
       <UniqueIdentifier>{3507471a-42f0-4916-bb76-04114d361afd}</UniqueIdentifier>
@@ -130,6 +124,9 @@
     </Filter>
     <Filter Include="03 Scene\02 Customize">
       <UniqueIdentifier>{d83d14c9-5b07-4f84-9d11-360a7e163f45}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02 Component\03 StateMachine">
+      <UniqueIdentifier>{8c8c2f3f-0b3f-4932-8087-818b47168b50}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -232,9 +229,6 @@
     <ClInclude Include="PlayerState.h">
       <Filter>01 GameObject\00 Player\PlayerState</Filter>
     </ClInclude>
-    <ClInclude Include="StateMachine.h">
-      <Filter>02 Component\03 StateMachine</Filter>
-    </ClInclude>
     <ClInclude Include="Scene_Customize.h">
       <Filter>03 Scene\02 Customize</Filter>
     </ClInclude>
@@ -246,6 +240,9 @@
     </ClInclude>
     <ClInclude Include="ColorButton.h">
       <Filter>01 GameObject\03 UI\99 Customize\ColorButton</Filter>
+    </ClInclude>
+    <ClInclude Include="StateMachine.h">
+      <Filter>02 Component\03 StateMachine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -348,9 +345,6 @@
     </ClCompile>
     <ClCompile Include="PlayerState.cpp">
       <Filter>01 GameObject\00 Player\PlayerState</Filter>
-    </ClCompile>
-    <ClCompile Include="StateMachine.cpp">
-      <Filter>02 Component\03 StateMachine</Filter>
     </ClCompile>
     <ClCompile Include="Scene.cpp">
       <Filter>03 Scene</Filter>
