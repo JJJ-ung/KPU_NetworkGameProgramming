@@ -20,6 +20,9 @@ public:
 	virtual INT LateUpdate_GameObject(float TimeDelta);
 	virtual HRESULT Render_GameObject();
 
+public:
+	virtual INT Update_Networking();
+
 protected:
 	D3DXMATRIX Get_Transform(_D3DTRANSFORMSTATETYPE eType);
 

@@ -120,6 +120,23 @@ HRESULT GameMgr::LateUpdate_GameObject(float TimeDelta)
 	return NOERROR;
 }
 
+int GameMgr::Update_Networking()
+{
+	for (int i = 0; i < OBJECT::END; ++i)
+	{
+		auto iter = m_lstObj[i].begin();
+		for (; iter != m_lstObj[i].end(); )
+		{
+			if ((*iter)->Update_Networking() == -1)
+				return -1;
+			else
+				++iter;
+		}
+	}
+
+	return 0;
+}
+
 HRESULT GameMgr::Clear_Scene()
 {
 	cout << "Clear" << endl;

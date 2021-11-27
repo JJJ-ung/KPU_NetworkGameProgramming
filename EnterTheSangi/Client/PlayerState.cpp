@@ -13,6 +13,7 @@ void Player_Idle::Enter(Player* owner)
 {
 	State<Player>::Enter(owner);
 	m_pOwner->Get_Speed() = 0.f;
+	m_pOwner->Get_State() = STATE::IDLE;
 	cout << "Idle" << endl;
 }
 
@@ -60,6 +61,7 @@ void Player_Run::Enter(Player* owner)
 {
 	State<Player>::Enter(owner);
 	m_pOwner->Get_Speed() = 200.f;
+	m_pOwner->Get_State() = STATE::RUN;
 	cout << "Run" << endl;
 }
 
@@ -123,6 +125,7 @@ void Player_Dodge::Enter(Player* owner)
 		if (vDir.x < 0.f) m_pOwner->Change_Animation(L"Dodge_Front");
 		else m_pOwner->Change_Animation(L"Dodge_Side");
 	}
+	m_pOwner->Get_State() = STATE::DODGE;
 
 	cout << "Dodge" << endl;
 }

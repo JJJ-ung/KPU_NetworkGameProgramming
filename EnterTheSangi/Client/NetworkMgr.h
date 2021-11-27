@@ -23,6 +23,7 @@ public:
 	HRESULT Send_LoginInfo(const char* name);
 	HRESULT Send_ColorInfo(D3DXVECTOR3 body, D3DXVECTOR3 cloth);
 	HRESULT Send_ReadyInfo(bool ready);
+	HRESULT Send_PlayerInfo(STATE::TYPE eState, D3DXVECTOR3 vPos, float fAngle);
 ///////////////////////////////////////////////////////////////////////////////////////
 
 // For Recv /////////////////////////////////////////////////////////////////////////

@@ -67,3 +67,5 @@ using namespace chrono;
 #ifdef _DEBUG
 #pragma comment(linker,"/entry:wWinMainCRTStartup /subsystem:console")
 #endif
+
+//#define TEST

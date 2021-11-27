@@ -16,6 +16,9 @@ public:
 	int Update_MainApp(const float TimeDelta);
 	HRESULT Render_MainApp();
 
+public:
+	int Update_Networking(const float TimeDelta);
+
 private:
 	LPDIRECT3DDEVICE9 m_pGraphic_Device = nullptr;
 

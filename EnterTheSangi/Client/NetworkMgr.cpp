@@ -86,6 +86,18 @@ HRESULT NetworkMgr::Send_ReadyInfo(bool ready)
     return Send_ClientInfo(CS_PACKET_READY, (void*)&t);
 }
 
+HRESULT NetworkMgr::Send_PlayerInfo(STATE::TYPE eState, D3DXVECTOR3 vPos, float fAngle)
+{
+    cs_packet_player_info t = {};
+    t.size = sizeof(cs_packet_player_info);
+    t.type = CS_PACKET_PLAYER_INFO;
+    t.m_state = eState;
+    t.m_position.x = (short)vPos.x;
+    t.m_position.y = (short)vPos.y;
+    t.m_look = (short)fAngle;
+    return Send_ClientInfo(CS_PACKET_PLAYER_INFO, (void*)&t);
+}
+
 unsigned NetworkMgr::Thread_Recv(void* pArg)
 {
     NetworkMgr* pNetworkMgr = (NetworkMgr*)pArg;

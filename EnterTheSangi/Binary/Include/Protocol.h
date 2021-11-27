@@ -55,7 +55,6 @@ struct cs_packet_ready
 	unsigned char  size;
 	char           type;
 	bool           is_ready;
-
 };
 
 struct cs_packet_player_info
@@ -64,7 +63,7 @@ struct cs_packet_player_info
 	char           type;
 	STATE::TYPE    m_state;
 	svector2       m_position;
-	svector2       m_look;
+	short		       m_look;
 };
 
 //--------------------------------------------------

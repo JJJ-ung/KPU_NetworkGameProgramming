@@ -31,6 +31,9 @@ public:
 	HRESULT LateUpdate_GameObject(float TimeDelta);
 
 public:
+	int Update_Networking();
+
+public:
 	HRESULT Clear_Scene();
 	HRESULT Clear_ObjectList(OBJECT::TYPE eType);
 

@@ -6,8 +6,6 @@
 #include "TestMap.h"
 #include "NetworkPlayer.h"
 
-#define TEST
-
 Scene_Test::Scene_Test(LPDIRECT3DDEVICE9 pGraphic_Device)
 	:Scene(pGraphic_Device)
 {
@@ -29,7 +27,7 @@ HRESULT Scene_Test::Ready_Scene()
 	m_pGameMgr->Get_ClientInfos()[0] = t;
 	if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::PLAYER, Player::Create(m_pGraphic_Device, m_pGameMgr->Get_ClientInfos()[0]))))
 		return E_FAIL;
-#elif
+#else
 	for(auto t : m_pGameMgr->Get_ClientInfos())
 	{
 		if(t.islocal)

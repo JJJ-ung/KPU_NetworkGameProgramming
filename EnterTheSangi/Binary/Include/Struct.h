@@ -1,6 +1,9 @@
 #pragma once
+#include <string>
 #include "Enum.h"
 // For Rendering / DirectX
+
+using namespace std;
 
 typedef struct tagVertex_ViewPort_Texture
 {
@@ -24,11 +27,10 @@ typedef struct tagIndex32
 	unsigned long	_0, _1, _2;
 }INDEX32;
 
-
 struct svector2
 {
-	unsigned short x;
-	unsigned short y;
+	short x;
+	short y;
 };
 
 // For Client
@@ -49,11 +51,11 @@ public:
 	tagClientInfo() { }
 	tagClientInfo(bool local, UINT idx, string str, D3DXVECTOR3 cloth, D3DXVECTOR3 body, D3DXVECTOR3 pos)
 		:islocal(local), index(idx), name(str), custom(cloth, body), startpos(pos)	{}
-	bool islocal;
-	UINT index;
-	string name;
-	CUSTOMIZE custom;
-	D3DXVECTOR3 startpos;
+	bool islocal = true;
+	UINT index = 0;
+	string name = "";
+	CUSTOMIZE custom{};
+	D3DXVECTOR3 startpos{};
 }CLIENT;
 
 // For Server

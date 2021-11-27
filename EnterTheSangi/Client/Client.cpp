@@ -84,7 +84,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
             if (pTimerMgr->Frame_Limit(TimerMgr::NETWORKING, 30.f))
             {
                 // 네트워크 업데이트 사항
-                pTimerMgr->Update_Timer(TimerMgr::NETWORK_DEFAULT);
+                pMainApp->Update_Networking(pTimerMgr->Update_Timer(TimerMgr::NETWORK_DEFAULT));
             }
         }
 	}

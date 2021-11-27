@@ -9,8 +9,6 @@
 #include "Font.h"
 #include "NetworkMgr.h"
 
-#define TEST
-
 Scene_Title::Scene_Title(LPDIRECT3DDEVICE9 pGraphic_Device)
 	:Scene(pGraphic_Device)
 {
@@ -96,7 +94,7 @@ HRESULT Scene_Title::Setup_Recv(char c, void* recv)
 			cout << "Failed To Change Scene" << endl;
 			return E_FAIL;
 		}
-#elif
+#else
 		Scene_Customize* pScene = Scene_Customize::Create(m_pGraphic_Device, login);
 		if (FAILED(m_pGameMgr->Set_CurrScene(pScene)))
 		{

@@ -97,6 +97,11 @@ HRESULT MainApp::Render_MainApp()
 	return NOERROR;
 }
 
+int MainApp::Update_Networking(const float TimeDelta)
+{
+	return m_pGameMgr->Update_Networking();
+}
+
 MainApp* MainApp::Create()
 {
 	MainApp* pMainApp = new MainApp;

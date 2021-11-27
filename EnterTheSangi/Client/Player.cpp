@@ -34,6 +34,9 @@ HRESULT Player::Ready_GameObject(CLIENT t)
 	m_pGameMgr = GameMgr::GetInstance();
 	if (!m_pGameMgr) return E_FAIL;
 
+	m_pNetworkMgr = NetworkMgr::GetInstance();
+	if (!m_pNetworkMgr) return E_FAIL;
+
 	if (FAILED(Ready_AnimationInfo()))
 		return E_FAIL;
 
@@ -111,6 +114,14 @@ HRESULT Player::Render_GameObject()
 	pEffect->End();
 
 	return GameObject::Render_GameObject();
+}
+
+INT Player::Update_Networking()
+{
+	cout << "SendPlayer" << endl;
+	m_pNetworkMgr->Send_PlayerInfo(m_eState, m_vPosition, m_pInputMgr->Get_Angle());
+
+	return GameObject::Update_Networking();
 }
 
 bool Player::Update_Animation(float TimeDelta)
