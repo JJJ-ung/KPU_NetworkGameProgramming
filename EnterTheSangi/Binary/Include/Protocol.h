@@ -23,6 +23,7 @@ const char CS_PACKET_CHANGE_COLOR = 2;
 const char CS_PACKET_READY = 3;
 const char CS_PACKET_PLAYER_INFO = 4;
 const char CS_PACKET_SHOOT_BULLET = 5;
+
 const char CS_PACKET_TYPE_END = 6;
 
 //server to client packet
@@ -35,6 +36,7 @@ const char SC_PACKET_ALL_READY = 6;
 const char SC_PACKET_GAME_STATE = 7;
 const char SC_PACKET_PUT_BULLET = 8;
 const char SC_PACKET_REMOVE_BULLET = 9;
+
 const char SC_PACKET_TYPE_END = 10;
 
 

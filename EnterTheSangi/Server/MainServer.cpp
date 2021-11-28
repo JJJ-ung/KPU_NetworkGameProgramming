@@ -419,8 +419,10 @@ void CMainServer::ProcessPacket(char client_id)
             m_bullets[i].SetID(i);
             m_bullets[i].SetLook(rp.look);
             m_bullets[i].SetPosition(rp.position);
-
+           
             sc_packet_put_bullet sp;
+            sp.size = sizeof(sc_packet_put_bullet);
+            sp.type = SC_PACKET_PUT_BULLET;
             sp.bullet_id = i;
             sp.bullet_type = rp.bullet_type;
             sp.look = rp.look;
@@ -518,7 +520,7 @@ int CMainServer::DoAccept()
 
 void CMainServer::ServerProcess() {
 
-    CollisionCheckTerrainPlayer();
+    //CollisionCheckTerrainPlayer();
     CollisionCheckPlayerBullet();
     CollisionCheckTerrainBullet();
     CollisionCheckPlayerChest();
@@ -531,11 +533,26 @@ void CMainServer::CollisionCheckTerrainPlayer()
 
 void CMainServer::CollisionCheckTerrainBullet()
 {
-    for (auto& bullet : m_bullets)
+    for (int i = 0; i > MAX_BULLETS; ++i)
     {
-        //벽 충돌시
+        if (false)//벽 충돌시
+        {
+            //총알 삭제
+            m_bullets[i].StateLock();
+            m_bullets[i].SetState(OBJECT_STATE::ST_FREE);
+            m_bullets[i].StateUnlock();
 
-        //총알 삭제
+
+            sc_packet_remove_bullet sp;
+            sp.type = SC_PACKET_REMOVE_BULLET;
+            sp.size = sizeof(sc_packet_remove_bullet);
+            sp.bullet_id = i;
+
+            for (auto& client : m_clients)
+            {
+                send(client.GetSocket(), (char*)&sp, sizeof(sc_packet_remove_bullet), 0);
+            }
+        }
     }
 }
 
@@ -544,15 +561,28 @@ void CMainServer::CollisionCheckPlayerBullet()
     for (auto& client : m_clients)
     {
         CPlayer& player = client.GetPlayer();
-        for (auto& bullet : m_bullets)
+        for (int i = 0; i > MAX_BULLETS; ++i)
         {
-            if (CollisionCheck(bullet, player) == true)
+            if (CollisionCheck(m_bullets[i], player) == true)
             {
                 //플레이어 체력 감소
 
                 //플레이어 사망 판정
 
                 //불릿 삭제
+                m_bullets[i].StateLock();
+                m_bullets[i].SetState(OBJECT_STATE::ST_FREE);
+                m_bullets[i].StateUnlock();
+
+                sc_packet_remove_bullet sp;
+                sp.type = SC_PACKET_REMOVE_BULLET;
+                sp.size = sizeof(sc_packet_remove_bullet);
+                sp.bullet_id = i;
+
+                for (auto& client : m_clients)
+                {
+                    send(client.GetSocket(), (char*)&sp, sizeof(sc_packet_remove_bullet), 0);
+                }
             }
             else
             {
