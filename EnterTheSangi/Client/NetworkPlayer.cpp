@@ -63,8 +63,6 @@ INT NetworkPlayer::Update_GameObject(float time_delta)
 
 	m_pNameTag->Update_Position(m_vPosition, D3DXVECTOR3(0.f, -48.f, 0.f));
 
-	cout << "[" << m_tClientInfo.index << "] " << m_vPosition.x << "/" << m_vPosition.y << endl;
-
 	return NOEVENT;
 }
 
@@ -111,6 +109,11 @@ HRESULT NetworkPlayer::Render_GameObject()
 	return GameObject::Render_GameObject();
 }
 
+INT NetworkPlayer::Update_Networking()
+{
+	return 0;
+}
+
 INT NetworkPlayer::Recv_Networking(char c, void* p)
 {
 	// 받아 온 정보 업뎃
@@ -123,6 +126,7 @@ INT NetworkPlayer::Recv_Networking(char c, void* p)
 
 	m_vPosition.x = player.position.x;
 	m_vPosition.y = player.position.y;
+	cout << "[" << m_tClientInfo.index << "] " << m_vPosition.x << "/" << m_vPosition.y << endl;
 
 	if (player.state == (char)STATE::IDLE)
 		strAnimation = L"Idle_";

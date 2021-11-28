@@ -14,6 +14,7 @@ public:
 	virtual HRESULT Render_GameObject();
 
 public:
+	virtual INT Update_Networking();
 	virtual INT Recv_Networking(char c, void* p);
 
 public:
