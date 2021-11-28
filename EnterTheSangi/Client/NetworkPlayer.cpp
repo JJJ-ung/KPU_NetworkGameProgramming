@@ -63,6 +63,8 @@ INT NetworkPlayer::Update_GameObject(float time_delta)
 
 	m_pNameTag->Update_Position(m_vPosition, D3DXVECTOR3(0.f, -48.f, 0.f));
 
+	cout << "[" << m_tClientInfo.index << "] " << m_vPosition.x << "/" << m_vPosition.y << endl;
+
 	return NOEVENT;
 }
 
@@ -146,11 +148,6 @@ INT NetworkPlayer::Recv_Networking(char c, void* p)
 	Change_Animation(strAnimation);
 
 	m_iHealth = player.health;
-
-	//if(player.is_shooting)
-	//{
-	//	// ÃÑ¾Ë
-	//}
 
 	return Player::Recv_Networking(c, p);
 }
