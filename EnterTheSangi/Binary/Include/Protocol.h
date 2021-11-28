@@ -62,7 +62,7 @@ struct cs_packet_player_info
 {
 	unsigned char  size;
 	char           type;
-	STATE::TYPE    m_state;
+	char		   m_state;
 	svector2       m_position;
 	short		       m_look;
 };

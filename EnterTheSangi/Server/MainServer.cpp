@@ -410,7 +410,7 @@ void CMainServer::DoSend()
     {
         sp.player[i].look = m_clients[i].GetPlayer().GetLook();
         sp.player[i].position = m_clients[i].GetPlayer().GetPosition();
-        sp.player[i].state = (STATE::TYPE)m_clients[i].GetPlayerState();
+        sp.player[i].state = m_clients[i].GetPlayerState();
         sp.size = sizeof(sc_packet_game_state);
         sp.type = SC_PACKET_GAME_STATE;
         
