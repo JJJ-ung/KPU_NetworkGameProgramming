@@ -135,7 +135,7 @@ void CMainServer::ClientThread(char id)
 
             //m_server_event 다시 죽여야하는데 어디서?
             // 전체 데이터 송신
-            //DoSend();
+            DoSend();
 
             m_state_lock.lock();
         }
@@ -179,7 +179,7 @@ void CMainServer::ServerThread()
         {
             m_state_lock.unlock();
 
-            DoSend();
+            
 
             ServerProcess();
 
