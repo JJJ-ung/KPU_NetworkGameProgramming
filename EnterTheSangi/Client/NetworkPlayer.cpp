@@ -45,6 +45,8 @@ HRESULT NetworkPlayer::Ready_GameObject(CLIENT t)
 
 	m_eState = STATE::IDLE;
 
+	Change_Animation(L"Idle_Front");
+
 	if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::UI, m_pNameTag = Font::Create(m_pDevice, t.name, 0.5f, true, true))))
 		return E_FAIL;
 	if (!m_pNameTag) return E_FAIL;
