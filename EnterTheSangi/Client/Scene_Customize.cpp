@@ -84,8 +84,7 @@ HRESULT Scene_Customize::Add_OtherPlayer(sc_packet_login_other_client* tRecv)
 
 	if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::PLAYER, m_pPostCard[tRecv->id] = PostCard::Create(m_pGraphic_Device, tRecv->id, false, tRecv->name, tRecv->body_color, tRecv->cloth_color))))
 		return E_FAIL;
-
-	m_pGameMgr->Get_ClientInfos()[tRecv->id] = CLIENT(false, tRecv->id, m_pGameMgr->Get_ClientPlayerName(), tRecv->cloth_color, tRecv->body_color, D3DXVECTOR3());
+	m_pGameMgr->Get_ClientInfos()[tRecv->id] = CLIENT(false, tRecv->id, tRecv->name, tRecv->cloth_color, tRecv->body_color, D3DXVECTOR3());
 
 	return m_pPostCard[tRecv->id]->Setup_Ready(tRecv->is_ready);
 }

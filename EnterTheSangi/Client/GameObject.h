@@ -22,7 +22,7 @@ public:
 
 public:
 	virtual INT Update_Networking();
-	virtual INT Recv_Networking();
+	virtual INT Recv_Networking(char c, void* p);
 
 protected:
 	D3DXMATRIX Get_Transform(_D3DTRANSFORMSTATETYPE eType);

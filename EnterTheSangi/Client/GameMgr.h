@@ -32,6 +32,7 @@ public:
 
 public:
 	int Update_Networking();
+	int Recv_Networking(char c, void* p);
 
 public:
 	HRESULT Clear_Scene();

@@ -35,6 +35,9 @@ protected:
 	HRESULT Ready_AnimationInfo();
 
 protected:
+	int m_iHealth = 10;
+
+protected:
 	float m_fSide = 1.f;
 	float m_fSpeed = 1.f;
 	STATE::TYPE m_eState;

@@ -34,6 +34,11 @@ void CMainServer::Init(const int server_port)
         m_clients[i].SetID(i);
         m_clients[i].GetPlayer().SetBodyColor(D3DXVECTOR3(rand() % 5 * 0.2f, rand() % 5 * 0.2f, rand() % 5 * 0.2f));
         m_clients[i].GetPlayer().SetClothColor(D3DXVECTOR3(rand() % 5 * 0.2f, rand() % 5 * 0.2f, rand() % 5 * 0.2f));
+        svector2 temp;
+        temp.x = 0;
+        temp.y = 0;
+        m_clients[i].GetPlayer().SetPosition(temp);
+        m_clients[i].GetPlayer().SetLook(0);
     }
 
     for (auto& cl : m_clients)
@@ -220,9 +225,6 @@ void CMainServer::ProcessPacket(char client_id)
         m_clients[client_id].StateUnlock();
 
         //다른 플레이어들에게 로그인했음을 알림.
-        //for ingame debug
-        if (int(client_id) == 2)
-            m_game_state = SCENE::ID::STAGE;
 
         sc_packet_login_other_client packet;
         packet.size = sizeof(sc_packet_login_other_client);
@@ -381,8 +383,6 @@ void CMainServer::ProcessPacket(char client_id)
 
             m_game_state = SCENE::STAGE;
             m_state_lock.unlock();
-
-
         }
     }
     else if (packet_type == CS_PACKET_PLAYER_INFO)
@@ -392,6 +392,7 @@ void CMainServer::ProcessPacket(char client_id)
         cout << "client [" << int(client_id) << "] recv : CS_PACKET_PLAYER_INFO \n";
         m_clients[client_id].GetPlayer().SetPosition(rp.m_position);
         m_clients[client_id].GetPlayer().SetLook(rp.m_look);
+        m_clients[client_id].SetPlayerState(rp.m_state);
     }
     else if (packet_type == CS_PACKET_SHOOT_BULLET)
     {
@@ -448,10 +449,11 @@ void CMainServer::DoSend()
     for(int i = 0; i < 3; ++i)
     {
         sp.player[i].look = m_clients[i].GetPlayer().GetLook();
-        sp.player[i].id = m_clients[i].GetID();
         sp.player[i].position = m_clients[i].GetPlayer().GetPosition();
+        sp.player[i].state = m_clients[i].GetPlayerState();
         sp.size = sizeof(sc_packet_game_state);
         sp.type = SC_PACKET_GAME_STATE;
+        
     }
     for (auto& sc : m_clients)
     {

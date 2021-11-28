@@ -91,7 +91,7 @@ HRESULT NetworkMgr::Send_PlayerInfo(STATE::TYPE eState, D3DXVECTOR3 vPos, float 
     cs_packet_player_info t = {};
     t.size = sizeof(cs_packet_player_info);
     t.type = CS_PACKET_PLAYER_INFO;
-    t.m_state = eState;
+    t.m_state = (char)eState;
     t.m_position.x = (short)vPos.x;
     t.m_position.y = (short)vPos.y;
     t.m_look = (short)fAngle;
@@ -148,6 +148,7 @@ unsigned NetworkMgr::Thread_Recv(void* pArg)
         }
 
         pNetworkMgr->m_pGameMgr->Setup_Recv(buf[1], buf);
+        pNetworkMgr->m_pGameMgr->Recv_Networking(buf[1], buf);
     }
 
     LeaveCriticalSection(pNetworkMgr->Get_Crt());
