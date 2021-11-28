@@ -125,7 +125,7 @@ struct sc_packet_game_state  //매 프레임마다 게임 전체 정보 전달
 {
 	unsigned char  size;
 	char           type;
-	player_info_for_packet player;
+	player_info_for_packet player[3];
 	//Player info
 	//GameStatePlayer player[3];
 	//vector<Item>    items;

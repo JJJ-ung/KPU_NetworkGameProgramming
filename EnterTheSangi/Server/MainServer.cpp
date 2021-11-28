@@ -126,10 +126,11 @@ void CMainServer::ClientThread(char id)
             ProcessPacket(id);
             cout << "ingame data recv!!! \n";
             SetEvent(m_client_event[id]);
-            //WaitForSingleObject(m_server_event, INFINITE);//timeout 넣어야 하지 않을까 싶긴 한데 server_timer 동기화때문에 일단 둠
+            WaitForSingleObject(m_server_event, INFINITE);//timeout 넣어야 하지 않을까 싶긴 한데 server_timer 동기화때문에 일단 둠
+            
             //m_server_event 다시 죽여야하는데 어디서?
             // 전체 데이터 송신
-            DoSend();
+            //DoSend();
 
             m_state_lock.lock();
         }
@@ -145,18 +146,28 @@ void CMainServer::ClientThread(char id)
 void CMainServer::ServerThread()
 {
     int ret;
+    int client_count;
     for (;;)
     {  //In Robby
-
+        client_count = 0;
         m_state_lock.lock();
         while (m_game_state == SCENE::ID::CUSTOMIZE)
         {
             m_state_lock.unlock();
-            DoAccept();
+            for (auto& cl : m_clients)
+            {
+                cl.StateLock();
+                if (cl.GetState() != ST_FREE)
+                    client_count++;
+                cl.StateUnlock();
+            }
+
+            if(client_count <= 3)
+                DoAccept();
             m_state_lock.lock();
         }
         m_state_lock.unlock();
-
+        cout << "Now InGame loop \n";
         m_server_timer = chrono::high_resolution_clock::now() + 1s / 60 * 2;
         //In Game
         m_state_lock.lock();
@@ -167,14 +178,14 @@ void CMainServer::ServerThread()
             for (int i = 0; i < MAX_CLIENTS; ++i)
                 ResetEvent(m_client_event[i]);
             ServerProcess();
-            //DoSend();
+            DoSend();
             auto time_t = chrono::high_resolution_clock::now();
             if (time_t > m_server_timer)
-                cout << "server process time over" << endl;
+                ;
             else
                 Sleep(chrono::duration_cast<chrono::milliseconds>(m_server_timer - time_t).count());
             SetEvent(m_server_event);
-
+            cout << "server process!" << endl;
             m_server_timer += 1s / 60 * 2;
 
             m_state_lock.lock();
@@ -393,21 +404,20 @@ void CMainServer::ProcessPacket(char client_id)
 void CMainServer::DoSend()
 {
     sc_packet_game_state sp;
-
-    for (auto& cl : m_clients)
+    
+    for(int i = 0; i < 3; ++i)
     {
-        sp.player.look = cl.GetPlayer().GetLook();
-        sp.player.id = cl.GetID();
-        sp.player.position = cl.GetPlayer().GetPosition();
+        sp.player[i].look = m_clients[i].GetPlayer().GetLook();
+        sp.player[i].id = m_clients[i].GetID();
+        sp.player[i].position = m_clients[i].GetPlayer().GetPosition();
         sp.size = sizeof(sc_packet_game_state);
         sp.type = SC_PACKET_GAME_STATE;
-
-        for (auto& sc : m_clients)
-            send(sc.GetSocket(), (char*)&sp, sizeof(sc_packet_game_state), 0);
-
+    }
+    for (auto& sc : m_clients)
+    {
+        send(sc.GetSocket(), (char*)&sp, sizeof(sc_packet_game_state), 0);
         cout << "ingame data send! \n";
     }
-
     // 여기서 플레이어들 정보 취합후 일괄 전송
     //for (auto& cl : m_clients)
     //    send(cl.GetSocket(), (char*)&sp, sizeof(sc_packet_game_state), 0);
