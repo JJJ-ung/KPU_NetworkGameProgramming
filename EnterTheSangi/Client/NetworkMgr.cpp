@@ -45,6 +45,8 @@ HRESULT NetworkMgr::Send_ClientInfo(char type, void* p)
     if (type >= CS_PACKET_TYPE_END)
         return E_FAIL;
 
+    cout << " send " << endl;
+
     HRESULT hr = -1;
 
     switch (type)
@@ -131,28 +133,7 @@ unsigned NetworkMgr::Thread_Recv(void* pArg)
             ptr += received;
         } while (left > 0);
 
-        switch (buf[1])
-        {
-        case SC_PACKET_LOGIN_OK:
-            cout << "SC_PACKET_LOGIN_OK" << endl;
-            break;
-        case SC_PACKET_CHANGE_COLOR:
-            cout << "SC_PACKET_CHANGE_COLOR" << endl;
-            break;
-        case SC_PACKET_LOGIN_OTHER_CLIENT:
-            cout << "SC_PACKET_LOGIN_OTHER_CLIENT" << endl;
-            break;
-        case SC_PACKET_REMOVE_OBJECT:
-            break;
-        case SC_PACKET_READY: 
-            cout << "SC_PACKET_READY" << endl;
-            break;
-        default:
-            break;
-        }
-
         pNetworkMgr->m_pGameMgr->Setup_Recv(buf[1], buf);
-        //pNetworkMgr->m_pGameMgr->Recv_Networking(buf[1], buf);
     }
 
     LeaveCriticalSection(pNetworkMgr->Get_Crt());

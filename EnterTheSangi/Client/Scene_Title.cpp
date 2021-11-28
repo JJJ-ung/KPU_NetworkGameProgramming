@@ -65,16 +65,11 @@ HRESULT Scene_Title::Render_Scene()
 {
 	if(m_pInputMgr->KeyDown(KEY_ENTER))
 	{
-		if (m_bPressedOK)
-			return NOERROR;
-
 		if (m_strName.length() < 2)
 			return NOERROR;
 
-		m_pGameMgr->Get_ClientPlayerName() = m_strName;
 		m_pNetworkMgr->Send_LoginInfo(m_strName.c_str());
-
-		m_bPressedOK = true;
+		m_pGameMgr->Get_ClientPlayerName() = m_strName;
 	}
 
 	return Scene::Render_Scene(); 

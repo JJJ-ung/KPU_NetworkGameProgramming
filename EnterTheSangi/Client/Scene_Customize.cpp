@@ -64,6 +64,9 @@ HRESULT Scene_Customize::Update_PlayerColor(sc_packet_change_color* tRecv)
 	if (!m_pPostCard[tRecv->id])
 		return E_FAIL;
 
+	if (!m_pPostCard[tRecv->id]->Get_Player())
+		return E_FAIL;
+
 	m_pPostCard[tRecv->id]->Get_Player()->Get_CustomInfo().vBody = tRecv->body_color;
 	m_pPostCard[tRecv->id]->Get_Player()->Get_CustomInfo().vCloth = tRecv->cloth_color;
 

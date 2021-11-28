@@ -21,7 +21,6 @@ private:
 	string m_strName = "";
 	Font* m_pName = nullptr;
 	AnimatedSprite* m_pAnimation = nullptr;
-	bool m_bPressedOK = false;
 
 public:
 	static Scene_Title* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
