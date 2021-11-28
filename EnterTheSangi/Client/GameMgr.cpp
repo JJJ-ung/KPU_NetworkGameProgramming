@@ -137,6 +137,23 @@ int GameMgr::Update_Networking()
 	return 0;
 }
 
+int GameMgr::Recv_Networking(char c, void* p)
+{
+	for (int i = 0; i < OBJECT::END; ++i)
+	{
+		auto iter = m_lstObj[i].begin();
+		for (; iter != m_lstObj[i].end(); )
+		{
+			if ((*iter)->Recv_Networking(c, p) == -1)
+				return -1;
+			else
+				++iter;
+		}
+	}
+
+	return 0;
+}
+
 HRESULT GameMgr::Clear_Scene()
 {
 	cout << "Clear" << endl;

@@ -67,10 +67,9 @@ struct player_info_for_packet
 	svector2        position;
 	short			look;
 	DIR::DIR        direction;
-	WEAPON::TYPE    weapon;
+	char    weapon;
 	char            health;
 	bool            is_shooting;
-	float           cool_time;
 }typedef player_info;
 
 struct bullet_info_for_packet

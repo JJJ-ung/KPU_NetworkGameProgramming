@@ -36,7 +36,7 @@ INT GameObject::Update_Networking()
 	return 0;
 }
 
-INT GameObject::Recv_Networking()
+INT GameObject::Recv_Networking(char c, void* p)
 {
 	return 0;
 }

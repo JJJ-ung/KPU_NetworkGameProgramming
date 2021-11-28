@@ -148,6 +148,7 @@ unsigned NetworkMgr::Thread_Recv(void* pArg)
         }
 
         pNetworkMgr->m_pGameMgr->Setup_Recv(buf[1], buf);
+        pNetworkMgr->m_pGameMgr->Recv_Networking(buf[1], buf);
     }
 
     LeaveCriticalSection(pNetworkMgr->Get_Crt());
