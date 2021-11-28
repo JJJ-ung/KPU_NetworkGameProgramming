@@ -65,7 +65,7 @@ struct player_info_for_packet
 	char            id;
 	STATE::TYPE     state;
 	svector2        position;
-	svector2        look;
+	short			look;
 	DIR::DIR        direction;
 	WEAPON::TYPE    weapon;
 	char            health;

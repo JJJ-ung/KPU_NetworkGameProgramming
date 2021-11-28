@@ -9,7 +9,7 @@ void CGameObject::SetPosition(svector2 pos)
 	m_position = pos;
 };
 
-void CGameObject::SetLook(svector2 look)
+void CGameObject::SetLook(short look)
 {
 	m_look = look;
 };
@@ -19,7 +19,7 @@ svector2 CGameObject::GetPosition()
 	return m_position;
 };
 
-svector2 CGameObject::GetLook()
+short CGameObject::GetLook()
 {
 	return m_look;
 };
