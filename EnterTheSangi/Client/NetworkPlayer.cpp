@@ -123,11 +123,11 @@ INT NetworkPlayer::Recv_Networking(char c, void* p)
 	m_vPosition.x = player.position.x;
 	m_vPosition.y = player.position.y;
 
-	if (player.state == STATE::IDLE)
+	if (player.state == (char)STATE::IDLE)
 		strAnimation = L"Idle_";
-	if (player.state == STATE::RUN)
+	if (player.state == (char)STATE::RUN)
 		strAnimation = L"Run_";
-	if (player.state == STATE::DODGE)
+	if (player.state == (char)STATE::DODGE)
 		strAnimation = L"Dodge_";
 
 	if (abs(player.look) < 45)
