@@ -94,6 +94,7 @@ void CMainServer::ClientThread(char id)
 
             if (m_clients[id].GetState() != ST_FREE) {
                 ret = DoRecv(id);
+                //cout << "Client [" << int(id) << "] recv data\n";
                 if (ret == SOCKET_ERROR)
                 {
                     Disconnect(id);
@@ -131,7 +132,6 @@ void CMainServer::ClientThread(char id)
                 continue;
             }
             ProcessPacket(id);
-            cout << "ingame data recv!!! \n";
 
             //m_server_event 다시 죽여야하는데 어디서?
             // 전체 데이터 송신
@@ -140,6 +140,7 @@ void CMainServer::ClientThread(char id)
             m_state_lock.lock();
         }
         m_state_lock.unlock();
+        
         //수신 성공시 suspend thread
         //모든 클라이언트로부터 recv 혹은 timeout시 서버 연산
         //이후 resume thread
@@ -177,6 +178,7 @@ void CMainServer::ServerThread()
         while (m_game_state == SCENE::ID::STAGE)
         {
             m_state_lock.unlock();
+
             DoSend();
 
             ServerProcess();
@@ -188,8 +190,6 @@ void CMainServer::ServerThread()
             }
             else
                 Sleep(chrono::duration_cast<chrono::milliseconds>(m_server_timer - time_t).count());
-
-            cout << "server process!" << endl;
             m_server_timer += 1s / 60 * 2;
 
             m_state_lock.lock();
@@ -389,7 +389,7 @@ void CMainServer::ProcessPacket(char client_id)
     {
         cs_packet_player_info rp;
         memcpy(&rp, m_clients[client_id].GetBuf(), sizeof(cs_packet_player_info));
-        cout << "client [" << int(client_id) << "] recv : CS_PACKET_PLAYER_INFO \n";
+
         m_clients[client_id].GetPlayer().SetPosition(rp.m_position);
         m_clients[client_id].GetPlayer().SetLook(rp.m_look);
         m_clients[client_id].SetPlayerState(rp.m_state);
@@ -446,19 +446,20 @@ void CMainServer::DoSend()
 {
     sc_packet_game_state sp;
     
-    for(int i = 0; i < 3; ++i)
+    
+    for(int i = 0; i < MAX_CLIENTS; ++i)
     {
         sp.player[i].look = m_clients[i].GetPlayer().GetLook();
         sp.player[i].position = m_clients[i].GetPlayer().GetPosition();
         sp.player[i].state = m_clients[i].GetPlayerState();
         sp.size = sizeof(sc_packet_game_state);
         sp.type = SC_PACKET_GAME_STATE;
-        
+        //cout << sp.player[i].look << ", (" << sp.player[i].position.x << ", " << sp.player[i].position.y << "), " << sp.player[i].state << endl;
     }
     for (auto& sc : m_clients)
     {
         send(sc.GetSocket(), (char*)&sp, sizeof(sc_packet_game_state), 0);
-        cout << "ingame data send! \n";
+        //cout << "ingame data send! \n";
     }
     // 여기서 플레이어들 정보 취합후 일괄 전송
     //for (auto& cl : m_clients)
@@ -467,7 +468,7 @@ void CMainServer::DoSend()
 
 int CMainServer::DoRecv(char id)
 {
-    char* buf = m_clients[id].GetBuf();
+ char* buf = m_clients[id].GetBuf();
     int received;
     int left;
     bool first_recv = true;
@@ -486,6 +487,10 @@ int CMainServer::DoRecv(char id)
         left -= received;
         buf += received;
     } while (left > 0);
+
+    
+    cout << "client [" << int(id) << "] -> " << (void*)m_clients[id].GetBuf() << endl;
+    return received;
 };
 
 int CMainServer::DoAccept()
@@ -503,7 +508,7 @@ int CMainServer::DoAccept()
     {
         m_clients[new_id].SetSocket(client_socket);
 
-        if (m_client_threads.size() < 3) {
+        if (m_client_threads.size() < MAX_CLIENTS) {
             if (int(new_id) >= m_client_threads.size())
                 m_client_threads.emplace_back(&CMainServer::ClientThread, this, new_id);
         }

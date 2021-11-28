@@ -5,16 +5,16 @@
 
 using namespace std;
 
-//constexpr const char* SERVER_IP = "220.94.221.20";
+constexpr const char* SERVER_IP = "220.94.221.20";
 //constexpr const char* SERVER_IP = "121.139.87.66";
-constexpr const char* SERVER_IP = "127.0.0.1";
+//constexpr const char* SERVER_IP = "127.0.0.1";
 const int SERVER_PORT = 5000;
 const int MAX_CLIENTS = 3;
 const int MAX_BULLETS = 50;
 const int MAX_CHESTS = 20;
 //constexpr unsigned int MAX_BUF_SIZE = 256;
 #define  MAX_NAME_SIZE 16
-#define    BUF_SIZE 256
+#define  BUF_SIZE 1024
 
 
 // client to server packet
