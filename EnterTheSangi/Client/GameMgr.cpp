@@ -176,6 +176,9 @@ HRESULT GameMgr::Setup_Recv(char type, void* pRecv)
 	if (!m_pCurrScene)
 		return E_FAIL;
 
+	if (FAILED(Recv_Networking(type, pRecv)))
+		return E_FAIL;
+
 	return m_pCurrScene->Setup_Recv(type, pRecv);
 }
 
