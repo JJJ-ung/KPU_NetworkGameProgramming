@@ -62,14 +62,12 @@ public:
 
 struct player_info_for_packet
 {
-	char            id;
-	STATE::TYPE     state;
-	svector2        position;
-	short			look;
-	DIR::DIR        direction;
-	char    weapon;
-	char            health;
-	bool            is_shooting;
+	STATE::TYPE    state;
+	svector2				position;
+	short					look;
+	char					weapon;
+	char					health;
+	bool						is_shooting;
 }typedef player_info;
 
 struct bullet_info_for_packet

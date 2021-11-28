@@ -43,6 +43,8 @@ HRESULT NetworkPlayer::Ready_GameObject(CLIENT t)
 
 	m_tClientInfo = t;
 
+	m_eState = STATE::IDLE;
+
 	if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::UI, m_pNameTag = Font::Create(m_pDevice, t.name, 0.5f, true, true))))
 		return E_FAIL;
 	if (!m_pNameTag) return E_FAIL;
@@ -103,11 +105,46 @@ HRESULT NetworkPlayer::Render_GameObject()
 	return GameObject::Render_GameObject();
 }
 
-INT NetworkPlayer::Recv_Networking()
+INT NetworkPlayer::Recv_Networking(char c, void* p)
 {
 	// ¹Þ¾Æ ¿Â Á¤º¸ ¾÷µ«
 
-	return Player::Recv_Networking();
+	sc_packet_game_state t;
+	memcpy(&t, p, sizeof(sc_packet_game_state));
+
+	player_info_for_packet player = t.player[m_tClientInfo.index];
+
+	wstring strAnimation = L"";
+
+	m_vPosition.x = player.position.x;
+	m_vPosition.y = player.position.y;
+
+	if (player.state == STATE::IDLE)
+		strAnimation = L"Idle_";
+	if (player.state == STATE::RUN)
+		strAnimation = L"Run_";
+	if (player.state == STATE::DODGE)
+		strAnimation = L"Dodge_";
+
+	if (player.look < 45)
+		strAnimation += L"Front";
+	else if (player.look < 90)
+		strAnimation += L"Side";
+	else if (player.look < 135)
+		strAnimation += L"BackSide";
+	else
+		strAnimation += L"Back";
+
+	Change_Animation(strAnimation);
+
+	m_iHealth = player.health;
+
+	if(player.is_shooting)
+	{
+		// ÃÑ¾Ë
+	}
+
+	return Player::Recv_Networking(c, p);
 }
 
 NetworkPlayer* NetworkPlayer::Create(LPDIRECT3DDEVICE9 pGraphic_Device, CLIENT t)
