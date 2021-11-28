@@ -70,7 +70,7 @@ INT NetworkPlayer::LateUpdate_GameObject(float time_delta)
 {
 	m_pRenderer->Add_RenderList(Renderer::RENDER_NONALPHA, this);
 
-	return Player::LateUpdate_GameObject(time_delta);
+	return GameObject::LateUpdate_GameObject(time_delta);
 }
 
 HRESULT NetworkPlayer::Render_GameObject()
