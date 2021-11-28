@@ -42,8 +42,11 @@ public:
 	template<class T1, class T2 >
 	bool CollisionCheck(T1& object_1, T2& object_2);
 
+	void InitBullets();
+	void InitChests();
 	char GetNewID();
 	bool IsAllClientsReady();
+	char CreatBullet();
 
 private:
 	SOCKET                   m_listen_socket;
@@ -58,7 +61,7 @@ private:
 	SCENE::ID                m_game_state;
 	std::mutex               m_state_lock;
 
-	list<CChest>             m_chests;
-	list<CBullet>            m_bullets;
+	std::array<CChest,MAX_CHESTS> m_chests;
+	std::array<CBullet, MAX_CHESTS> m_bullets;
 
 };
