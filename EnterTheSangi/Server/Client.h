@@ -2,7 +2,7 @@
 #include <winsock2.h>
 #include <mutex>
 #include "Player.h"
-
+#include "Enum.h"
 //client state
 enum CLIENT_STATE { ST_FREE, ST_ACCEPT, ST_INROBBY,ST_READY,ST_INGAME };
 
@@ -18,6 +18,8 @@ public:
 	void SetState(CLIENT_STATE state);
 	void SetSocket(SOCKET socket);
 
+	void SetPlayerState(char t);
+	char GetPlayerState();
 
 	char GetID();
 	CLIENT_STATE GetState();
@@ -47,6 +49,7 @@ private:
 	char           m_ID;
 	char		   m_name[MAX_NAME_SIZE];
 	CLIENT_STATE   m_state;
+	char		   m_player_state;
 	std::mutex     m_state_lock;
 	std::mutex	   m_socket_lock;
 	CPlayer        m_player;
