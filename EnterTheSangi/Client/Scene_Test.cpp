@@ -64,6 +64,12 @@ HRESULT Scene_Test::Render_Scene()
 	return Scene::Render_Scene();
 }
 
+HRESULT Scene_Test::Setup_Recv(char c, void* recv)
+{
+	m_pGameMgr->Recv_Networking(c, recv);
+	return Scene::Setup_Recv(c, recv);
+}
+
 Scene_Test* Scene_Test::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
 {
 	Scene_Test* pInstance = new Scene_Test(pGraphic_Device);

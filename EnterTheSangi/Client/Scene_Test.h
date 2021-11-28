@@ -15,6 +15,9 @@ public:
 	virtual HRESULT Render_Scene();
 
 public:
+	virtual HRESULT Setup_Recv(char type, void* pRecv);
+
+public:
 	static Scene_Test* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
 	virtual void Free();
 };

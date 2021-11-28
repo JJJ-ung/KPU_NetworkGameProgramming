@@ -126,6 +126,11 @@ INT Player::Update_Networking()
 	return GameObject::Update_Networking();
 }
 
+INT Player::Recv_Networking(char c, void* p)
+{
+	return GameObject::Recv_Networking(c, p);
+}
+
 bool Player::Update_Animation(float TimeDelta)
 {
 	return m_pCurrAnimation->Update_Animation(TimeDelta);

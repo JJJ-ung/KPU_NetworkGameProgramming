@@ -24,6 +24,7 @@ public:
 
 public:
 	INT Update_Networking();
+	INT Recv_Networking(char c, void* p);
 
 public:
 	bool Update_Animation(float TimeDelta);
