@@ -82,7 +82,7 @@ HRESULT NetworkPlayer::Render_GameObject()
 		return E_FAIL;
 
 	D3DXMATRIX		matScale, matTrans, matWorld;
-	D3DXMatrixScaling(&matScale, 3.f, 3.f, 3.f);
+	D3DXMatrixScaling(&matScale, 3.f * m_fSide, 3.f, 3.f);
 	D3DXMatrixTranslation(&matTrans, m_vPosition.x, m_vPosition.y, m_vPosition.z);
 	matWorld = matScale * matTrans;
 	pEffect->SetMatrix("g_matWorld", &matWorld);
@@ -130,14 +130,19 @@ INT NetworkPlayer::Recv_Networking(char c, void* p)
 	if (player.state == STATE::DODGE)
 		strAnimation = L"Dodge_";
 
-	if (player.look < 45)
+	if (abs(player.look) < 45)
 		strAnimation += L"Front";
-	else if (player.look < 90)
+	else if (abs(player.look) < 90)
 		strAnimation += L"Side";
-	else if (player.look < 135)
+	else if (abs(player.look) < 135)
 		strAnimation += L"BackSide";
 	else
 		strAnimation += L"Back";
+
+	if(player.look < 0)
+		m_fSide = -1.f;
+	else
+		m_fSide = 1.f;
 
 	Change_Animation(strAnimation);
 
