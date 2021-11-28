@@ -138,8 +138,6 @@ void CMainServer::ClientThread(char id)
         //수신 성공시 suspend thread
         //모든 클라이언트로부터 recv 혹은 timeout시 서버 연산
         //이후 resume thread
-
-
     }
 }
 
@@ -174,11 +172,10 @@ void CMainServer::ServerThread()
         while (m_game_state == SCENE::ID::STAGE)
         {
             m_state_lock.unlock();
-            WaitForMultipleObjects(MAX_CLIENTS, m_client_event, true, 1000 / 60 * 2);
-            for (int i = 0; i < MAX_CLIENTS; ++i)
-                ResetEvent(m_client_event[i]);
-            ServerProcess();
             DoSend();
+
+            ServerProcess();
+
             auto time_t = chrono::high_resolution_clock::now();
             if (time_t > m_server_timer)
             {
@@ -186,7 +183,7 @@ void CMainServer::ServerThread()
             }
             else
                 Sleep(chrono::duration_cast<chrono::milliseconds>(m_server_timer - time_t).count());
-            SetEvent(m_server_event);
+
             cout << "server process!" << endl;
             m_server_timer += 1s / 60 * 2;
 
