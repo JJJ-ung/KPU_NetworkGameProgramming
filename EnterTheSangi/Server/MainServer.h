@@ -62,6 +62,6 @@ private:
 	std::mutex               m_state_lock;
 
 	std::array<CChest,MAX_CHESTS> m_chests;
-	std::array<CBullet, MAX_CHESTS> m_bullets;
+	std::array<CBullet, MAX_BULLETS> m_bullets;
 
 };
