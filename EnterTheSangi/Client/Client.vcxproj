@@ -226,7 +226,9 @@
     <ClCompile Include="TestMap.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TimerMgr.cpp" />
-    <ClCompile Include="Weapon.cpp" />
+    <ClCompile Include="Weapon.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc" />
