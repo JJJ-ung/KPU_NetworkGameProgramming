@@ -43,6 +43,8 @@ HRESULT NetworkPlayer::Ready_GameObject(CLIENT t)
 
 	m_tClientInfo = t;
 
+	m_vPosition = t.startpos;
+
 	m_eState = STATE::IDLE;
 
 	Change_Animation(L"Idle_Front");

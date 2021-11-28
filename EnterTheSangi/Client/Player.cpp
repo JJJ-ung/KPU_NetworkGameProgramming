@@ -42,6 +42,8 @@ HRESULT Player::Ready_GameObject(CLIENT t)
 
 	m_tClientInfo = t;
 
+	m_vPosition = t.startpos;
+
 	m_pStateMachine = StateMachine<Player>::Create(this, Player_Idle::Instance());
 	if (!m_pStateMachine)
 		return E_FAIL;
