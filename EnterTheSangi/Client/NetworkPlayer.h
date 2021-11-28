@@ -14,8 +14,8 @@ public:
 	virtual HRESULT Render_GameObject();
 
 public:
-	virtual INT Update_Networking();
-	virtual INT Recv_Networking(char c, void* p);
+	INT Update_Networking();
+	INT Recv_Networking(char c, void* p);
 
 public:
 	static NetworkPlayer* Create(LPDIRECT3DDEVICE9 pGraphic_Device, CLIENT t);

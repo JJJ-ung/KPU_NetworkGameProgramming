@@ -23,7 +23,7 @@ public:
 	virtual HRESULT Render_GameObject();
 
 public:
-	virtual INT Update_Networking();
+	INT Update_Networking();
 
 public:
 	bool Update_Animation(float TimeDelta);
