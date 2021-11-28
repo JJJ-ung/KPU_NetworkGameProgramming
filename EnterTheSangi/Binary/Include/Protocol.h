@@ -29,7 +29,8 @@ const char SC_PACKET_REMOVE_OBJECT = 3;
 const char SC_PACKET_CHANGE_COLOR = 4;
 const char SC_PACKET_READY = 5;
 const char SC_PACKET_ALL_READY = 6;
-const char SC_PACKET_TYPE_END = 7;
+const char SC_PACKET_GAME_STATE = 7;
+const char SC_PACKET_TYPE_END = 8;
 
 
 //--------------------------------------------------
@@ -122,9 +123,9 @@ struct sc_packet_all_ready // 모든 플레이어가 준비 완료임을 알림
 
 struct sc_packet_game_state  //매 프레임마다 게임 전체 정보 전달
 {
-	unsigned char   size;
-	char            type;
-
+	unsigned char  size;
+	char           type;
+	player_info_for_packet player;
 	//Player info
 	//GameStatePlayer player[3];
 	//vector<Item>    items;

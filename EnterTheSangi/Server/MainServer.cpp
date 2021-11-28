@@ -41,7 +41,7 @@ void CMainServer::Init(const int server_port)
         cl.SetState(ST_FREE);
     }
 
-    m_game_state = SCENE::ID::CUSTOMIZE;
+    m_game_state = SCENE::CUSTOMIZE;
     for (int i = 0; i < MAX_CLIENTS; ++i)
         m_client_event[i] = CreateEvent(NULL, true, true, NULL);
     m_server_event = CreateEvent(NULL, true, false, NULL);
@@ -124,9 +124,9 @@ void CMainServer::ClientThread(char id)
                 continue;
             }
             ProcessPacket(id);
-
+            cout << "ingame data recv!!! \n";
             SetEvent(m_client_event[id]);
-            WaitForSingleObject(m_server_event, INFINITE);//timeout 넣어야 하지 않을까 싶긴 한데 server_timer 동기화때문에 일단 둠
+            //WaitForSingleObject(m_server_event, INFINITE);//timeout 넣어야 하지 않을까 싶긴 한데 server_timer 동기화때문에 일단 둠
             //m_server_event 다시 죽여야하는데 어디서?
             // 전체 데이터 송신
             DoSend();
@@ -147,6 +147,7 @@ void CMainServer::ServerThread()
     int ret;
     for (;;)
     {  //In Robby
+
         m_state_lock.lock();
         while (m_game_state == SCENE::ID::CUSTOMIZE)
         {
@@ -166,6 +167,7 @@ void CMainServer::ServerThread()
             for (int i = 0; i < MAX_CLIENTS; ++i)
                 ResetEvent(m_client_event[i]);
             ServerProcess();
+            //DoSend();
             auto time_t = chrono::high_resolution_clock::now();
             if (time_t > m_server_timer)
                 cout << "server process time over" << endl;
@@ -208,6 +210,8 @@ void CMainServer::ProcessPacket(char client_id)
         m_clients[client_id].StateUnlock();
 
         //다른 플레이어들에게 로그인했음을 알림.
+        if (int(client_id) == 2)
+            m_game_state = SCENE::ID::STAGE;
 
         sc_packet_login_other_client packet;
         packet.size = sizeof(sc_packet_login_other_client);
@@ -237,6 +241,8 @@ void CMainServer::ProcessPacket(char client_id)
                 other.StateUnlock();
                 continue;
             }
+
+
         }
 
         // 접속한 대상에게 다른 클라이언트 정보도 다 보냄!
@@ -369,6 +375,14 @@ void CMainServer::ProcessPacket(char client_id)
         }
     }
 
+    else if (packet_type == CS_PACKET_PLAYER_INFO)
+    {
+        cs_packet_player_info rp;
+        memcpy(&rp, m_clients[client_id].GetBuf(), sizeof(cs_packet_player_info));
+        cout << "client [" << int(client_id) << "] recv : CS_PACKET_PLAYER_INFO \n";
+        m_clients[client_id].GetPlayer().SetPosition(rp.m_position);
+        m_clients[client_id].GetPlayer().SetLook(rp.m_look);
+    }
 
     else
     {
@@ -382,12 +396,21 @@ void CMainServer::DoSend()
 
     for (auto& cl : m_clients)
     {
+        sp.player.look = cl.GetPlayer().GetLook();
+        sp.player.id = cl.GetID();
+        sp.player.position = cl.GetPlayer().GetPosition();
+        sp.size = sizeof(sc_packet_game_state);
+        sp.type = SC_PACKET_GAME_STATE;
 
+        for (auto& sc : m_clients)
+            send(sc.GetSocket(), (char*)&sp, sizeof(sc_packet_game_state), 0);
+
+        cout << "ingame data send! \n";
     }
 
     // 여기서 플레이어들 정보 취합후 일괄 전송
-    for (auto& cl : m_clients)
-        send(cl.GetSocket(), (char*)&sp, sizeof(sc_packet_game_state), 0);
+    //for (auto& cl : m_clients)
+    //    send(cl.GetSocket(), (char*)&sp, sizeof(sc_packet_game_state), 0);
 };
 
 int CMainServer::DoRecv(char id)

@@ -11,10 +11,10 @@ public:
 	~CGameObject();
 
 	void                 SetPosition(svector2 pos);
-	void                 SetLook(svector2 look);
+	void                 SetLook(short look);
 
 	svector2          GetPosition();
-	svector2          GetLook();
+	short          GetLook();
 
 	virtual float        vGetHeightHf() =0;   // return half height
 	virtual float        vGetWidthHf() = 0;    // return half width
@@ -24,7 +24,7 @@ public:
 	bool operator==(const CGameObject& robject)const ;
 protected:
 	svector2          m_position;
-	svector2          m_look;
+	short			  m_look;
 
 private:
 
