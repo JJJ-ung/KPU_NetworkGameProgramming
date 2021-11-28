@@ -62,6 +62,7 @@ HRESULT NetworkMgr::Send_ClientInfo(char type, void* p)
         hr = send(m_socket, (char*)p, sizeof(cs_packet_player_info), 0);
         break;
     default:
+        cout << "None Send" << endl;
         hr = E_FAIL;
         break;
     }

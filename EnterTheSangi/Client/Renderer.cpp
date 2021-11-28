@@ -66,8 +66,8 @@ HRESULT Renderer::Render_Objects()
 	if (FAILED(Render_UI()))
 		return E_FAIL;
 
-	if (FAILED(Render_Blend()))
-		return E_FAIL;
+	//if (FAILED(Render_Blend()))
+	//	return E_FAIL;
 
 #ifdef _DEBUG
 	//m_pTarget_Manager->Render_Debug_Buffer(L"MRT_Deferred");
@@ -90,11 +90,11 @@ HRESULT Renderer::Render_Priority()
 
 HRESULT Renderer::Render_NonAlpha()
 {
-	if (nullptr == m_pTarget_Manager)
-		return E_FAIL;
+	//if (nullptr == m_pTarget_Manager)
+	//	return E_FAIL;
 
-	if (FAILED(m_pTarget_Manager->Begin_MRT(L"MRT_Deferred")))
-		return E_FAIL;
+	//if (FAILED(m_pTarget_Manager->Begin_MRT(L"MRT_Deferred")))
+	//	return E_FAIL;
 
 	for (auto& pGameObject : m_RenderList[RENDER_NONALPHA])
 	{
@@ -103,8 +103,8 @@ HRESULT Renderer::Render_NonAlpha()
 	}
 	m_RenderList[RENDER_NONALPHA].clear();
 
-	if (FAILED(m_pTarget_Manager->End_MRT(L"MRT_Deferred")))
-		return E_FAIL;
+	//if (FAILED(m_pTarget_Manager->End_MRT(L"MRT_Deferred")))
+	//	return E_FAIL;
 
 	return NOERROR;
 }

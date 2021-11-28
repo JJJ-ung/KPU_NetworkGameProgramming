@@ -117,10 +117,10 @@ MainApp* MainApp::Create()
 
 void MainApp::Free()
 {
+	NetworkMgr::GetInstance()->DestroyInstance();
 	Renderer::GetInstance()->DestroyInstance();
 	ShaderMgr::GetInstance()->DestroyInstance();
 	GameMgr::GetInstance()->DestroyInstance();
 	ResourceMgr::GetInstance()->DestroyInstance();
 	DeviceMgr::GetInstance()->DestroyInstance();
-	NetworkMgr::GetInstance()->DestroyInstance();
 }

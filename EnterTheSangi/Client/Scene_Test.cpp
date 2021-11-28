@@ -23,7 +23,7 @@ HRESULT Scene_Test::Ready_Scene()
 #ifdef TEST
 	CLIENT t(true, 0, m_pGameMgr->Get_ClientPlayerName(), 
 		D3DXVECTOR3(rand() % 10 * 0.1f, rand() % 10 * 0.1f, rand() % 10 * 0.1f), 
-		D3DXVECTOR3(rand() % 10 * 0.1f, rand() % 10 * 0.1f, rand() % 10 * 0.1f), D3DXVECTOR3());
+		D3DXVECTOR3(rand() % 10 * 0.1f, rand() % 10 * 0.1f, rand() % 10 * 0.1f), D3DXVECTOR3(0.f, 0.f, 0.f));
 	m_pGameMgr->Get_ClientInfos()[0] = t;
 	if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::PLAYER, Player::Create(m_pGraphic_Device, m_pGameMgr->Get_ClientInfos()[0]))))
 		return E_FAIL;
