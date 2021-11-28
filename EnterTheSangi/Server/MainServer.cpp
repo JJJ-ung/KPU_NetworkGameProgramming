@@ -41,6 +41,9 @@ void CMainServer::Init(const int server_port)
         cl.SetState(ST_FREE);
     }
 
+    InitBullets();
+    InitChests();
+
     m_game_state = SCENE::CUSTOMIZE;
     for (int i = 0; i < MAX_CLIENTS; ++i)
         m_client_event[i] = CreateEvent(NULL, true, true, NULL);
@@ -114,7 +117,6 @@ void CMainServer::ClientThread(char id)
             ret = DoRecv(id);
             if (ret == SOCKET_ERROR)
             {
-
                 m_state_lock.lock();
                 continue;
             }
@@ -125,9 +127,7 @@ void CMainServer::ClientThread(char id)
             }
             ProcessPacket(id);
             cout << "ingame data recv!!! \n";
-            SetEvent(m_client_event[id]);
-            WaitForSingleObject(m_server_event, INFINITE);//timeout 넣어야 하지 않을까 싶긴 한데 server_timer 동기화때문에 일단 둠
-            
+
             //m_server_event 다시 죽여야하는데 어디서?
             // 전체 데이터 송신
             //DoSend();
@@ -162,7 +162,7 @@ void CMainServer::ServerThread()
                 cl.StateUnlock();
             }
 
-            if(client_count <= 3)
+            if(client_count <= MAX_CLIENTS)
                 DoAccept();
             m_state_lock.lock();
         }
@@ -181,7 +181,9 @@ void CMainServer::ServerThread()
             DoSend();
             auto time_t = chrono::high_resolution_clock::now();
             if (time_t > m_server_timer)
-                ;
+            {
+                // server process overflowed
+            }
             else
                 Sleep(chrono::duration_cast<chrono::milliseconds>(m_server_timer - time_t).count());
             SetEvent(m_server_event);
@@ -221,6 +223,7 @@ void CMainServer::ProcessPacket(char client_id)
         m_clients[client_id].StateUnlock();
 
         //다른 플레이어들에게 로그인했음을 알림.
+        //for ingame debug
         if (int(client_id) == 2)
             m_game_state = SCENE::ID::STAGE;
 
@@ -385,7 +388,6 @@ void CMainServer::ProcessPacket(char client_id)
 
         }
     }
-
     else if (packet_type == CS_PACKET_PLAYER_INFO)
     {
         cs_packet_player_info rp;
@@ -394,7 +396,46 @@ void CMainServer::ProcessPacket(char client_id)
         m_clients[client_id].GetPlayer().SetPosition(rp.m_position);
         m_clients[client_id].GetPlayer().SetLook(rp.m_look);
     }
+    else if (packet_type == CS_PACKET_SHOOT_BULLET)
+    {
+    cs_packet_shoot_bullet rp;
+    memcpy(&rp, m_clients[client_id].GetBuf(), sizeof(cs_packet_shoot_bullet));
+    cout << "client [" << int(client_id) << "] recv : CS_PACKET_SHOOT_BULLET \n";
 
+    for (int i=0;i>MAX_BULLETS;++i)
+    {
+    
+        m_bullets[i].StateLock();
+        if (m_bullets[i].GetState() == OBJECT_STATE::ST_ALIVE)
+        {
+            m_bullets[i].StateUnlock();
+            continue;
+        }
+        else if (m_bullets[i].GetState() == OBJECT_STATE::ST_FREE)
+        {
+            m_bullets[i].SetState(OBJECT_STATE::ST_ALIVE);
+            m_bullets[i].StateUnlock();
+            m_bullets[i].SetType(rp.bullet_type);
+            m_bullets[i].SetID(i);
+            m_bullets[i].SetLook(rp.look);
+            m_bullets[i].SetPosition(rp.position);
+
+            sc_packet_put_bullet sp;
+            sp.bullet_id = i;
+            sp.bullet_type = rp.bullet_type;
+            sp.look = rp.look;
+            sp.position = rp.position;
+            for (auto& client : m_clients)
+            {
+                send(client.GetSocket(), (char*)&sp, sizeof(sc_packet_put_bullet), 0);
+            }
+            break;  
+        }
+        // bullet 최대개수가 꽉참
+        cout << "BULLET_OVERFLOW" << endl;
+    }
+
+    }
     else
     {
 
@@ -556,6 +597,24 @@ bool CMainServer::CollisionCheck(T1& object_1, T2& object_2)
 
     return false;
 }
+
+void CMainServer::InitBullets()
+{
+    for (int i = 0; i < MAX_BULLETS; ++i)
+    {
+        m_bullets[i].SetID(i);
+        m_bullets[i].SetState(OBJECT_STATE::ST_FREE);
+    }
+}
+
+void CMainServer::InitChests()
+{
+    for (int i = 0; i < MAX_CHESTS; ++i)
+    {
+        // 초기 생성
+    }
+}
+
 
 char CMainServer::GetNewID()
 {

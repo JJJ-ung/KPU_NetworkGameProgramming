@@ -10,6 +10,8 @@ using namespace std;
 constexpr const char* SERVER_IP = "127.0.0.1";
 const int SERVER_PORT = 5000;
 const int MAX_CLIENTS = 3;
+const int MAX_BULLETS = 50;
+const int MAX_CHESTS = 20;
 //constexpr unsigned int MAX_BUF_SIZE = 256;
 #define  MAX_NAME_SIZE 16
 #define    BUF_SIZE 256
@@ -20,7 +22,8 @@ const char CS_PACKET_LOGIN = 1;
 const char CS_PACKET_CHANGE_COLOR = 2;
 const char CS_PACKET_READY = 3;
 const char CS_PACKET_PLAYER_INFO = 4;
-const char CS_PACKET_TYPE_END = 5;
+const char CS_PACKET_SHOOT_BULLET = 5;
+const char CS_PACKET_TYPE_END = 6;
 
 //server to client packet
 const char SC_PACKET_LOGIN_OK = 1;
@@ -30,7 +33,9 @@ const char SC_PACKET_CHANGE_COLOR = 4;
 const char SC_PACKET_READY = 5;
 const char SC_PACKET_ALL_READY = 6;
 const char SC_PACKET_GAME_STATE = 7;
-const char SC_PACKET_TYPE_END = 8;
+const char SC_PACKET_PUT_BULLET = 8;
+const char SC_PACKET_REMOVE_BULLET = 9;
+const char SC_PACKET_TYPE_END = 10;
 
 
 //--------------------------------------------------
@@ -64,8 +69,18 @@ struct cs_packet_player_info
 	char           type;
 	STATE::TYPE    m_state;
 	svector2       m_position;
-	short		       m_look;
+	short		   m_look;
 };
+
+struct cs_packet_shoot_bullet
+{
+	unsigned char  size;
+	char           type;
+	char           bullet_type;
+	svector2       position;
+	short		   look;
+};
+
 
 //--------------------------------------------------
 //         server to client packet 
@@ -126,8 +141,23 @@ struct sc_packet_game_state  //매 프레임마다 게임 전체 정보 전달
 	unsigned char  size;
 	char           type;
 	player_info_for_packet player[3];
-	//Player info
-	//GameStatePlayer player[3];
-	//vector<Item>    items;
-	//vector<Bullet>  bullets;
+	//아이템 정보 추가 필요
+
+};
+
+struct sc_packet_put_bullet
+{
+	unsigned char  size;
+	char           type;
+	char           bullet_type;
+	char           bullet_id;
+	svector2       position;
+	short		   look;
+};
+
+struct sc_packet_remove_bullet
+{
+	unsigned char  size;
+	char           type;
+	char           bullet_id;
 };

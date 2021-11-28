@@ -3,6 +3,10 @@
 #include "Enum.h"
 #include "Struct.h"
 
+namespace OBJECT_STATE
+{
+	enum STATE { ST_FREE, ST_ALIVE };
+};
 
 class CGameObject
 {
@@ -13,8 +17,8 @@ public:
 	void                 SetPosition(svector2 pos);
 	void                 SetLook(short look);
 
-	svector2          GetPosition();
-	short          GetLook();
+	svector2             GetPosition();
+	short                GetLook();
 
 	virtual float        vGetHeightHf() =0;   // return half height
 	virtual float        vGetWidthHf() = 0;    // return half width
@@ -24,7 +28,7 @@ public:
 	bool operator==(const CGameObject& robject)const ;
 protected:
 	svector2          m_position;
-	short			  m_look;
+	short			  m_look;	
 
 private:
 
