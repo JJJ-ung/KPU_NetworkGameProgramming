@@ -48,10 +48,6 @@ HRESULT Loading::Load_Resources()
 
 HRESULT Loading::Load_Objects()
 {
-	//GameMgr* pGameMgr = GameMgr::GetInstance();
-	//HRESULT hr = pGameMgr->Add_Prototype(OBJECT::PLAYER, Player::Create(m_pGraphicDev, "Player"));
-	//if (FAILED(hr)) return E_FAIL;
-
 	return NOERROR;
 }
 
@@ -66,13 +62,28 @@ unsigned int Loading::Thread_Main(void* pArg)
 
 	EnterCriticalSection(pLoading->Get_Crt());
 
-	if(FAILED(pLoading->Load_Resources())) return -1;
+	if (FAILED(pLoading->Load_Resources()))
+	{
+		cout << "Resource Load Failed" << endl;
+		LeaveCriticalSection(pLoading->Get_Crt());
+		return -1;
+	}
 	cout << "Resource Loaded" << endl;
 
-	if (FAILED(pLoading->Load_Objects())) return -1;
+	if (FAILED(pLoading->Load_Objects())) 
+	{
+		cout << "Object Load Failed" << endl;
+		LeaveCriticalSection(pLoading->Get_Crt());
+		return -1;
+	}
 	cout << "Objects Loaded" << endl;
 
-	if (FAILED(pLoading->Load_MapInfo())) return -1;
+	if (FAILED(pLoading->Load_MapInfo()))
+	{
+		cout << "Map Load Failed" << endl;
+		LeaveCriticalSection(pLoading->Get_Crt());
+		return -1;
+	}
 	cout << "Map Loaded" << endl;
 
 	pLoading->m_bFinish = true;

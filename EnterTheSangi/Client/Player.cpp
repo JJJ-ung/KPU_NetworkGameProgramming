@@ -121,7 +121,7 @@ HRESULT Player::Render_GameObject()
 
 INT Player::Update_Networking()
 {
-	//cout << "SendPlayer" << endl;
+	cout << "SendPlayer" << endl;
 	m_pNetworkMgr->Send_PlayerInfo(m_eState, m_vPosition, m_pInputMgr->Get_Angle());
 
 	return GameObject::Update_Networking();

@@ -58,6 +58,9 @@ HRESULT NetworkMgr::Send_ClientInfo(char type, void* p)
     case CS_PACKET_READY:
         hr = send(m_socket, (char*)p, sizeof(cs_packet_ready), 0);
         break;
+    case CS_PACKET_PLAYER_INFO:
+        hr = send(m_socket, (char*)p, sizeof(cs_packet_player_info), 0);
+        break;
     default:
         hr = E_FAIL;
         break;
@@ -106,7 +109,7 @@ unsigned NetworkMgr::Thread_Recv(void* pArg)
 
     while (!pNetworkMgr->m_bFinish)
     {
-        cout << "Thread" << endl;
+        //cout << "Thread" << endl;
         char buf[BUF_SIZE];
 
         int left;

@@ -112,7 +112,6 @@ HRESULT NetworkPlayer::Render_GameObject()
 INT NetworkPlayer::Recv_Networking(char c, void* p)
 {
 	// ¹Þ¾Æ ¿Â Á¤º¸ ¾÷µ«
-
 	sc_packet_game_state t;
 	memcpy(&t, p, sizeof(sc_packet_game_state));
 
@@ -148,10 +147,10 @@ INT NetworkPlayer::Recv_Networking(char c, void* p)
 
 	m_iHealth = player.health;
 
-	if(player.is_shooting)
-	{
-		// ÃÑ¾Ë
-	}
+	//if(player.is_shooting)
+	//{
+	//	// ÃÑ¾Ë
+	//}
 
 	return Player::Recv_Networking(c, p);
 }
