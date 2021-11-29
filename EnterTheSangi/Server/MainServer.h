@@ -30,7 +30,7 @@ public:
 	void ClientThread(char id);
 	void ServerThread();
 
-	void DoSend();
+	void DoSend(char client_id);
 	int  DoRecv(char id);
 	int  DoAccept();
 	void ProcessPacket(char id);

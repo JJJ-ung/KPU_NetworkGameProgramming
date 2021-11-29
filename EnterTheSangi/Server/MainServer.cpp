@@ -135,7 +135,7 @@ void CMainServer::ClientThread(char id)
 
             //m_server_event 다시 죽여야하는데 어디서?
             // 전체 데이터 송신
-            DoSend();
+            DoSend(id);
 
             m_state_lock.lock();
         }
@@ -153,10 +153,11 @@ void CMainServer::ServerThread()
     int client_count;
     for (;;)
     {  //In Robby
-        client_count = 0;
+        
         m_state_lock.lock();
         while (m_game_state == SCENE::ID::CUSTOMIZE)
         {
+            client_count = 0;
             m_state_lock.unlock();
             for (auto& cl : m_clients)
             {
@@ -442,7 +443,7 @@ void CMainServer::ProcessPacket(char client_id)
     }
 }
 
-void CMainServer::DoSend()
+void CMainServer::DoSend(char client_id)
 {
     sc_packet_game_state sp;
     
@@ -456,11 +457,13 @@ void CMainServer::DoSend()
         sp.type = SC_PACKET_GAME_STATE;
         //cout << sp.player[i].look << ", (" << sp.player[i].position.x << ", " << sp.player[i].position.y << "), " << sp.player[i].state << endl;
     }
-    for (auto& sc : m_clients)
-    {
-        send(sc.GetSocket(), (char*)&sp, sizeof(sc_packet_game_state), 0);
-        //cout << "ingame data send! \n";
-    }
+    //for (auto& sc : m_clients)
+    //{
+    //    send(sc.GetSocket(), (char*)&sp, sizeof(sc_packet_game_state), 0);
+    //    //cout << "ingame data send! \n";
+    //}
+
+    send(m_clients[client_id].GetSocket(), (char*)&sp, sizeof(sc_packet_game_state), 0);
     // 여기서 플레이어들 정보 취합후 일괄 전송
     //for (auto& cl : m_clients)
     //    send(cl.GetSocket(), (char*)&sp, sizeof(sc_packet_game_state), 0);
