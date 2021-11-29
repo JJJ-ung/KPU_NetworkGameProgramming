@@ -126,7 +126,6 @@ INT NetworkPlayer::Recv_Networking(char c, void* p)
 
 	m_vPosition.x = player.position.x;
 	m_vPosition.y = player.position.y;
-	cout << "[" << m_tClientInfo.index << "] " << m_vPosition.x << "/" << m_vPosition.y << endl;
 
 	if (player.state == (char)STATE::IDLE)
 		strAnimation = L"Idle_";

@@ -14,6 +14,9 @@ InputMgr::~InputMgr()
 
 BOOL InputMgr::KeyDown(DWORD dwCurKey)
 {
+	if (GetFocus() != g_hWnd)
+		return false;
+
 	if (!(m_dwKeyDown & dwCurKey) && (m_dwCurKey & dwCurKey))
 	{
 		m_dwKeyDown |= dwCurKey;
@@ -31,6 +34,9 @@ BOOL InputMgr::KeyDown(DWORD dwCurKey)
 
 BOOL InputMgr::KeyUp(DWORD dwCurKey)
 {
+	if (GetFocus() != g_hWnd)
+		return false;
+
 	if ((m_dwKeyUp & dwCurKey) && !(m_dwCurKey & dwCurKey))
 	{
 		m_dwKeyUp ^= dwCurKey;
@@ -48,6 +54,9 @@ BOOL InputMgr::KeyUp(DWORD dwCurKey)
 
 BOOL InputMgr::KeyPressing(DWORD dwCurKey)
 {
+	if (GetFocus() != g_hWnd)
+		return false;
+
 	if (m_dwCurKey & dwCurKey)
 		return true;
 
@@ -56,6 +65,9 @@ BOOL InputMgr::KeyPressing(DWORD dwCurKey)
 
 BOOL InputMgr::KeyCombined(DWORD dwFirstKey, DWORD dwSecondKey)
 {
+	if (GetFocus() != g_hWnd)
+		return false;
+
 	if (KeyDown(dwSecondKey) && KeyPressing(dwFirstKey))
 		return true;
 
