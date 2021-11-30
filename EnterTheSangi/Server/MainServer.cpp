@@ -414,7 +414,7 @@ void CMainServer::ProcessPacket(char client_id)
     memcpy(&rp, m_clients[client_id].GetBuf(), sizeof(cs_packet_shoot_bullet));
     cout << "client [" << int(client_id) << "] recv : CS_PACKET_SHOOT_BULLET \n";
 
-    for (int i=0;i>MAX_BULLETS;++i)
+    for (int i=0;i<MAX_BULLETS;++i)
     {
     
         m_bullets[i].StateLock();
@@ -431,7 +431,9 @@ void CMainServer::ProcessPacket(char client_id)
             m_bullets[i].SetID(i);
             //m_bullets[i].SetLook(rp.look);
             m_bullets[i].SetPosition(rp.position);
-           
+           // 서버에서 가지는 총알포지션 값에 델타타임 적용 필요 (서버 충돌체크용)
+
+
             sc_packet_put_bullet sp;
             sp.size = sizeof(sc_packet_put_bullet);
             sp.type = SC_PACKET_PUT_BULLET;
@@ -548,14 +550,14 @@ void CMainServer::ServerProcess() {
 
 void CMainServer::CollisionCheckTerrainPlayer()
 {
-
+    //클라이언트에서 합니다
 }
 
 void CMainServer::CollisionCheckTerrainBullet()
 {
     for (int i = 0; i > MAX_BULLETS; ++i)
     {
-        if (false)//벽 충돌시
+        if (false/*임시값, 맵 좌표 정보 받아서 수정필요*/)//벽 충돌시
         {
             //총알 삭제
             m_bullets[i].StateLock();
@@ -619,13 +621,24 @@ void CMainServer::CollisionCheckPlayerChest()
         CPlayer& player = client.GetPlayer();
         for (auto& chest : m_chests)
         {
+            // 서버 쓰레드(싱글)에서 처리하므로 chset 스테이트락 사용x            
             if (CollisionCheck(chest, player) == true)
             {
                 //무기 선택 (랜덤? 사전 설정?)
 
                 //플레이어 무기 변경
 
-                //아이템 삭제
+                //아이템 삭제 후 재생성 (실제로는 이동)
+                //맵 좌표 받고 좌표 생성 로직 최신화 필요
+                chest.SetPosition({ rand() % 1000, rand() % 1000 });
+
+                sc_packet_move_chest sp;
+                sp.type = SC_PACKET_MOVE_CHEST;
+                sp.size = sizeof(sc_packet_move_chest);
+                sp.chest_id = chest.GetID();
+                sp.position = chest.GetPosition();
+                for (auto& client : m_clients)
+                    send(client.GetSocket(), (char*)&sp, sizeof(sc_packet_move_chest), 0);
             }
             else
             {
@@ -641,7 +654,8 @@ bool CMainServer::CollisionCheck(T1& object_1, T2& object_2)
     if (abs(object_1.GetPosition().x - object_2.GetPosition().x) <=
         (object_1.vGetWidthHf() + object_2.vGetWidthHf()))
         return true;
-    if (abs(object_1.GetPosition().y - object_2.GetPosition().y) <=
+    if (abs((object_1.GetPosition().y- object_1.vGetHeightHf()) - 
+        (object_2.GetPosition().y- object_2.vGetHeightHf())) <=
         (object_1.vGetHeightHf() + object_2.vGetHeightHf()))
         return true;
 
