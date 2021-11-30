@@ -13,6 +13,16 @@ CChest::~CChest()
 
 };
 
+char CChest::GetID()
+{
+	return m_id;
+}
+
+OBJECT_STATE::STATE CChest::GetState()
+{
+	return m_state;
+}
+
 float CChest::vGetHeightHf()
 {
 	return m_height_hf;
@@ -27,3 +37,13 @@ OBJECT::TYPE CChest::vGetObjectType() const
 {
 	return m_object_type;
 };
+
+void CChest::SetID(char id)
+{
+	m_id = id;
+}
+
+void CChest::SetState(OBJECT_STATE::STATE state)
+{
+	m_state = state;
+}

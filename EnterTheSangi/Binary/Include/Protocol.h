@@ -36,8 +36,12 @@ const char SC_PACKET_ALL_READY = 6;
 const char SC_PACKET_GAME_STATE = 7;
 const char SC_PACKET_PUT_BULLET = 8;
 const char SC_PACKET_REMOVE_BULLET = 9;
+const char SC_PACKET_PUT_CHEST = 10;
+const char SC_PACKET_MOVE_CHEST = 11;
+const char SC_PACKET_REMOVE_CHEST = 12;
+const char SC_PACKET_CHANGE_WEAPON = 13;
 
-const char SC_PACKET_TYPE_END = 10;
+const char SC_PACKET_TYPE_END = 14;
 
 
 //--------------------------------------------------
@@ -80,7 +84,7 @@ struct cs_packet_shoot_bullet
 	char           type;
 	char           bullet_type;
 	svector2       position;
-	svector2		   direction;
+	svector2	   direction;
 };
 
 
@@ -153,7 +157,7 @@ struct sc_packet_put_bullet
 	char           type;
 	char           bullet_type;
 	svector2       position;
-	svector2		   direction;
+	svector2	   direction;
 };
 
 struct sc_packet_remove_bullet
@@ -161,4 +165,35 @@ struct sc_packet_remove_bullet
 	unsigned char  size;
 	char           type;
 	char           bullet_id;
+};
+
+struct sc_packet_put_chest
+{
+	unsigned char  size;
+	char           type;
+	char           chest_id;
+	svector2       position;
+};
+
+struct sc_packet_move_chest
+{
+	unsigned char  size;
+	char           type;
+	char           chest_id;
+	svector2       position;
+};
+
+struct sc_packet_remove_chest
+{
+	unsigned char  size;
+	char           type;
+	char           chest_id;
+};
+
+struct sc_packet_change_weapon
+{
+	unsigned char  size;
+	char           type;
+	char           id;
+	char           weapon_id;
 };

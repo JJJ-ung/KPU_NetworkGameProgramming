@@ -34,9 +34,9 @@ private:
 
 	D3DXVECTOR3          m_body_color;
 	D3DXVECTOR3          m_cloth_color;
-
-	const static OBJECT::TYPE 
-		                 m_object_type= OBJECT::PLAYER;
+	
 	static float         m_height_hf;
 	static float         m_width_hf;
+	const static OBJECT::TYPE
+		m_object_type = OBJECT::PLAYER;
 };
