@@ -54,6 +54,8 @@ HRESULT Player::Ready_GameObject(CLIENT t)
 	if (!m_pNameTag) return E_FAIL;
 	m_pNameTag->Update_Position(m_vPosition, D3DXVECTOR3(0.f, 48.f, 0.f));
 
+	D3DXMatrixIdentity(&m_matWorld);
+
 	return GameObject::Ready_GameObject();
 }
 
@@ -64,7 +66,14 @@ INT Player::Update_GameObject(float time_delta)
 	D3DXVec3Normalize(&m_vDirection, &m_vDirection);
 	m_vPosition += m_vDirection * m_fSpeed * time_delta;
 
+	//cout << m_vPosition.x << "/" << m_vPosition.y << "/" << m_vPosition.z << endl;
+
 	m_pNameTag->Update_Position(m_vPosition, D3DXVECTOR3(0.f, -48.f, 0.f));
+
+	D3DXMATRIX		matScale, matTrans;
+	D3DXMatrixScaling(&matScale, 3.f * m_fSide, 3.f, 3.f);
+	D3DXMatrixTranslation(&matTrans, m_vPosition.x, m_vPosition.y, m_vPosition.z);
+	m_matWorld = matScale * matTrans;
 
 	return GameObject::Update_GameObject(time_delta);
 }
@@ -91,11 +100,7 @@ HRESULT Player::Render_GameObject()
 	if (FAILED(m_pCurrAnimation->Set_Texture(pEffect, "g_BaseTexture")))
 		return E_FAIL;
 
-	D3DXMATRIX		matScale, matTrans, matWorld;
-	D3DXMatrixScaling(&matScale, 3.f * m_fSide, 3.f, 3.f);
-	D3DXMatrixTranslation(&matTrans, m_vPosition.x, m_vPosition.y, m_vPosition.z);
-	matWorld = matScale * matTrans;
-	pEffect->SetMatrix("g_matWorld", &matWorld);
+	pEffect->SetMatrix("g_matWorld", &m_matWorld);
 
 	D3DXMATRIX		matTmp;
 	m_pDevice->GetTransform(D3DTS_TEXTURE0, &matTmp);

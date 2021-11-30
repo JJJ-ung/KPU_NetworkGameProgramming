@@ -69,6 +69,8 @@ public:
 	float shotspeed = 1.f;
 	float bulletspeed = 1.f;
 	float duration = 0.f;
+	D3DXVECTOR2 bulletoffset = { 0.f, 0.f };
+	float size = 1.f;
 }WEAPON;
 
 // For Server

@@ -31,10 +31,12 @@ HRESULT Texture::Ready_Component(LPD3DXSPRITE pSprite, const TCHAR* pPath, const
 		if (FAILED(D3DXCreateTextureFromFile(m_pGraphic_Device, szFileName, (LPDIRECT3DTEXTURE9*)&pTexture)))
 			return E_FAIL;
 
+		D3DXGetImageInfoFromFile(szFileName, &m_tInfo);
+
+		m_vecInfo.push_back(m_tInfo);
+
 		m_vecTexture.push_back(pTexture);
 	}
-
-	D3DXGetImageInfoFromFile(szFileName, &m_tInfo);
 
 	return NOERROR;
 }

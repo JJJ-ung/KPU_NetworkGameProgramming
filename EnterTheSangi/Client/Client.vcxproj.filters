@@ -262,6 +262,9 @@
     <ClInclude Include="Mouse.h">
       <Filter>01 GameObject\04 UI\03 Mouse</Filter>
     </ClInclude>
+    <ClInclude Include="Bullet.h">
+      <Filter>01 GameObject\02 Bullet</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">
@@ -387,6 +390,9 @@
     </ClCompile>
     <ClCompile Include="Mouse.cpp">
       <Filter>01 GameObject\04 UI\03 Mouse</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet.cpp">
+      <Filter>01 GameObject\02 Bullet</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

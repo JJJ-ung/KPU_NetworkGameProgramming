@@ -88,7 +88,7 @@ HRESULT ResourceMgr::Add_WeaponData(const TCHAR* pPath)
 	while (true)
 	{
 		WEAPON t;
-		fin >> t.type >> t.damage >> t.shotspeed >> t.bulletspeed >> t.duration;
+		fin >> t.type >> t.damage >> t.shotspeed >> t.bulletspeed >> t.duration >> t.bulletoffset.x >> t.bulletoffset.y >> t.size;
 		if (fin.eof()) break;
 		m_mapWeaponData.insert(WEAPONDATA::value_type(t.type, t));
 	}

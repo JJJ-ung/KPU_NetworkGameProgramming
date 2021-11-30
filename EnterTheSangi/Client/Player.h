@@ -15,6 +15,7 @@ public:
 	STATE::TYPE& Get_State() { return m_eState; }
 	D3DXVECTOR3& Get_Dir() { return m_vDirection; }
 	StateMachine<Player>* Get_StateMachine() { return m_pStateMachine; }
+	virtual float Get_Y() { return m_vPosition.y + 32.f; }
 
 public:
 	virtual HRESULT Ready_GameObject(CLIENT t);
@@ -43,6 +44,7 @@ protected:
 	float m_fSpeed = 1.f;
 	STATE::TYPE m_eState;
 	D3DXVECTOR3 m_vDirection{ 0.f, 0.f, 0.f };
+	D3DXMATRIX m_matWorld;
 
 protected:
 	CLIENT m_tClientInfo = {};

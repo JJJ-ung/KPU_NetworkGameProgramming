@@ -8,7 +8,7 @@ public:
 	virtual ~Texture();
 
 public:
-	D3DXIMAGE_INFO Get_TextureInfo() { return m_tInfo; }
+	D3DXIMAGE_INFO Get_TextureInfo(int idx = 0) { return m_vecInfo[idx]; }
 	UINT Get_TextureCnt() { return (UINT)m_vecTexture.size(); }
 	LPDIRECT3DTEXTURE9 Get_Texture(UINT index) { return m_vecTexture[index]; }
 
@@ -25,6 +25,8 @@ private:
 	D3DXIMAGE_INFO m_tInfo{};
 	vector<LPDIRECT3DTEXTURE9>					m_vecTexture;
 	typedef vector<LPDIRECT3DTEXTURE9>	VECTEXTURE;
+	vector<D3DXIMAGE_INFO>							m_vecInfo;
+	typedef vector<D3DXIMAGE_INFO>			VECTEXTUREINFO;
 
 public:
 	static Texture* Create(LPDIRECT3DDEVICE9 pGraphicDev, LPD3DXSPRITE pSprite, const TCHAR* pPath, const UINT& iCnt = 1);

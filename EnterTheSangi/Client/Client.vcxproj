@@ -153,6 +153,7 @@
   <ItemGroup>
     <ClInclude Include="AnimatedSprite.h" />
     <ClInclude Include="Animation.h" />
+    <ClInclude Include="Bullet.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Chest.h" />
     <ClInclude Include="Client.h" />
@@ -201,6 +202,7 @@
   <ItemGroup>
     <ClCompile Include="AnimatedSprite.cpp" />
     <ClCompile Include="Animation.cpp" />
+    <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Chest.cpp" />
     <ClCompile Include="Client.cpp" />

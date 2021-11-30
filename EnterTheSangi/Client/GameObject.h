@@ -16,7 +16,7 @@ public:
 
 public:
 	D3DXVECTOR3& Get_Position() { return m_vPosition; }
-	float Get_Y() { return m_vPosition.y; }
+	virtual float Get_Y() { return m_vPosition.y; }
 
 public:
 	virtual HRESULT Ready_GameObject();
