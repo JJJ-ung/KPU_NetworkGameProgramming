@@ -186,7 +186,7 @@ HRESULT Player::Ready_AnimationInfo()
 
 	wifstream fin;
 
-	fin.open(L"../Binary/Data/Animation/Anim_Player.txt");
+	fin.open(L"../Binary/Data/Anim_Player.txt");
 	if (fin.fail()) return E_FAIL;
 
 	UINT speed, center, start;

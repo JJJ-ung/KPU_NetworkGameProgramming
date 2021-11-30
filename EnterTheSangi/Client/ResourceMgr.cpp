@@ -77,6 +77,33 @@ Texture* ResourceMgr::Find_Texture(const TCHAR* pTexSetTag, const TCHAR* pState)
 	return iter2->second;
 }
 
+HRESULT ResourceMgr::Add_WeaponData(const TCHAR* pPath)
+{
+	wifstream fin;
+
+	fin.open(pPath);
+	if (fin.fail())
+		return E_FAIL;
+
+	while (true)
+	{
+		WEAPON t;
+		fin >> t.type >> t.damage >> t.shotspeed >> t.bulletspeed >> t.duration;
+		if (fin.eof()) break;
+		m_mapWeaponData.insert(WEAPONDATA::value_type(t.type, t));
+	}
+
+	return NOERROR;
+}
+
+WEAPON ResourceMgr::Find_WeaponData(int iType)
+{
+	auto iter = m_mapWeaponData.find(iType);
+	if (iter == m_mapWeaponData.end())
+		return WEAPON();
+	return iter->second;
+}
+
 void ResourceMgr::Free()
 {
 	for(auto iter_texset : m_mapTexSets)

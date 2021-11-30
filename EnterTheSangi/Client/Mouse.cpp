@@ -1,23 +1,21 @@
 #include "framework.h"
-#include "StaticSprite.h"
-
+#include "Mouse.h"
 #include "Shader.h"
 #include "Texture.h"
 #include "ShaderMgr.h"
 #include "ResourceMgr.h"
 
-StaticSprite::StaticSprite(LPDIRECT3DDEVICE9 pGraphic_Device)
+Mouse::Mouse(LPDIRECT3DDEVICE9 pGraphic_Device)
 	:GameObject(pGraphic_Device)
 {
 }
 
-StaticSprite::~StaticSprite()
+Mouse::~Mouse()
 {
 	Free();
 }
 
-HRESULT StaticSprite::Ready_GameObject(const TCHAR* pObjTag, const TCHAR* pStateTag, D3DXVECTOR3 vPos,
-	D3DXVECTOR3 vScale)
+HRESULT Mouse::Ready_GameObject()
 {
 	m_pRenderer = Renderer::GetInstance();
 	if (!m_pRenderer) return E_FAIL;
@@ -25,36 +23,35 @@ HRESULT StaticSprite::Ready_GameObject(const TCHAR* pObjTag, const TCHAR* pState
 	m_pResourceMgr = ResourceMgr::GetInstance();
 	if (!m_pResourceMgr) return E_FAIL;
 
+	m_pInputMgr = InputMgr::GetInstance();
+	if (!m_pInputMgr) return E_FAIL;
+
 	m_pShader = ShaderMgr::GetInstance()->Get_ShaderReference(L"Default");
 	if (!m_pShader) return E_FAIL;
 
-	m_pTexture = m_pResourceMgr->Find_Texture(pObjTag, pStateTag);
+	m_pTexture = m_pResourceMgr->Find_Texture(L"UI", L"Mouse");
 	if (!m_pTexture) return E_FAIL;
-
-	m_vPosition = vPos;
-	m_vScale = vScale;
 
 	m_vCenter = D3DXVECTOR3(m_pTexture->Get_TextureInfo().Width * 0.5f, m_pTexture->Get_TextureInfo().Height * 0.5f, 0.f);
 
 	return GameObject::Ready_GameObject();
 }
 
-INT StaticSprite::Update_GameObject(float time_delta)
+INT Mouse::Update_GameObject(float time_delta)
 {
-	if(m_fAlpha < 1.f)
-		m_fAlpha += time_delta * 3.f;
-
 	return GameObject::Update_GameObject(time_delta);
 }
 
-INT StaticSprite::LateUpdate_GameObject(float time_delta)
+INT Mouse::LateUpdate_GameObject(float time_delta)
 {
+	m_vPosition = m_pInputMgr->Get_TrueMousePoint();
+
 	m_pRenderer->Add_RenderList(Renderer::RENDER_UI, this);
 
 	return GameObject::LateUpdate_GameObject(time_delta);
 }
 
-HRESULT StaticSprite::Render_GameObject()
+HRESULT Mouse::Render_GameObject()
 {
 	LPD3DXEFFECT	pEffect = m_pShader->Get_EffectHandle();
 	if (nullptr == pEffect) return E_FAIL;
@@ -75,8 +72,6 @@ HRESULT StaticSprite::Render_GameObject()
 	m_pDevice->GetTransform(D3DTS_PROJECTION, &matTmp);
 	pEffect->SetMatrix("g_matProj", &matTmp);
 
-	m_pShader->Set_Value("g_fAlpha", &m_fAlpha, sizeof(float));
-
 	pEffect->Begin(nullptr, 0);
 	pEffect->BeginPass(0);
 
@@ -89,16 +84,15 @@ HRESULT StaticSprite::Render_GameObject()
 	return GameObject::Render_GameObject();
 }
 
-StaticSprite* StaticSprite::Create(LPDIRECT3DDEVICE9 pGraphic_Device, const TCHAR* pObjTag, const TCHAR* pStateTag,
-	D3DXVECTOR3 vPos, D3DXVECTOR3 vScale)
+Mouse* Mouse::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
 {
-	StaticSprite* pInstance = new StaticSprite(pGraphic_Device);
-	if (FAILED(pInstance->Ready_GameObject(pObjTag, pStateTag, vPos, vScale)))
+	Mouse* pInstance = new Mouse(pGraphic_Device);
+	if (FAILED(pInstance->Ready_GameObject()))
 		SafeDelete(pInstance);
 	return pInstance;
 }
 
-void StaticSprite::Free()
+void Mouse::Free()
 {
 	GameObject::Free();
 }

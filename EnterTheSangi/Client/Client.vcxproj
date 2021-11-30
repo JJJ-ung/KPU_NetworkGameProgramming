@@ -167,6 +167,7 @@
     <ClInclude Include="InputMgr.h" />
     <ClInclude Include="Loading.h" />
     <ClInclude Include="MainApp.h" />
+    <ClInclude Include="Mouse.h" />
     <ClInclude Include="NetworkMgr.h" />
     <ClInclude Include="NetworkPlayer.h" />
     <ClInclude Include="Player.h" />
@@ -213,6 +214,7 @@
     <ClCompile Include="InputMgr.cpp" />
     <ClCompile Include="Loading.cpp" />
     <ClCompile Include="MainApp.cpp" />
+    <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="NetworkMgr.cpp" />
     <ClCompile Include="NetworkPlayer.cpp" />
     <ClCompile Include="Player.cpp" />

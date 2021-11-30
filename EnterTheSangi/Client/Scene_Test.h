@@ -1,8 +1,6 @@
 #pragma once
 #include "Scene.h"
 
-class Player;
-class NetworkPlayer;
 class Scene_Test : public Scene
 {
 public:

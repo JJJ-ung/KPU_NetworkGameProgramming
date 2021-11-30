@@ -62,12 +62,13 @@ typedef struct tagWeaponInfo
 {
 public:
 	tagWeaponInfo() {}
-	tagWeaponInfo(int iType, int iDamage, float fShotSpeed, float fBulletSpeed)
-		: type(iType), damage(iDamage), shotspeed(fShotSpeed), bulletspeed(fBulletSpeed) {}
+	tagWeaponInfo(int iType, int iDamage, float fShotSpeed, float fBulletSpeed, float fDuration)
+		: type(iType), damage(iDamage), shotspeed(fShotSpeed), bulletspeed(fBulletSpeed), duration(fDuration) {}
 	int type = -1;
 	int damage = 0;
 	float shotspeed = 1.f;
 	float bulletspeed = 1.f;
+	float duration = 0.f;
 }WEAPON;
 
 // For Server

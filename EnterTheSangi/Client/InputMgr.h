@@ -37,6 +37,7 @@ public:
 	const float Get_Angle_Abs() { return abs(m_fAngle); }
 	const float Get_Angle_Radian() { return D3DXToRadian(m_fAngle); }
 	D3DXVECTOR3& Get_MousePoint() { return m_vMousePoint; }
+	D3DXVECTOR3& Get_TrueMousePoint() { return m_vTrueMousePoint; }
 
 private:
 	InputMgr();
@@ -76,7 +77,8 @@ private:
 private:
 	float								m_fAngle = 0.f;
 	POINT								m_tMousePoint = {};
-	D3DXVECTOR3				m_vMousePoint = {};
+	D3DXVECTOR3				m_vMousePoint = { 0.f, 0.f, 0.f };
+	D3DXVECTOR3				m_vTrueMousePoint = {0.f, 0.f, 0.f};
 
 public:
 	ULONG m_dwCurKey = 0;

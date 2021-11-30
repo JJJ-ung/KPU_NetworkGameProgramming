@@ -31,16 +31,19 @@ HRESULT Loading::Load_Resources()
 {
 	ResourceMgr* pResourceMgr = ResourceMgr::GetInstance();
 
-	HRESULT hr = pResourceMgr->Add_TexturesFromFile(L"Player", L"../Binary/Data/Texture/Texture_Player.txt");
+	HRESULT hr = pResourceMgr->Add_TexturesFromFile(L"Player", L"../Binary/Data/Texture_Player.txt");
 	if (FAILED(hr)) return E_FAIL;
 
-	hr = pResourceMgr->Add_TexturesFromFile(L"UI", L"../Binary/Data/Texture/Texture_UI.txt");
+	hr = pResourceMgr->Add_TexturesFromFile(L"UI", L"../Binary/Data/Texture_UI.txt");
 	if (FAILED(hr)) return E_FAIL;
 
-	hr = pResourceMgr->Add_TexturesFromFile(L"Weapon", L"../Binary/Data/Texture/Texture_Weapon.txt");
+	hr = pResourceMgr->Add_TexturesFromFile(L"Weapon", L"../Binary/Data/Texture_Weapon.txt");
 	if (FAILED(hr)) return E_FAIL;
 
 	hr = pResourceMgr->Add_Texture(L"Test", L"Map", L"../Binary/Resources/test0.png", 1);
+	if (FAILED(hr)) return E_FAIL;
+
+	hr = pResourceMgr->Add_WeaponData(L"../Binary/Data/Info_Weapon.txt");
 	if (FAILED(hr)) return E_FAIL;
 
 	return NOERROR;

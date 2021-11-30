@@ -69,6 +69,8 @@ HRESULT MainApp::Ready_MainApp()
 	if (FAILED(m_pGameMgr->Set_CurrScene(pScene)))
 		return E_FAIL;
 
+	ShowCursor(false);
+
 	return NOERROR;
 }
 

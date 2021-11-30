@@ -4,6 +4,7 @@
 #include "Scene_Test.h"
 #include "PostCard.h"
 #include "CustomPlayer.h"
+#include "Mouse.h"
 #include "NetworkMgr.h"
 
 Scene_Customize::Scene_Customize(LPDIRECT3DDEVICE9 pGraphic_Device)
@@ -29,6 +30,9 @@ HRESULT Scene_Customize::Ready_Scene(sc_packet_login_ok tLogin)
 	if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::PLAYER, m_pPostCard[tLogin.id] = PostCard::Create(m_pGraphic_Device, tLogin.id, true, m_pGameMgr->Get_ClientPlayerName(), tLogin.body_color, tLogin.cloth_color))))
 		return E_FAIL;
 	m_pGameMgr->Get_ClientInfos()[tLogin.id] = CLIENT(true, tLogin.id, m_pGameMgr->Get_ClientPlayerName(), tLogin.cloth_color, tLogin.body_color, D3DXVECTOR3(0.f, 0.f, 0.f));
+
+	if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::UI, Mouse::Create(m_pGraphic_Device))))
+		return E_FAIL;
 
 	return Scene::Ready_Scene();
 }

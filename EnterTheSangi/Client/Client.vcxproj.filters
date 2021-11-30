@@ -131,6 +131,12 @@
     <Filter Include="01 GameObject\03 Chest">
       <UniqueIdentifier>{fb95d0c2-dd19-4a61-a755-297dde516398}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01 GameObject\04 UI\04 Health">
+      <UniqueIdentifier>{9045a90d-bb8d-47f2-8025-d1d70304654d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01 GameObject\04 UI\03 Mouse">
+      <UniqueIdentifier>{5bd0f84a-7dd4-496c-bb37-8cf8cdaf579c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -252,6 +258,9 @@
     </ClInclude>
     <ClInclude Include="Chest.h">
       <Filter>01 GameObject\03 Chest</Filter>
+    </ClInclude>
+    <ClInclude Include="Mouse.h">
+      <Filter>01 GameObject\04 UI\03 Mouse</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -375,6 +384,9 @@
     </ClCompile>
     <ClCompile Include="Chest.cpp">
       <Filter>01 GameObject\03 Chest</Filter>
+    </ClCompile>
+    <ClCompile Include="Mouse.cpp">
+      <Filter>01 GameObject\04 UI\03 Mouse</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

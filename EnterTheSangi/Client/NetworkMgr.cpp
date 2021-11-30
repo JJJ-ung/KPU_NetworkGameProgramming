@@ -45,8 +45,6 @@ HRESULT NetworkMgr::Send_ClientInfo(char type, void* p)
     if (type >= CS_PACKET_TYPE_END)
         return E_FAIL;
 
-    cout << " send " << endl;
-
     HRESULT hr = -1;
 
     switch (type)

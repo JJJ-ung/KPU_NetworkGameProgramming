@@ -7,6 +7,7 @@
 #include "StaticSprite.h"
 #include "AnimatedSprite.h"
 #include "Font.h"
+#include "Mouse.h"
 #include "NetworkMgr.h"
 
 Scene_Title::Scene_Title(LPDIRECT3DDEVICE9 pGraphic_Device)
@@ -40,6 +41,9 @@ HRESULT Scene_Title::Ready_Scene()
 		return E_FAIL;
 
 	if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::UI, StaticSprite::Create(m_pGraphic_Device, L"UI", L"Login", D3DXVECTOR3(150.f, 700.f, 0.f), D3DXVECTOR3(1.f, 1.f, 1.f)))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::UI, Mouse::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
 	if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::UI, m_pName = Font::Create(m_pGraphic_Device, "", 0.7f, false))))

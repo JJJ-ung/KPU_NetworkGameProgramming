@@ -5,3 +5,6 @@ Login ../Binary/Resources/Login_0.png 1
 CustomizeWnd ../Binary/Resources/Customize/CustomizeWnd_0.png 1
 ColorIcon ../Binary/Resources/Customize/ColorIcon_0.png 1
 CustomizeReady ../Binary/Resources/Customize/CustomizeReady_0.png 1
+Mouse ../Binary/Resources/UI/Mouse_0.png 1
+Health ../Binary/Resources/UI/Health_%d.png 3
+Space ../Binary/Resources/UI/Space_%d.png 2
