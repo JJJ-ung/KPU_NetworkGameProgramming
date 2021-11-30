@@ -39,8 +39,9 @@ const char SC_PACKET_REMOVE_BULLET = 9;
 const char SC_PACKET_PUT_CHEST = 10;
 const char SC_PACKET_MOVE_CHEST = 11;
 const char SC_PACKET_REMOVE_CHEST = 12;
+const char SC_PACKET_CHANGE_WEAPON = 13;
 
-const char SC_PACKET_TYPE_END = 13;
+const char SC_PACKET_TYPE_END = 14;
 
 
 //--------------------------------------------------
@@ -187,4 +188,12 @@ struct sc_packet_remove_chest
 	unsigned char  size;
 	char           type;
 	char           chest_id;
+};
+
+struct sc_packet_change_weapon
+{
+	unsigned char  size;
+	char           type;
+	char           id;
+	char           weapon_id;
 };
