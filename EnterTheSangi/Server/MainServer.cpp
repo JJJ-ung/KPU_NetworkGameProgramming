@@ -384,6 +384,19 @@ void CMainServer::ProcessPacket(char client_id)
 
             m_game_state = SCENE::STAGE;
             m_state_lock.unlock();
+
+            // 초기 상자 정보를 전송한다.
+
+            sc_packet_put_chest packet_put_chest;
+            packet_put_chest.type = SC_PACKET_PUT_CHEST;
+            packet_put_chest.size = sizeof(sc_packet_put_chest);
+            for (auto& chest : m_chests)
+            {
+                packet_put_chest.chest_id = chest.GetID();
+                packet_put_chest.position = chest.GetPosition();
+                for (auto& client : m_clients)
+                    send(client.GetSocket(), (char*)&packet_put_chest, sizeof(sc_packet_put_chest), 0);
+            }
         }
     }
     else if (packet_type == CS_PACKET_PLAYER_INFO)
@@ -584,7 +597,7 @@ void CMainServer::CollisionCheckPlayerBullet()
                 sc_packet_remove_bullet sp;
                 sp.type = SC_PACKET_REMOVE_BULLET;
                 sp.size = sizeof(sc_packet_remove_bullet);
-                sp.bullet_id = i;
+                sp.bullet_id = m_bullets[i].GetID();
 
                 for (auto& client : m_clients)
                 {
@@ -646,10 +659,12 @@ void CMainServer::InitBullets()
 
 void CMainServer::InitChests()
 {
-    for (int i = 0; i < MAX_CHESTS; ++i)
-    {
-        // 초기 생성
-    }
+	for (int i = 0; i < MAX_CHESTS; ++i)
+	{
+		m_chests[i].SetID(i);
+        m_bullets[i].SetState(OBJECT_STATE::ST_ALIVE);
+		m_chests[i].SetPosition(svector2{ i + 1 ,i + 1 });
+	}
 }
 
 
