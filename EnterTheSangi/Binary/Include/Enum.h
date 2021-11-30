@@ -17,16 +17,6 @@ namespace OBJECT
 	enum TYPE { MAP, PLAYER, NETWORK_PLAYER, BULLET, CHEST, DOOR, CAMERA, UI, END };
 }
 
-namespace WEAPON
-{
-	enum TYPE {PISTOL};
-}
-
-namespace BULLET
-{
-	enum TYPE { PISTOL };
-}
-
 namespace DIR
 {
 	enum DIR { DIR_LT, DIR_L, DIR_LB, DIR_CT, DIR_C, DIR_CB, DIR_RT, DIR_R, DIR_RB };

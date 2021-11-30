@@ -42,7 +42,6 @@ protected:
 	float m_fSide = 1.f;
 	float m_fSpeed = 1.f;
 	STATE::TYPE m_eState;
-	D3DXVECTOR3 m_vPosition{0.f, 0.f, 0.f};
 	D3DXVECTOR3 m_vDirection{ 0.f, 0.f, 0.f };
 
 protected:

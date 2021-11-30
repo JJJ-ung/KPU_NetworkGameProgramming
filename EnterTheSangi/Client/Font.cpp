@@ -53,7 +53,7 @@ INT Font::Update_GameObject(float time_delta)
 
 INT Font::LateUpdate_GameObject(float time_delta)
 {
-	m_pRenderer->Add_RenderList(Renderer::RENDER_NONALPHA, this);
+	m_pRenderer->Add_RenderList(Renderer::RENDER_UI, this);
 
 	return GameObject::LateUpdate_GameObject(time_delta);
 }
@@ -70,7 +70,7 @@ HRESULT Font::Render_GameObject()
 		if (FAILED(m_pTexture->Set_Texture(pEffect, "g_BaseTexture", m_vecIndex[i])))
 			return E_FAIL;
 
-		D3DXVECTOR3 vPos = { m_fSpace * m_fSize * i + m_vPos.x, m_vPos.y, 0.f };
+		D3DXVECTOR3 vPos = { m_fSpace * m_fSize * i + m_vPosition.x, m_vPosition.y, 0.f };
 		D3DXMatrixTranslation(&matTrans, vPos.x, vPos.y, vPos.z);
 		matWorld = matScale * matTrans;
 		pEffect->SetMatrix("g_matWorld", &matWorld);
@@ -140,7 +140,7 @@ HRESULT Font::Convert_Line(string strLine)
 
 HRESULT Font::Update_Position(D3DXVECTOR3 vPos, D3DXVECTOR3 vOffset)
 {
-	m_vPos = vPos + vOffset + m_vAlign;
+	m_vPosition = vPos + vOffset + m_vAlign;
 
 	return NOERROR;
 }

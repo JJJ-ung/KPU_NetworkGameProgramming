@@ -59,7 +59,7 @@ HRESULT AnimatedSprite::Render_GameObject()
 
 	D3DXMATRIX		matScale, matTrans, matWorld;
 	D3DXMatrixScaling(&matScale, m_vScale.x, m_vScale.y, m_vScale.z);
-	D3DXMatrixTranslation(&matTrans, m_vPos.x, m_vPos.y, m_vPos.z);
+	D3DXMatrixTranslation(&matTrans, m_vPosition.x, m_vPosition.y, m_vPosition.z);
 	matWorld = matScale * matTrans;
 	pEffect->SetMatrix("g_matWorld", &matWorld);
 

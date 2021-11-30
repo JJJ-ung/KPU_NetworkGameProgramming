@@ -57,4 +57,3 @@ public:
 	static Renderer* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
 	virtual void Free();
 };
-

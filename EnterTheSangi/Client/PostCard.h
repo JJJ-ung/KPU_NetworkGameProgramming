@@ -30,7 +30,6 @@ private:
 	NetworkMgr* m_pNetworkMgr = nullptr;
 
 private:
-	D3DXVECTOR3 m_vPosition = {};
 	D3DXVECTOR3 m_vCenter = {};
 	D3DXMATRIX m_matView = {};
 	D3DXVECTOR3 m_vColor[2] = {};

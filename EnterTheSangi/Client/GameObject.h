@@ -15,6 +15,10 @@ public:
 	virtual ~GameObject();
 
 public:
+	D3DXVECTOR3& Get_Position() { return m_vPosition; }
+	float Get_Y() { return m_vPosition.y; }
+
+public:
 	virtual HRESULT Ready_GameObject();
 	virtual INT Update_GameObject(float TimeDelta);
 	virtual INT LateUpdate_GameObject(float TimeDelta);
@@ -26,6 +30,9 @@ public:
 
 protected:
 	D3DXMATRIX Get_Transform(_D3DTRANSFORMSTATETYPE eType);
+
+protected:
+	D3DXVECTOR3 m_vPosition{ 0.f, 0.f, 0.f };
 
 protected:
 	LPDIRECT3DDEVICE9		m_pDevice = nullptr;

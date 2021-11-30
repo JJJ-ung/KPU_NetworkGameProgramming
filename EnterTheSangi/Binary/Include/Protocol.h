@@ -5,9 +5,9 @@
 
 using namespace std;
 
-constexpr const char* SERVER_IP = "220.94.221.20";
+//constexpr const char* SERVER_IP = "220.94.221.20";
 //constexpr const char* SERVER_IP = "121.139.87.66";
-//constexpr const char* SERVER_IP = "127.0.0.1";
+constexpr const char* SERVER_IP = "127.0.0.1";
 const int SERVER_PORT = 5000;
 const int MAX_CLIENTS = 3;
 const int MAX_BULLETS = 50;
@@ -80,7 +80,7 @@ struct cs_packet_shoot_bullet
 	char           type;
 	char           bullet_type;
 	svector2       position;
-	short		   look;
+	svector2		   direction;
 };
 
 
@@ -152,9 +152,8 @@ struct sc_packet_put_bullet
 	unsigned char  size;
 	char           type;
 	char           bullet_type;
-	char           bullet_id;
 	svector2       position;
-	short		   look;
+	svector2		   direction;
 };
 
 struct sc_packet_remove_bullet

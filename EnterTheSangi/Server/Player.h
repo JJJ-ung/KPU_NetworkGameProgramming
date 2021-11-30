@@ -30,7 +30,6 @@ private:
 	DIR::DIR             m_direction;
 	char                 m_health;
 	bool                 m_is_invincible;
-	WEAPON::TYPE         m_weapon;
 	float                m_cool_time;
 
 	D3DXVECTOR3          m_body_color;

@@ -30,7 +30,7 @@ HRESULT StaticSprite::Ready_GameObject(const TCHAR* pObjTag, const TCHAR* pState
 	m_pTexture = m_pResourceMgr->Find_Texture(pObjTag, pStateTag);
 	if (!m_pTexture) return E_FAIL;
 
-	m_vPos = vPos;
+	m_vPosition = vPos;
 	m_vScale = vScale;
 
 	m_vCenter = D3DXVECTOR3(m_pTexture->Get_TextureInfo().Width * 0.5f, m_pTexture->Get_TextureInfo().Height * 0.5f, 0.f);
@@ -48,7 +48,7 @@ INT StaticSprite::Update_GameObject(float time_delta)
 
 INT StaticSprite::LateUpdate_GameObject(float time_delta)
 {
-	m_pRenderer->Add_RenderList(Renderer::RENDER_NONALPHA, this);
+	m_pRenderer->Add_RenderList(Renderer::RENDER_UI, this);
 
 	return GameObject::LateUpdate_GameObject(time_delta);
 }
@@ -63,7 +63,7 @@ HRESULT StaticSprite::Render_GameObject()
 
 	D3DXMATRIX		matScale, matTrans, matWorld;
 	D3DXMatrixScaling(&matScale, m_vScale.x, m_vScale.y, m_vScale.z);
-	D3DXMatrixTranslation(&matTrans, m_vPos.x, m_vPos.y, m_vPos.z);
+	D3DXMatrixTranslation(&matTrans, m_vPosition.x, m_vPosition.y, m_vPosition.z);
 	matWorld = matScale * matTrans;
 	pEffect->SetMatrix("g_matWorld", &matWorld);
 

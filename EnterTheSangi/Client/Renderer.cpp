@@ -88,6 +88,11 @@ HRESULT Renderer::Render_Priority()
 	return NOERROR;
 }
 
+bool Compare_Y(GameObject* a, GameObject* b)
+{
+	return a->Get_Y() < b->Get_Y();
+}
+
 HRESULT Renderer::Render_NonAlpha()
 {
 	//if (nullptr == m_pTarget_Manager)
@@ -95,6 +100,8 @@ HRESULT Renderer::Render_NonAlpha()
 
 	//if (FAILED(m_pTarget_Manager->Begin_MRT(L"MRT_Deferred")))
 	//	return E_FAIL;
+
+	m_RenderList[RENDER_NONALPHA].sort(Compare_Y);
 
 	for (auto& pGameObject : m_RenderList[RENDER_NONALPHA])
 	{

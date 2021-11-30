@@ -108,7 +108,7 @@ INT PostCard::Update_GameObject(float time_delta)
 
 INT PostCard::LateUpdate_GameObject(float time_delta)
 {
-	m_pRenderer->Add_RenderList(Renderer::RENDER_NONALPHA, this);
+	m_pRenderer->Add_RenderList(Renderer::RENDER_PRIORITY, this);
 
 	return GameObject::LateUpdate_GameObject(time_delta);
 }
@@ -122,7 +122,7 @@ HRESULT PostCard::Render_GameObject()
 	if (FAILED(m_pTexture->Set_Texture(pEffect, "g_BaseTexture")))
 		return E_FAIL;
 
-	D3DXMATRIX		matScale, matTrans, matWorld;
+	D3DXMATRIX		matScale, matTrans, matRot, matWorld;
 	D3DXMatrixScaling(&matScale, 2.4f, 2.4f, 2.4f);
 	D3DXMatrixTranslation(&matTrans, m_vPosition.x, m_vPosition.y, m_vPosition.z);
 	matWorld = matScale * matTrans;
@@ -153,8 +153,9 @@ HRESULT PostCard::Render_GameObject()
 			return E_FAIL;
 
 		D3DXMatrixScaling(&matScale, 2.4f, 2.4f, 2.4f);
-		D3DXMatrixTranslation(&matTrans, m_vPosition.x, m_vPosition.y, m_vPosition.z);
-		matWorld = matScale * matTrans;
+		D3DXMatrixRotationZ(&matRot, D3DXToRadian(-10.f));
+		D3DXMatrixTranslation(&matTrans, m_vPosition.x, m_vPosition.y + 200.f, m_vPosition.z);
+		matWorld = matScale * matRot *  matTrans;
 		pEffect->SetMatrix("g_matWorld", &matWorld);
 		pEffect->SetMatrix("g_matView", &m_matView);
 

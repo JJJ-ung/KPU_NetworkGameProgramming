@@ -74,7 +74,7 @@ INT CustomPlayer::Update_GameObject(float time_delta)
 
 INT CustomPlayer::LateUpdate_GameObject(float time_delta)
 {
-	m_pRenderer->Add_RenderList(Renderer::RENDER_NONALPHA, this);
+	m_pRenderer->Add_RenderList(Renderer::RENDER_UI, this);
 
 	return GameObject::LateUpdate_GameObject(time_delta);
 }

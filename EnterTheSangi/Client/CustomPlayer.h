@@ -23,7 +23,6 @@ public:
 private:
 	float m_fAlpha = 0.f;
 	string m_strName = "";
-	D3DXVECTOR3 m_vPosition{ 0.f, 0.f, 0.f };
 	D3DXMATRIX m_matView = {};
 
 private:

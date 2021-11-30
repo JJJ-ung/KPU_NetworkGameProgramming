@@ -250,6 +250,9 @@
     <ClInclude Include="Weapon.h">
       <Filter>01 GameObject\01 Weapon</Filter>
     </ClInclude>
+    <ClInclude Include="Chest.h">
+      <Filter>01 GameObject\03 Chest</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc">
@@ -369,6 +372,9 @@
     </ClCompile>
     <ClCompile Include="Weapon.cpp">
       <Filter>01 GameObject\01 Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="Chest.cpp">
+      <Filter>01 GameObject\03 Chest</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

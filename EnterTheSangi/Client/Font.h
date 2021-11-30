@@ -10,7 +10,7 @@ public:
 
 public:
 	string& Get_Line() { return m_strLine; }
-	D3DXVECTOR3& Get_Pos() { return m_vPos; }
+	D3DXVECTOR3& Get_Pos() { return m_vPosition; }
 	D3DXVECTOR4& Get_Color() { return m_vColor; }
 	D3DXMATRIX& Get_ViewMatrix() { return m_matView; }
 
@@ -35,7 +35,6 @@ private:
 	float m_fSize = 1.f;
 	bool m_bAlign = true;
 	bool m_bViewMat = true;
-	D3DXVECTOR3 m_vPos{ 0.f, 0.f, 0.f };
 	D3DXVECTOR3 m_vAlign{ 0.f, 0.f, 0.f };
 	D3DXVECTOR4 m_vColor = { 1.f, 1.f, 1.f, 0.f };
 

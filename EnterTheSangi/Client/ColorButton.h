@@ -36,7 +36,6 @@ private:
 	UINT m_iPlayerID = 0;
 	D3DXMATRIX m_matView = {};
 	D3DXVECTOR3 m_vCenter = {};
-	D3DXVECTOR3 m_vPosition = {};
 
 private:
 	COLORINFO m_vBodyColors[3] = {};

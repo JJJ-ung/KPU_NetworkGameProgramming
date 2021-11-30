@@ -416,15 +416,15 @@ void CMainServer::ProcessPacket(char client_id)
             m_bullets[i].StateUnlock();
             m_bullets[i].SetType(rp.bullet_type);
             m_bullets[i].SetID(i);
-            m_bullets[i].SetLook(rp.look);
+            //m_bullets[i].SetLook(rp.look);
             m_bullets[i].SetPosition(rp.position);
            
             sc_packet_put_bullet sp;
             sp.size = sizeof(sc_packet_put_bullet);
             sp.type = SC_PACKET_PUT_BULLET;
-            sp.bullet_id = i;
+            //sp.bullet_id = i;
             sp.bullet_type = rp.bullet_type;
-            sp.look = rp.look;
+            //sp.look = rp.look;
             sp.position = rp.position;
             for (auto& client : m_clients)
             {

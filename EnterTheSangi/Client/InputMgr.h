@@ -35,6 +35,7 @@ public:
 	string& Get_Text() { return m_strText; }
 	float& Get_Angle() { return m_fAngle; }
 	const float Get_Angle_Abs() { return abs(m_fAngle); }
+	const float Get_Angle_Radian() { return D3DXToRadian(m_fAngle); }
 	D3DXVECTOR3& Get_MousePoint() { return m_vMousePoint; }
 
 private:
