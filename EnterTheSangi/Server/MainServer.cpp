@@ -115,6 +115,8 @@ void CMainServer::ClientThread(char id)
         }
         m_state_lock.unlock();
 
+        Sleep(50);
+
 		sc_packet_put_chest packet_put_chest;
 		packet_put_chest.type = SC_PACKET_PUT_CHEST;
 		packet_put_chest.size = sizeof(sc_packet_put_chest);
@@ -125,9 +127,6 @@ void CMainServer::ClientThread(char id)
 			packet_put_chest.weapon_id = chest.GetWeaponID();
 
 			send(m_clients[id].GetSocket(), (char*)&packet_put_chest, sizeof(sc_packet_put_chest), 0);
-			cout << "put chest: " << (int)packet_put_chest.chest_id << " at "
-				<< packet_put_chest.position.x << ", " << packet_put_chest.position.y << endl;
-
 		}
 
         //In Game
