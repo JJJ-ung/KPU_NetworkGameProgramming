@@ -85,7 +85,10 @@ HRESULT Scene_Stage::Render_Scene()
 
 HRESULT Scene_Stage::Setup_Recv(char c, void* recv)
 {
-	m_pGameMgr->Recv_Networking(c, recv);
+	if(c == SC_PACKET_GAME_STATE)
+		m_pGameMgr->Recv_Networking(c, recv);
+
+	// �߰� ����
 	if(c == SC_PACKET_PUT_BULLET)
 	{
 		sc_packet_put_bullet t = {};
@@ -99,6 +102,30 @@ HRESULT Scene_Stage::Setup_Recv(char c, void* recv)
 		sc_packet_put_chest t = {};
 		memcpy(&t, recv, sizeof(sc_packet_put_chest));
 		if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::CHEST, Chest::Create(m_pGraphic_Device, t))))
+			return E_FAIL;
+	}
+	if (c == SC_PACKET_MOVE_CHEST)
+	{
+		sc_packet_move_chest t = {};
+		memcpy(&t, recv, sizeof(sc_packet_move_chest));
+		Chest* p = (Chest*)m_pGameMgr->Get_GameObject(OBJECT::CHEST, t.chest_id);
+		if (!p) return E_FAIL;
+		if(FAILED(p->Move_Chest(t))) return E_FAIL;
+	}
+
+	// ���� ����
+	if (c == SC_PACKET_REMOVE_BULLET)
+	{
+		sc_packet_remove_bullet t = {};
+		memcpy(&t, recv, sizeof(sc_packet_remove_bullet));
+		if (FAILED(m_pGameMgr->Delete_GameObject(OBJECT::BULLET, t.bullet_id)))
+			return E_FAIL;
+	}
+	if (c == SC_PACKET_REMOVE_CHEST)
+	{
+		sc_packet_remove_chest t = {};
+		memcpy(&t, recv, sizeof(sc_packet_remove_chest));
+		if (FAILED(m_pGameMgr->Delete_GameObject(OBJECT::CHEST, t.chest_id)))
 			return E_FAIL;
 	}
 
