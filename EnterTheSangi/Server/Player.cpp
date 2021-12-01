@@ -47,6 +47,10 @@ STATE::TYPE CPlayer::GetState()
 	return m_state;
 };
 
+char CPlayer::GetWeapon()
+{
+	return m_weapon;
+};
 
 void CPlayer::SetBodyColor(D3DXVECTOR3 body_color)
 {
@@ -67,6 +71,11 @@ void CPlayer::SetHealth(float health)
 {
 	m_health = health;
 };
+
+void CPlayer::SetWeapon(char weapon)
+{
+	m_weapon = weapon;
+}
 
 void CPlayer::ChangeHealth(float delta_health)
 {

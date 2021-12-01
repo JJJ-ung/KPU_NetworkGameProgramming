@@ -16,6 +16,7 @@ public:
 	D3DXVECTOR3          GetClothColor();
 	float                GetHealth();
 	STATE::TYPE          GetState();
+	char                 GetWeapon();
 
 	virtual srect        GetCollisionBox();
 	virtual float        vGetHeightHf();   //  return half height
@@ -26,6 +27,7 @@ public:
 	void                 SetClothColor(D3DXVECTOR3 cloth_color);
 	void                 SetState(STATE::TYPE state);
 	void                 SetHealth(float health);         // set player.health to health
+	void                 SetWeapon(char weapon);
 	void                 ChangeHealth(float delta_health); // add delta_health to player.health
 	void                 ChangeInvincibleMode();
 
@@ -37,7 +39,7 @@ private:
 	DIR::DIR             m_direction;
 	char                 m_health;
 	bool                 m_is_invincible;
-
+	char                 m_weapon;
 
 	D3DXVECTOR3          m_body_color;
 	D3DXVECTOR3          m_cloth_color;	

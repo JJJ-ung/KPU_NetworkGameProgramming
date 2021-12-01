@@ -115,7 +115,7 @@ void CMainServer::ClientThread(char id)
         }
         m_state_lock.unlock();
 
-        Sleep(50);
+        Sleep(100);
 
 		sc_packet_put_chest packet_put_chest;
 		packet_put_chest.type = SC_PACKET_PUT_CHEST;
@@ -543,8 +543,8 @@ void CMainServer::ServerProcess()
 {
     //CollisionCheckTerrainPlayer();
     UpdateBullet();
-    CollisionCheckPlayerBullet();
-    //CollisionCheckTerrainBullet();
+    //CollisionCheckPlayerBullet();
+    CollisionCheckTerrainBullet();
     CollisionCheckPlayerChest();
 };
 
@@ -668,8 +668,19 @@ void CMainServer::CollisionCheckPlayerChest()
             if (CollisionCheck(chest, player) == true)
             {
                 //무기 선택 (랜덤? 사전 설정?)
+                char rand_weapon= rand() % MAX_WEAPON;
+                
+                sc_packet_change_weapon weapon_change_packet;
+                weapon_change_packet.size = sizeof(weapon_change_packet);
+                weapon_change_packet.type = SC_PACKET_CHANGE_WEAPON;
+                weapon_change_packet.id = client.GetID();
+                weapon_change_packet.weapon_id = rand_weapon;
+                for (auto& client : m_clients)
+                    send(client.GetSocket(), (char*)&weapon_change_packet, sizeof(sc_packet_change_weapon), 0);
 
                 //플레이어 무기 변경
+                player.SetWeapon(rand_weapon);
+
 
                 //아이템 삭제 후 재생성 (실제로는 이동)
                 //맵 좌표 받고 좌표 생성 로직 최신화 필요
