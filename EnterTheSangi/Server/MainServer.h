@@ -42,9 +42,13 @@ public:
 	void CollisionCheckPlayerChest();
 	template<class T1, class T2 >
 	bool CollisionCheck(T1& object_1, T2& object_2);
+	template<class T1>
+	bool TerrainCollisionCheck(T1& object_1);
 
 	void InitBullets();
 	void InitChests();
+	void InitPlayers();   
+	void InitMapRects();
 	char GetNewID();
 	bool IsAllClientsReady();
 	char CreatBullet();
@@ -65,5 +69,5 @@ private:
 	Server_Timer			 m_PerformanceCounter;
 	std::array<CChest,MAX_CHESTS> m_chests;
 	std::array<CBullet, MAX_BULLETS> m_bullets;
-
+	std::array<srect, MAX_MAP_RECT>  m_map_rects;
 };

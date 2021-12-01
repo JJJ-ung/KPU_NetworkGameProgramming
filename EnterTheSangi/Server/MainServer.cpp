@@ -390,6 +390,8 @@ void CMainServer::ProcessPacket(char client_id)
             m_game_state = SCENE::STAGE;
             m_state_lock.unlock();
 
+       
+            
             // 초기 상자 정보를 전송한다.
 
             sc_packet_put_chest packet_put_chest;
@@ -555,7 +557,7 @@ void CMainServer::CollisionCheckTerrainBullet()
 {
     for (int i = 0; i < MAX_BULLETS; ++i)
     {
-        if (false/*임시값, 맵 좌표 정보 받아서 수정필요*/)//벽 충돌시
+        if (TerrainCollisionCheck(m_bullets[i]))//벽 충돌시
         {
             //총알 삭제
             m_bullets[i].StateLock();
@@ -579,23 +581,28 @@ void CMainServer::CollisionCheckTerrainBullet()
 void CMainServer::CollisionCheckPlayerBullet()
 {
     for (auto& client : m_clients)
-    {
+    {       
         CPlayer& player = client.GetPlayer();
+        // 서버 쓰레드(싱글)에서 처리하므로 player 스테이트락 사용x    
+        if (player.GetState() == STATE::TYPE::DEAD)
+            continue;
+
         for (int i = 0; i < MAX_BULLETS; ++i)
         {
-            if (CollisionCheck(m_bullets[i], player) == true && player.GetHealth() > 0)
-            {
+            if (CollisionCheck(m_bullets[i], player) == true )
+            {            
                 //플레이어 체력 감소
-                float health = player.GetHealth();
-                
-                switch (m_bullets[i].GetType())
-                {
-                
-                }
                 // health를 여기서 감소시킬건데 총알 타입에 따른 데미지를 받아오는 친구가 있나..?
 
-                //플레이어 사망 판정 -> 그냥 체력이 0이면 충돌체크 끄자..
+                char dmg;
+                //dmg=m_bullets[i].~~~~~~~  // 총알 종류에 따른 데미지값
+                player.ChangeHealth(-dmg);               
+
+                //플레이어 사망 판정
+                if (player.GetHealth()==0)
+                    player.SetState(STATE::TYPE::DEAD);
                 
+
                 //불릿 삭제
                 m_bullets[i].StateLock();
                 m_bullets[i].SetState(OBJECT_STATE::ST_FREE);
@@ -624,6 +631,10 @@ void CMainServer::CollisionCheckPlayerChest()
     for (auto& client : m_clients)
     {
         CPlayer& player = client.GetPlayer();
+        // 서버 쓰레드(싱글)에서 처리하므로 player 스테이트락 사용x    
+        if (player.GetState() == STATE::TYPE::DEAD)
+            continue;
+ 
         for (auto& chest : m_chests)
         {
             // 서버 쓰레드(싱글)에서 처리하므로 chset 스테이트락 사용x            
@@ -648,22 +659,38 @@ void CMainServer::CollisionCheckPlayerChest()
             else
             {
                 continue;
-            }
-        }
-    }
+			}
+		}
+	}
 }
 
 template<class T1, class T2 >
 bool CMainServer::CollisionCheck(T1& object_1, T2& object_2)
 {
-    if (abs(object_1.GetPosition().x - object_2.GetPosition().x) <=
-        (object_1.vGetWidthHf() + object_2.vGetWidthHf()))
-        return true;
-    if (abs((object_1.GetPosition().y- object_1.vGetHeightHf()) - 
-        (object_2.GetPosition().y- object_2.vGetHeightHf())) <=
-        (object_1.vGetHeightHf() + object_2.vGetHeightHf()))
-        return true;
+	if (abs(object_1.GetPosition().x - object_2.GetPosition().x) <=
+		(object_1.vGetWidthHf() + object_2.vGetWidthHf()))
+		return true;
+	if (abs(object_1.GetPosition().y - object_2.GetPosition().y) <=
+		(object_1.vGetHeightHf() + object_2.vGetHeightHf()))
+		return true;
 
+	return false;
+}
+
+template<class T1 >
+bool CMainServer::TerrainCollisionCheck(T1& object_1) // 맵 안에 있으면 false, 벽이랑 닿거나 넘어가면 true
+{
+    for (auto& map_rect : m_map_rects)
+    {
+        //UP
+        if ((object_1.GetPosition().y - object_1.vGetHeightHf()) <= map_rect.pos_1.y) return true;
+        //DOWN
+        if ((object_1.GetPosition().y + object_1.vGetHeightHf()) >= map_rect.pos_2.y) return true;
+        //LEFT
+        if ((object_1.GetPosition().x - object_1.vGetWidthHf()) <= map_rect.pos_1.x) return true;
+        //RIGHT
+        if ((object_1.GetPosition().x + object_1.vGetWidthHf()) >= map_rect.pos_2.x) return true;
+    }
     return false;
 }
 
@@ -686,6 +713,28 @@ void CMainServer::InitChests()
 	}
 }
 
+void CMainServer::InitPlayers()
+{
+    for (auto& cl : m_clients)
+    {
+        CPlayer& player = cl.GetPlayer();
+            player.SetState(STATE::TYPE::IDLE);
+            player.SetHealth(PLAYER_MAX_HP);  
+    }
+    //플레이어별 초기 좌표 설정 
+}
+
+void CMainServer::InitMapRects()
+{
+	// map_rect 값 넣어서 초기화
+	m_map_rects[0] = { {},{} };
+	m_map_rects[1] = { {},{} };
+	m_map_rects[2] = { {},{} };
+	m_map_rects[3] = { {},{} };
+	m_map_rects[4] = { {},{} };
+
+	//m_map_rects[MAX_MAP_RECT]
+}
 
 char CMainServer::GetNewID()
 {

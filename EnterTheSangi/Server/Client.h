@@ -31,16 +31,9 @@ public:
 	void StateLock();
 	void StateUnlock();
 
-	void SocketLock()
-	{
-		m_socket_lock.lock();
-	}
+	void SocketLock();
+	void SocketUnlock();
 
-	void SocketUnlock()
-	{
-		m_socket_lock.unlock();
-	}
-	
 
 private:
 	SOCKET         m_socket;

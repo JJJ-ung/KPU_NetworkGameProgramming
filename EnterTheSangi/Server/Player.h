@@ -14,6 +14,7 @@ public:
 	D3DXVECTOR3          GetBodyColor();
 	D3DXVECTOR3          GetClothColor();
 	float                GetHealth();
+	STATE::TYPE          GetState();
 
 	virtual float        vGetHeightHf();   //  return half height
 	virtual float        vGetWidthHf();    //  return half width
@@ -21,6 +22,7 @@ public:
 	 
 	void                 SetBodyColor(D3DXVECTOR3 body_color);
 	void                 SetClothColor(D3DXVECTOR3 cloth_color);
+	void                 SetState(STATE::TYPE state);
 	void                 SetHealth(float health);         // set player.health to health
 	void                 ChangeHealth(float delta_health); // add delta_health to player.health
 	void                 ChangeInvincibleMode();

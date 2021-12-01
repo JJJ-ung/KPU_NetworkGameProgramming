@@ -40,6 +40,12 @@ float CPlayer::GetHealth()
 	return m_health;
 };
 
+STATE::TYPE CPlayer::GetState()
+{
+	return m_state;
+};
+
+
 void CPlayer::SetBodyColor(D3DXVECTOR3 body_color)
 {
 	m_body_color = body_color;
@@ -48,6 +54,11 @@ void CPlayer::SetBodyColor(D3DXVECTOR3 body_color)
 void CPlayer::SetClothColor(D3DXVECTOR3 cloth_color)
 {
 	m_cloth_color = cloth_color;
+};
+
+void CPlayer::SetState(STATE::TYPE state)
+{
+	m_state = state;
 };
 
 void CPlayer::SetHealth(float health)
@@ -61,8 +72,8 @@ void CPlayer::ChangeHealth(float delta_health)
 	m_health += delta_health;
 	if (m_health < 0)
 		m_health = 0;
-	else if (m_health > 100)
-		m_health = 100;		
+	else if (m_health > PLAYER_MAX_HP)
+		m_health = PLAYER_MAX_HP;
 };
 
 void CPlayer::ChangeInvincibleMode()
