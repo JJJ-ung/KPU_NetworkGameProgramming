@@ -630,7 +630,7 @@ void CMainServer::CollisionCheckPlayerChest()
 
                 //아이템 삭제 후 재생성 (실제로는 이동)
                 //맵 좌표 받고 좌표 생성 로직 최신화 필요
-                chest.SetPosition({ rand() % 1000, rand() % 1000 });
+                chest.SetPosition({ (short)rand() % 1000, (short)rand() % 1000 });
 
                 sc_packet_move_chest sp;
                 sp.type = SC_PACKET_MOVE_CHEST;
@@ -677,7 +677,7 @@ void CMainServer::InitChests()
 	{
 		m_chests[i].SetID(i);
         m_bullets[i].SetState(OBJECT_STATE::ST_ALIVE);
-		m_chests[i].SetPosition(svector2{ i + 1 ,i + 1 });
+		m_chests[i].SetPosition(svector2{ (short)i + 1 ,(short)i + 1 });
 	}
 }
 
