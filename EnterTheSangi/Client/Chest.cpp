@@ -83,6 +83,15 @@ HRESULT Chest::Render_GameObject()
 	return GameObject::Render_GameObject();
 }
 
+HRESULT Chest::Move_Chest(sc_packet_move_chest p)
+{
+	if (p.chest_id != m_iObjectID) return E_FAIL;
+
+	m_vPosition = { (float)p.position.x, (float)p.position.y, 0.f };
+	m_iWeaponID = p.weapon_id;
+	return NOERROR;
+}
+
 HRESULT Chest::Render_ChestBottom()
 {
 	LPD3DXEFFECT	pEffect = m_pShader->Get_EffectHandle();

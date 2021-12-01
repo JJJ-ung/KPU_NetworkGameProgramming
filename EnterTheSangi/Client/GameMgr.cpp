@@ -73,6 +73,16 @@ HRESULT GameMgr::Delete_GameObject(OBJECT::TYPE eType, char iObjID)
 	return E_FAIL;
 }
 
+GameObject* GameMgr::Get_GameObject(OBJECT::TYPE eType, char iObjID)
+{
+	for(auto p : m_lstObj[eType])
+	{
+		if (p->Get_ObjID() == iObjID)
+			return p;
+	}
+	return nullptr;
+}
+
 HRESULT GameMgr::Set_PrototypesOnScene(OBJECT::TYPE eType)
 {
 	if (eType == OBJECT::TYPE::END) return E_FAIL;

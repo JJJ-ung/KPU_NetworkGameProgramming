@@ -14,6 +14,9 @@ public:
 	virtual INT LateUpdate_GameObject(float TimeDelta);
 	virtual HRESULT Render_GameObject();
 
+public:
+	HRESULT Move_Chest(sc_packet_move_chest p);
+
 private:
 	HRESULT Render_ChestBottom();
 	HRESULT Render_ChestTop();

@@ -14,10 +14,12 @@ public:
 	D3DXVECTOR3& Get_PlayerPos() { return m_vPlayerPos; }
 	string& Get_ClientPlayerName() { return m_strClientPlayerName; }
 	vector<CLIENT>& Get_ClientInfos() { return m_vecClients; }
+
 public:
 	HRESULT Set_CurrScene(Scene* pScene);
 	HRESULT Add_GameObject(OBJECT::TYPE eType, GameObject* pObj);
 	HRESULT Delete_GameObject(OBJECT::TYPE eType, char iObjID);
+	GameObject* Get_GameObject(OBJECT::TYPE eType, char iObjID);
 
 public:
 	HRESULT Set_PrototypesOnScene(OBJECT::TYPE eType);
