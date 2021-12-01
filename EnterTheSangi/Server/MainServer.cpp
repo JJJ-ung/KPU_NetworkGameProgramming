@@ -437,15 +437,16 @@ void CMainServer::ProcessPacket(char client_id)
             m_bullets[i].SetID(i);
             //m_bullets[i].SetLook(rp.look);
             m_bullets[i].SetPosition(rp.position);
+            m_bullets[i].SetLook(rp.angle);
            // 서버에서 가지는 총알포지션 값에 델타타임 적용 필요 (서버 충돌체크용)
 
 
             sc_packet_put_bullet sp;
             sp.size = sizeof(sc_packet_put_bullet);
             sp.type = SC_PACKET_PUT_BULLET;
-            //sp.bullet_id = i;
             sp.bullet_type = rp.bullet_type;
-            //sp.look = rp.look;
+            sp.angle = rp.angle;
+            sp.direction = rp.direction;
             sp.position = rp.position;
             for (auto& client : m_clients)
             {
@@ -477,10 +478,7 @@ void CMainServer::DoSend(char client_id)
         sp.size = sizeof(sc_packet_game_state);
         sp.type = SC_PACKET_GAME_STATE;
 
-        //if (m_clients[i].GetPlayer().GetHealth() == 0)
-        //    sp.player[i].is_dead = true;
-        //else
-        //    sp.player[i].is_dead = false;
+        // 죽은건 체력 0이면 클라에서 처리하자!
     }
     send(m_clients[client_id].GetSocket(), (char*)&sp, sizeof(sc_packet_game_state), 0);
 };
@@ -556,7 +554,7 @@ void CMainServer::CollisionCheckTerrainPlayer()
 
 void CMainServer::CollisionCheckTerrainBullet()
 {
-    for (int i = 0; i > MAX_BULLETS; ++i)
+    for (int i = 0; i < MAX_BULLETS; ++i)
     {
         if (false/*임시값, 맵 좌표 정보 받아서 수정필요*/)//벽 충돌시
         {
@@ -584,7 +582,7 @@ void CMainServer::CollisionCheckPlayerBullet()
     for (auto& client : m_clients)
     {
         CPlayer& player = client.GetPlayer();
-        for (int i = 0; i > MAX_BULLETS; ++i)
+        for (int i = 0; i < MAX_BULLETS; ++i)
         {
             if (CollisionCheck(m_bullets[i], player) == true && player.GetHealth() > 0)
             {
