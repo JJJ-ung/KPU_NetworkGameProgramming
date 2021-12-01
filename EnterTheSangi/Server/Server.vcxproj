@@ -153,6 +153,7 @@
     <ClInclude Include="Chest.h" />
     <ClInclude Include="MainServer.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Server_Timer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Bullet.cpp" />

@@ -121,8 +121,7 @@ void CMainServer::ClientThread(char id)
         while (m_game_state == SCENE::ID::STAGE)
         {
             float fDelta = m_PerformanceCounter.update();
-            float fps = 1 / fDelta;
-            cout << "fps : " << fps << endl;
+            cout << "fps : " << 1.0f / fDelta << endl;
             m_state_lock.unlock();
             //스레드 동기화
             //타이머 필요

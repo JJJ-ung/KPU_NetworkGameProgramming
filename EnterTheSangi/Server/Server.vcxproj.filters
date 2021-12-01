@@ -45,6 +45,9 @@
     <ClInclude Include="GameObject.h">
       <Filter>03 GameObject\00 GameObject</Filter>
     </ClInclude>
+    <ClInclude Include="Server_Timer.h">
+      <Filter>01 MainServer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
