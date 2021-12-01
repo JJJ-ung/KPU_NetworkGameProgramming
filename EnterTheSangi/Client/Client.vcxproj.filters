@@ -86,9 +86,6 @@
     <Filter Include="01 GameObject\01 Weapon">
       <UniqueIdentifier>{bc7d8d84-eaeb-487f-949c-6da310218472}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01 GameObject\99 TestMap">
-      <UniqueIdentifier>{b97b8ec0-052a-4efa-97fc-b25b1d4c7dff}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01 GameObject\00 Player\NetworkPlayer">
       <UniqueIdentifier>{0e8679a5-f719-4e3f-adbb-4ae691bc76f0}</UniqueIdentifier>
     </Filter>
@@ -136,6 +133,18 @@
     </Filter>
     <Filter Include="01 GameObject\04 UI\03 Mouse">
       <UniqueIdentifier>{5bd0f84a-7dd4-496c-bb37-8cf8cdaf579c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01 GameObject\99 Map">
+      <UniqueIdentifier>{b97b8ec0-052a-4efa-97fc-b25b1d4c7dff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01 GameObject\99 Map\Test">
+      <UniqueIdentifier>{4a92ee4c-a22d-499f-a121-5f6b37ed4414}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01 GameObject\99 Map\Main">
+      <UniqueIdentifier>{8ec2b0ef-b830-4c45-8a01-f87e8ce5a51a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03 Scene\03 Stage">
+      <UniqueIdentifier>{b0e8321d-965c-405d-aa67-8ae2d3ac4de7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -211,9 +220,6 @@
     <ClInclude Include="Camera.h">
       <Filter>01 GameObject\98 Camera</Filter>
     </ClInclude>
-    <ClInclude Include="TestMap.h">
-      <Filter>01 GameObject\99 TestMap</Filter>
-    </ClInclude>
     <ClInclude Include="AnimatedSprite.h">
       <Filter>01 GameObject\04 UI\01 AnimatedSprite</Filter>
     </ClInclude>
@@ -264,6 +270,15 @@
     </ClInclude>
     <ClInclude Include="Bullet.h">
       <Filter>01 GameObject\02 Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="TestMap.h">
+      <Filter>01 GameObject\99 Map\Test</Filter>
+    </ClInclude>
+    <ClInclude Include="MainMap.h">
+      <Filter>01 GameObject\99 Map\Main</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene_Stage.h">
+      <Filter>03 Scene\03 Stage</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -340,9 +355,6 @@
     <ClCompile Include="Camera.cpp">
       <Filter>01 GameObject\98 Camera</Filter>
     </ClCompile>
-    <ClCompile Include="TestMap.cpp">
-      <Filter>01 GameObject\99 TestMap</Filter>
-    </ClCompile>
     <ClCompile Include="AnimatedSprite.cpp">
       <Filter>01 GameObject\04 UI\01 AnimatedSprite</Filter>
     </ClCompile>
@@ -393,6 +405,15 @@
     </ClCompile>
     <ClCompile Include="Bullet.cpp">
       <Filter>01 GameObject\02 Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="TestMap.cpp">
+      <Filter>01 GameObject\99 Map\Test</Filter>
+    </ClCompile>
+    <ClCompile Include="MainMap.cpp">
+      <Filter>01 GameObject\99 Map\Main</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene_Stage.cpp">
+      <Filter>03 Scene\03 Stage</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

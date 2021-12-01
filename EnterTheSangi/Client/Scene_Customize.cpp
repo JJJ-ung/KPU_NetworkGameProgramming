@@ -1,7 +1,7 @@
 #include "framework.h"
 #include "Scene_Customize.h"
 #include "InputMgr.h"
-#include "Scene_Test.h"
+#include "Scene_Stage.h"
 #include "PostCard.h"
 #include "CustomPlayer.h"
 #include "Mouse.h"
@@ -47,7 +47,7 @@ HRESULT Scene_Customize::Render_Scene()
 	if(m_bSceneChange)
 	{
 		m_pGameMgr->Clear_Scene();
-		Scene_Test* pScene = Scene_Test::Create(m_pGraphic_Device);
+		Scene_Stage* pScene = Scene_Stage::Create(m_pGraphic_Device);
 		if (FAILED(m_pGameMgr->Set_CurrScene(pScene)))
 		{
 			cout << "Failed To Change Scene" << endl;

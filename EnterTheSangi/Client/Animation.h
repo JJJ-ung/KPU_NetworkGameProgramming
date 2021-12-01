@@ -9,6 +9,10 @@ public:
 	virtual ~Animation();
 
 public:
+	D3DXVECTOR3& Get_Center() { return m_vCenter; }
+	Texture* Get_Texture() { return m_pTexture; }
+
+public:
 	virtual HRESULT Ready_Component(Texture* pTexture, float fSpeed, bool bSetCenter, float fStartFrame);
 	virtual INT Update_Component(float TimeDelta);
 	bool Update_Animation(float TimeDelta);

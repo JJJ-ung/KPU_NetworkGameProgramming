@@ -52,7 +52,7 @@ HRESULT Player::Ready_GameObject(CLIENT t)
 	if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::UI, m_pNameTag = Font::Create(m_pDevice, t.name, 0.5f, true, true))))
 		return E_FAIL;
 	if (!m_pNameTag) return E_FAIL;
-	m_pNameTag->Update_Position(m_vPosition, D3DXVECTOR3(0.f, 48.f, 0.f));
+	m_pNameTag->Update_Position(m_vPosition, D3DXVECTOR3(0.f, 100.f, 0.f));
 
 	D3DXMatrixIdentity(&m_matWorld);
 
@@ -68,7 +68,7 @@ INT Player::Update_GameObject(float time_delta)
 
 	//cout << m_vPosition.x << "/" << m_vPosition.y << "/" << m_vPosition.z << endl;
 
-	m_pNameTag->Update_Position(m_vPosition, D3DXVECTOR3(0.f, -48.f, 0.f));
+	m_pNameTag->Update_Position(m_vPosition, D3DXVECTOR3(0.f, -100.f, 0.f));
 
 	D3DXMATRIX		matScale, matTrans;
 	D3DXMatrixScaling(&matScale, 3.f * m_fSide, 3.f, 3.f);
@@ -205,6 +205,8 @@ HRESULT Player::Ready_AnimationInfo()
 		pTexture = m_pResourceMgr->Find_Texture(L"Player", tag.c_str());
 		pAnimation = Animation::Create(m_pDevice, pTexture, (float)speed, (bool)center, (float)start);
 		if (!pAnimation) return E_FAIL;
+
+		pAnimation->Get_Center().y = (float)pAnimation->Get_Texture()->Get_TextureInfo().Height;
 
 		m_mapAnimations.insert(MAPANI::value_type(tag, pAnimation));
 	}

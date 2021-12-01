@@ -100,7 +100,7 @@ INT PostCard::Update_GameObject(float time_delta)
 	{
 		if (FAILED(m_pNetworkMgr->Send_ReadyInfo(!m_bReady)))
 			cout << "Failed" << endl;
-		cout << "Press" << endl;
+		//cout << "Press" << endl;
 	}
 
 	return GameObject::Update_GameObject(time_delta);
@@ -181,7 +181,7 @@ HRESULT PostCard::Render_GameObject()
 
 HRESULT PostCard::Setup_Ready(bool bReady)
 {
-	cout << "R" << endl;
+//	cout << "R" << endl;
 	m_bReady = bReady;
 
 	if(m_pColorButton)

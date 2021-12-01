@@ -156,7 +156,7 @@ int GameMgr::Recv_Networking(char c, void* p)
 
 HRESULT GameMgr::Clear_Scene()
 {
-	cout << "Clear" << endl;
+	//cout << "Clear" << endl;
 	for (int i = 0; i < OBJECT::TYPE::END; ++i)
 		Clear_ObjectList((OBJECT::TYPE)i);
 

@@ -14,7 +14,7 @@ void Player_Idle::Enter(Player* owner)
 	State<Player>::Enter(owner);
 	m_pOwner->Get_Speed() = 0.f;
 	m_pOwner->Get_State() = STATE::IDLE;
-	cout << "Idle" << endl;
+	//cout << "Idle" << endl;
 }
 
 INT Player_Idle::Update(float time_delta)
@@ -62,7 +62,7 @@ void Player_Run::Enter(Player* owner)
 	State<Player>::Enter(owner);
 	m_pOwner->Get_Speed() = 200.f;
 	m_pOwner->Get_State() = STATE::RUN;
-	cout << "Run" << endl;
+	//cout << "Run" << endl;
 }
 
 INT Player_Run::Update(float time_delta)
@@ -113,7 +113,7 @@ void Player_Dodge::Enter(Player* owner)
 	State<Player>::Enter(owner);
 	m_pOwner->Get_Speed() = 400.f;
 	D3DXVECTOR3 vDir = m_pOwner->Get_Dir();
-	cout << vDir.x << "/" << vDir.y << endl;
+	//cout << vDir.x << "/" << vDir.y << endl;
 
 	if(vDir.y < 0.f)
 	{
@@ -127,7 +127,7 @@ void Player_Dodge::Enter(Player* owner)
 	}
 	m_pOwner->Get_State() = STATE::DODGE;
 
-	cout << "Dodge" << endl;
+	//cout << "Dodge" << endl;
 }
 
 INT Player_Dodge::Update(float time_delta)

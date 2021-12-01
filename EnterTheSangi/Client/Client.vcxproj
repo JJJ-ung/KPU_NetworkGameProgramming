@@ -168,6 +168,7 @@
     <ClInclude Include="InputMgr.h" />
     <ClInclude Include="Loading.h" />
     <ClInclude Include="MainApp.h" />
+    <ClInclude Include="MainMap.h" />
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="NetworkMgr.h" />
     <ClInclude Include="NetworkPlayer.h" />
@@ -180,6 +181,7 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Scene_Customize.h" />
     <ClInclude Include="Scene_Loading.h" />
+    <ClInclude Include="Scene_Stage.h" />
     <ClInclude Include="Scene_Test.h" />
     <ClInclude Include="Scene_Title.h" />
     <ClInclude Include="Shader.h" />
@@ -216,6 +218,7 @@
     <ClCompile Include="InputMgr.cpp" />
     <ClCompile Include="Loading.cpp" />
     <ClCompile Include="MainApp.cpp" />
+    <ClCompile Include="MainMap.cpp" />
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="NetworkMgr.cpp" />
     <ClCompile Include="NetworkPlayer.cpp" />
@@ -227,6 +230,7 @@
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Scene_Customize.cpp" />
     <ClCompile Include="Scene_Loading.cpp" />
+    <ClCompile Include="Scene_Stage.cpp" />
     <ClCompile Include="Scene_Test.cpp" />
     <ClCompile Include="Scene_Title.cpp" />
     <ClCompile Include="Shader.cpp" />

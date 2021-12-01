@@ -85,7 +85,7 @@ HRESULT NetworkMgr::Send_ColorInfo(D3DXVECTOR3 body, D3DXVECTOR3 cloth)
 
 HRESULT NetworkMgr::Send_ReadyInfo(bool ready)
 {
-    cout << ready << endl;
+   // cout << ready << endl;
     cs_packet_ready t = { sizeof(cs_packet_ready), CS_PACKET_READY, ready };
     return Send_ClientInfo(CS_PACKET_READY, (void*)&t);
 }

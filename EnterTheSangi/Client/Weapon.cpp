@@ -140,7 +140,7 @@ INT Weapon::Update_Rendering(float TimeDelta)
 	else
 		m_fSide = 1.f;
 
-	m_vPosition = m_pOwner->Get_Position() + D3DXVECTOR3(18.f * m_fSide, 35.f, 0.f);
+	m_vPosition = m_pOwner->Get_Position() + D3DXVECTOR3(18.f * m_fSide, -10.f, 0.f);
 
 	D3DXMatrixScaling(&matScale, 3.f, 3.f, 3.f);
 	D3DXMatrixScaling(&matFlip, m_fSide, 1.f, 1.f);

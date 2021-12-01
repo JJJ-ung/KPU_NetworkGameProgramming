@@ -1,20 +1,22 @@
 #include "framework.h"
-#include "TestMap.h"
+#include "MainMap.h"
 
 #include "Texture.h"
 #include "Shader.h"
+#include "GameMgr.h"
 #include "ShaderMgr.h"
 
-TestMap::TestMap(LPDIRECT3DDEVICE9 pGraphic_Device)
+MainMap::MainMap(LPDIRECT3DDEVICE9 pGraphic_Device)
 	:GameObject(pGraphic_Device)
 {
 }
 
-TestMap::~TestMap()
+MainMap::~MainMap()
 {
+	Free();
 }
 
-HRESULT TestMap::Ready_GameObject()
+HRESULT MainMap::Ready_GameObject()
 {
 	m_pRenderer = Renderer::GetInstance();
 	if (!m_pRenderer) return E_FAIL;
@@ -25,25 +27,40 @@ HRESULT TestMap::Ready_GameObject()
 	m_pShader = ShaderMgr::GetInstance()->Get_ShaderReference(L"Default");
 	if (!m_pShader) return E_FAIL;
 
-	m_pTexture = m_pResourceMgr->Find_Texture(L"Map", L"Test");
+	m_pTexture = m_pResourceMgr->Find_Texture(L"Map", L"Main");
 	if (!m_pTexture) return E_FAIL;
+
+	m_pInputMgr = InputMgr::GetInstance();
+	if (!m_pInputMgr) return E_FAIL;
+
+	m_pGameMgr = GameMgr::GetInstance();
+	if (!m_pGameMgr) return E_FAIL;
+
+	m_vCenter = { m_pTexture->Get_TextureInfo().Width * 0.5f, m_pTexture->Get_TextureInfo().Height * 0.5f, 0.f };
 
 	return GameObject::Ready_GameObject();
 }
 
-INT TestMap::Update_GameObject(float time_delta)
+INT MainMap::Update_GameObject(float time_delta)
 {
+	if(m_pInputMgr->KeyDown(KEY_SHIFT))
+	{
+		D3DXVECTOR3 v = m_pGameMgr->Get_PlayerPos();
+		v += m_pInputMgr->Get_MousePoint();
+		cout << v.x << ", " << v.y << endl;
+	}
+
 	return GameObject::Update_GameObject(time_delta);
 }
 
-INT TestMap::LateUpdate_GameObject(float time_delta)
+INT MainMap::LateUpdate_GameObject(float time_delta)
 {
 	m_pRenderer->Add_RenderList(Renderer::RENDER_PRIORITY, this);
 
 	return GameObject::LateUpdate_GameObject(time_delta);
 }
 
-HRESULT TestMap::Render_GameObject()
+HRESULT MainMap::Render_GameObject()
 {
 	LPD3DXEFFECT	pEffect = m_pShader->Get_EffectHandle();
 	if (nullptr == pEffect) return E_FAIL;
@@ -65,8 +82,7 @@ HRESULT TestMap::Render_GameObject()
 	pEffect->Begin(nullptr, 0);
 	pEffect->BeginPass(0);
 
-	D3DXVECTOR3 vCenter = {m_pTexture->Get_TextureInfo().Width * 0.5f, m_pTexture->Get_TextureInfo().Height * 0.5f, 0.f};
-	if (FAILED(m_pTexture->Draw_Sprite(0, &vCenter)))
+	if (FAILED(m_pTexture->Draw_Sprite(0, &m_vCenter)))
 		return E_FAIL;
 
 	pEffect->EndPass();
@@ -75,15 +91,15 @@ HRESULT TestMap::Render_GameObject()
 	return GameObject::Render_GameObject();
 }
 
-TestMap* TestMap::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
+MainMap* MainMap::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
 {
-	TestMap* pInstance = new TestMap(pGraphic_Device);
+	MainMap* pInstance = new MainMap(pGraphic_Device);
 	if (FAILED(pInstance->Ready_GameObject()))
 		SafeDelete(pInstance);
 	return pInstance;
 }
 
-void TestMap::Free()
+void MainMap::Free()
 {
 	GameObject::Free();
 }

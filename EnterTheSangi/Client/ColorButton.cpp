@@ -177,13 +177,13 @@ HRESULT ColorButton::Update_Collision(CustomPlayer* pPlayer)
 	{
 		if (PtInRect(&m_vBodyColors[i].collrect, pt))
 		{
-			cout << "Body" << i << endl;
+			//cout << "Body" << i << endl;
 			m_pNetworkMgr->Send_ColorInfo(D3DXVECTOR3(m_vBodyColors[i].color.x, m_vBodyColors[i].color.y, m_vBodyColors[i].color.z), pPlayer->Get_CustomInfo().vCloth);
 
 		}
 		if (PtInRect(&m_vClothColors[i].collrect, pt))
 		{
-			cout << "Cloth" << i << endl;
+			//cout << "Cloth" << i << endl;
 			m_pNetworkMgr->Send_ColorInfo(pPlayer->Get_CustomInfo().vBody, D3DXVECTOR3(m_vClothColors[i].color.x, m_vClothColors[i].color.y, m_vClothColors[i].color.z));
 		}
 	}

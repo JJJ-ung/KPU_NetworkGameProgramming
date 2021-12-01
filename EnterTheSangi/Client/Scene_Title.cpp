@@ -2,6 +2,7 @@
 #include "Scene_Title.h"
 #include "Scene_Customize.h"
 #include "Scene_Test.h"
+#include "Scene_Stage.h"
 #include "InputMgr.h"
 #include "NetworkMgr.h"
 #include "StaticSprite.h"
@@ -87,7 +88,13 @@ HRESULT Scene_Title::Setup_Recv(char c, void* recv)
 		sc_packet_login_ok login;
 		memcpy(&login, recv, sizeof(sc_packet_login_ok));
 #ifdef TEST
-		Scene_Test* pScene = Scene_Test::Create(m_pGraphic_Device);
+		//Scene_Test* pScene = Scene_Test::Create(m_pGraphic_Device);
+		//if (FAILED(m_pGameMgr->Set_CurrScene(pScene)))
+		//{
+		//	cout << "Failed To Change Scene" << endl;
+		//	return E_FAIL;
+		//}
+		Scene_Stage* pScene = Scene_Stage::Create(m_pGraphic_Device);
 		if (FAILED(m_pGameMgr->Set_CurrScene(pScene)))
 		{
 			cout << "Failed To Change Scene" << endl;

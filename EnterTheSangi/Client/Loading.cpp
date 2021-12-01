@@ -40,7 +40,10 @@ HRESULT Loading::Load_Resources()
 	hr = pResourceMgr->Add_TexturesFromFile(L"Weapon", L"../Binary/Data/Texture_Weapon.txt");
 	if (FAILED(hr)) return E_FAIL;
 
-	hr = pResourceMgr->Add_Texture(L"Test", L"Map", L"../Binary/Resources/test0.png", 1);
+	hr = pResourceMgr->Add_Texture(L"Map", L"Test", L"../Binary/Resources/test0.png", 1);
+	if (FAILED(hr)) return E_FAIL;
+
+	hr = pResourceMgr->Add_Texture(L"Map", L"Main", L"../Binary/Resources/Map_0.png", 1);
 	if (FAILED(hr)) return E_FAIL;
 
 	hr = pResourceMgr->Add_WeaponData(L"../Binary/Data/Info_Weapon.txt");
