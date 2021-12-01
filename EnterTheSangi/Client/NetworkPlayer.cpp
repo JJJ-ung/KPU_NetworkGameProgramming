@@ -42,6 +42,7 @@ HRESULT NetworkPlayer::Ready_GameObject(CLIENT t)
 		return E_FAIL;
 
 	m_tClientInfo = t;
+	m_iObjectID = t.index;
 
 	m_vPosition = t.startpos;
 

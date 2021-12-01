@@ -59,6 +59,20 @@ HRESULT GameMgr::Add_GameObject(OBJECT::TYPE eType, GameObject* pObj)
 	return NOERROR;
 }
 
+HRESULT GameMgr::Delete_GameObject(OBJECT::TYPE eType, char iObjID)
+{
+	for (auto iter = m_lstObj[eType].begin(); iter != m_lstObj[eType].end(); )
+	{
+		if ((*iter)->Get_ObjID() == iObjID)
+		{
+			SafeDelete(*iter);
+			m_lstObj[eType].erase(iter);
+			return NOERROR;
+		}
+	}
+	return E_FAIL;
+}
+
 HRESULT GameMgr::Set_PrototypesOnScene(OBJECT::TYPE eType)
 {
 	if (eType == OBJECT::TYPE::END) return E_FAIL;

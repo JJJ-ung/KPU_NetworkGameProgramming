@@ -83,6 +83,7 @@ HRESULT Scene_Stage::Setup_Recv(char c, void* recv)
 	m_pGameMgr->Recv_Networking(c, recv);
 	if(c == SC_PACKET_PUT_BULLET)
 	{
+		cout << "Add" << endl;
 		sc_packet_put_bullet t = {};
 		memcpy(&t, recv, sizeof(sc_packet_put_bullet));
 		if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::BULLET, Bullet::Create(m_pGraphic_Device, t))))

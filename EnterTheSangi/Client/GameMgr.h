@@ -17,6 +17,7 @@ public:
 public:
 	HRESULT Set_CurrScene(Scene* pScene);
 	HRESULT Add_GameObject(OBJECT::TYPE eType, GameObject* pObj);
+	HRESULT Delete_GameObject(OBJECT::TYPE eType, char iObjID);
 
 public:
 	HRESULT Set_PrototypesOnScene(OBJECT::TYPE eType);
