@@ -159,6 +159,7 @@ struct sc_packet_put_bullet
 	unsigned char  size;
 	char           type;
 	char           bullet_type;
+	char           bullet_id;
 	short		   angle;
 	svector2       position;
 	svector2	   direction;

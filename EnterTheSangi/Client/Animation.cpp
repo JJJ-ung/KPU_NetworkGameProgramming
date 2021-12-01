@@ -36,6 +36,7 @@ HRESULT Animation::Ready_Component(Texture* pTexture, float fSpeed, bool bSetCen
 
 INT Animation::Update_Component(float time_delta)
 {
+	if (m_bStop) return 0;
 	m_fFrame += time_delta * m_fFrameSpeed;
 	if (m_fFrame >= m_fMaxFrame)
 		m_fFrame = 0.f;
@@ -43,12 +44,18 @@ INT Animation::Update_Component(float time_delta)
 	return Component::Update_Component(time_delta);
 }
 
-bool Animation::Update_Animation(float TimeDelta)
+bool Animation::Update_Animation(float TimeDelta, bool bStop)
 {
+	if (m_bStop) return 0;
 	m_fFrame += TimeDelta * m_fFrameSpeed;
 	if (m_fFrame >= m_fMaxFrame)
 	{
 		m_fFrame = 0.f;
+		if(bStop)
+		{
+			m_fFrame = m_fMaxFrame;
+			m_bStop = true;
+		}
 		return true;
 	}
 

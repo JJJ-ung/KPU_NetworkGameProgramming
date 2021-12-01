@@ -47,10 +47,9 @@ HRESULT Bullet::Ready_GameObject(sc_packet_put_bullet tInfo)
 	m_fSpeed = t.bulletspeed;
 
 	m_fAngle = tInfo.angle;
+	m_fSide = 1.f;
 	if (m_fAngle > 0)
 		m_fSide = -1.f;
-	else
-		m_fSide = 1.f;
 
 	m_vCenter = D3DXVECTOR3(m_pTexture->Get_TextureInfo(m_iType).Width * 0.5f, m_pTexture->Get_TextureInfo(m_iType).Height * 0.5f, 0.f);
 
