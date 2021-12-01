@@ -53,4 +53,4 @@ using namespace chrono;
 #pragma comment(linker,"/entry:wWinMainCRTStartup /subsystem:console")
 #endif
 
-//#define TEST
+#define TEST

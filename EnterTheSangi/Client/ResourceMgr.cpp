@@ -80,7 +80,7 @@ Texture* ResourceMgr::Find_Texture(const TCHAR* pTexSetTag, const TCHAR* pState)
 HRESULT ResourceMgr::Add_WeaponData(const TCHAR* pPath)
 {
 	wifstream fin;
-
+	
 	fin.open(pPath);
 	if (fin.fail())
 		return E_FAIL;

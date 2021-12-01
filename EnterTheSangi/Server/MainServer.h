@@ -9,6 +9,7 @@
 #include <chrono>
 #include <mutex>
 #include <chrono>
+#include <fstream>
 #include "Client.h"
 #include "Protocol.h"
 #include "Enum.h"

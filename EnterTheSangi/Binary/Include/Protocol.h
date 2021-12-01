@@ -176,6 +176,7 @@ struct sc_packet_put_chest
 	unsigned char  size;
 	char           type;
 	char           chest_id;
+	char           weapon_id;
 	svector2       position;
 };
 
@@ -184,6 +185,7 @@ struct sc_packet_move_chest
 	unsigned char  size;
 	char           type;
 	char           chest_id;
+	char           weapon_id;
 	svector2       position;
 };
 

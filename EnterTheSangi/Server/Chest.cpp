@@ -1,8 +1,5 @@
 #include "Chest.h"
 
-float CChest::m_height_hf;
-float CChest::m_width_hf;
-
 CChest::CChest()
 {
 
@@ -23,14 +20,20 @@ OBJECT_STATE::STATE CChest::GetState()
 	return m_state;
 }
 
+srect CChest::GetCollisionBox()
+{
+	return { {m_position.x - 0 , m_position.y - 0  },{m_position.x + 0, m_position.y + 0  } }; //temp
+};
+
+
 float CChest::vGetHeightHf()
 {
-	return m_height_hf;
+	return CHEST_HEIGHT/2;
 }; 
 
 float CChest::vGetWidthHf()
 {
-	return m_width_hf;
+	return CHEST_WIDTH/2;
 };  
 
 OBJECT::TYPE CChest::vGetObjectType() const

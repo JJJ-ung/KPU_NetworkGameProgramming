@@ -1,14 +1,20 @@
 #pragma once
 #include <d3dx9.h>
 
-const char PLAYER_MAX_HP = 100;
-const char PLAYER_HEIGHT_HF = 0; // half height
-const char PLAYER_WIDTH_HF = 0; // half width
+//player
+const D3DXVECTOR3 INITIAL_BODY_COLOR = {};
+const D3DXVECTOR3 INITIAL_CLOTH_COLOR = {};
 
-//속도
+const char PLAYER_MAX_HP = 10;
+const char PLAYER_HEIGHT = 32 * 3;
+const char PLAYER_WIDTH = 32 * 3; 
 
-const char CHEST_HEIGHT_HF = 0; // half height
-const char CHEST_WIDTH_HF = 0; // half width
+//chest
+const char CHEST_HEIGHT = 32 * 3; 
+const char CHEST_WIDTH = 32 * 3; 
+
+//weapon
+
 
 //무기 종류
 
@@ -20,6 +26,4 @@ const char CHEST_WIDTH_HF = 0; // half width
 
 //무기(탄환) 속도
 
-const D3DXVECTOR3 INITIAL_BODY_COLOR = {};
-const D3DXVECTOR3 INITIAL_CLOTH_COLOR = {};
-
+//bullet

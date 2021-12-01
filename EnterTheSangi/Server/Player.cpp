@@ -2,22 +2,24 @@
 #include "Player.h"
 
 
-float CPlayer::m_height_hf;
-float CPlayer::m_width_hf;
-
 CPlayer::CPlayer() {};
 
 CPlayer::~CPlayer() {};
 
+srect CPlayer::GetCollisionBox()
+{
+	return { {m_position.x - PLAYER_HEIGHT / 2, m_position.y},
+		{m_position.x + PLAYER_HEIGHT / 2, m_position.y + PLAYER_HEIGHT } };
+}
 
 float CPlayer::vGetHeightHf()
 {
-	return m_height_hf;
+	return PLAYER_HEIGHT/2;
 }; 
 
 float CPlayer::vGetWidthHf()
 {
-	return m_width_hf;
+	return PLAYER_WIDTH/2;
 };
 
 OBJECT::TYPE CPlayer::vGetObjectType() const

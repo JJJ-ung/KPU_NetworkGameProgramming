@@ -20,6 +20,7 @@ public:
 	svector2             GetPosition();
 	short                GetLook();
 
+	virtual srect        GetCollisionBox() = 0;
 	virtual float        vGetHeightHf() =0;   // return half height
 	virtual float        vGetWidthHf() = 0;    // return half width
 	virtual OBJECT::TYPE vGetObjectType() const = 0; // return object type
