@@ -8,7 +8,7 @@ public:
 	virtual ~Bullet();
 
 public:
-	virtual HRESULT Ready_GameObject(int iType, D3DXVECTOR3 vPos, D3DXVECTOR3 vDir, float fSide, float fSize, float fAngle, float fDuration, float fSpeed);
+	virtual HRESULT Ready_GameObject(sc_packet_put_bullet tInfo);
 	virtual INT Update_GameObject(float TimeDelta);
 	virtual INT LateUpdate_GameObject(float TimeDelta);
 	virtual HRESULT Render_GameObject();
@@ -25,7 +25,7 @@ private:
 	D3DXVECTOR3 m_vCenter{ 0.f, 0.f, 0.f };
 
 public:
-	static Bullet* Create(LPDIRECT3DDEVICE9 pGraphic_Device, int iType, D3DXVECTOR3 vPos, D3DXVECTOR3 vDir, float fSide, float fSize, float fAngle, float fDuration, float fSpeed);
+	static Bullet* Create(LPDIRECT3DDEVICE9 pGraphic_Device, sc_packet_put_bullet tInfo);
 	virtual void Free();
 };
 

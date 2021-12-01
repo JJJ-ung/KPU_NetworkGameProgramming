@@ -14,7 +14,7 @@ Bullet::~Bullet()
 {
 }
 
-HRESULT Bullet::Ready_GameObject(int iType, D3DXVECTOR3 vPos, D3DXVECTOR3 vDir, float fSide, float fSize, float fAngle, float fDuration, float fSpeed)
+HRESULT Bullet::Ready_GameObject(sc_packet_put_bullet tInfo)
 {
 	m_pRenderer = Renderer::GetInstance();
 	if (!m_pRenderer) return E_FAIL;
@@ -31,22 +31,28 @@ HRESULT Bullet::Ready_GameObject(int iType, D3DXVECTOR3 vPos, D3DXVECTOR3 vDir, 
 	m_pTexture = m_pResourceMgr->Find_Texture(L"Weapon", L"Bullet");
 	if (!m_pTexture) return E_FAIL;
 
-	if (iType > 13)
+	if (tInfo.bullet_type > 13)
 		return E_FAIL;
-	m_iType = iType;
+	m_iType = tInfo.bullet_type;
 
-	m_vDir = vDir;
+	m_vDir = { (float)tInfo.direction.x, (float)tInfo.direction.y, 0.f };
 	D3DXVec3Normalize(&m_vDir, &m_vDir);
 
-	m_vPosition = vPos;
-	m_fSize = fSize;
-	m_fSide = fSide;
-	m_fAngle = fAngle;
+	m_vPosition = { (float)tInfo.position.x, (float)tInfo.position.y, 0.f };
 
-	m_vCenter = D3DXVECTOR3(m_pTexture->Get_TextureInfo(iType).Width * 0.5f, m_pTexture->Get_TextureInfo(iType).Height * 0.5f, 0.f);
+	auto t = m_pResourceMgr->Find_WeaponData(m_iType);
 
-	m_fDuration = fDuration;
-	m_fSpeed = fSpeed;
+	m_fSize = t.size;
+	m_fDuration = t.duration;
+	m_fSpeed = t.bulletspeed;
+
+	m_fAngle = tInfo.angle;
+	if (m_fAngle > 0)
+		m_fSide = -1.f;
+	else
+		m_fSide = 1.f;
+
+	m_vCenter = D3DXVECTOR3(m_pTexture->Get_TextureInfo(m_iType).Width * 0.5f, m_pTexture->Get_TextureInfo(m_iType).Height * 0.5f, 0.f);
 
 	return GameObject::Ready_GameObject();
 }
@@ -109,10 +115,10 @@ HRESULT Bullet::Render_GameObject()
 	return GameObject::Render_GameObject();
 }
 
-Bullet* Bullet::Create(LPDIRECT3DDEVICE9 pGraphic_Device, int iType, D3DXVECTOR3 vPos, D3DXVECTOR3 vDir, float fSide, float fSize, float fAngle, float fDuration, float fSpeed)
+Bullet* Bullet::Create(LPDIRECT3DDEVICE9 pGraphic_Device, sc_packet_put_bullet tInfo)
 {
 	Bullet* pInstance = new Bullet(pGraphic_Device);
-	if (FAILED(pInstance->Ready_GameObject(iType, vPos, vDir, fSide, fSize, fAngle, fDuration, fSpeed)))
+	if (FAILED(pInstance->Ready_GameObject(tInfo)))
 		SafeDelete(pInstance);
 	return pInstance;
 }

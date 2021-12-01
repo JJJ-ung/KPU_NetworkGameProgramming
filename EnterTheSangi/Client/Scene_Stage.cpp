@@ -7,6 +7,7 @@
 #include "MainMap.h"
 #include "NetworkPlayer.h"
 #include "Weapon.h"
+#include "Bullet.h"
 
 Scene_Stage::Scene_Stage(LPDIRECT3DDEVICE9 pGraphic_Device)
 	:Scene(pGraphic_Device)
@@ -80,6 +81,14 @@ HRESULT Scene_Stage::Render_Scene()
 HRESULT Scene_Stage::Setup_Recv(char c, void* recv)
 {
 	m_pGameMgr->Recv_Networking(c, recv);
+	if(c == SC_PACKET_PUT_BULLET)
+	{
+		sc_packet_put_bullet t = {};
+		memcpy(&t, recv, sizeof(sc_packet_put_bullet));
+		if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::BULLET, Bullet::Create(m_pGraphic_Device, t))))
+			return E_FAIL;
+	}
+
 	return Scene::Setup_Recv(c, recv);
 }
 

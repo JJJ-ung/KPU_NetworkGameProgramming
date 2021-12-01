@@ -174,12 +174,12 @@ INT Weapon::Shoot_Bullet(float TimeDelta)
 	m_vBulletDir = m_pInputMgr->Get_MousePoint();
 	D3DXVec3Normalize(&m_vBulletDir, &m_vBulletDir);
 
-	if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::BULLET,
-		Bullet::Create(m_pDevice, m_tWeaponInfo.type,
-			m_vBulletPos, m_vBulletDir,
-			m_fSide, m_tWeaponInfo.size, m_fAngle,
-			m_tWeaponInfo.duration, m_tWeaponInfo.bulletspeed))))
-		return E_FAIL;
+	//if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::BULLET,
+	//	Bullet::Create(m_pDevice, m_tWeaponInfo.type,
+	//		m_vBulletPos, m_vBulletDir,
+	//		m_fSide, m_tWeaponInfo.size, m_fAngle,
+	//		m_tWeaponInfo.duration, m_tWeaponInfo.bulletspeed))))
+	//	return E_FAIL;
 
 	m_pNetworkMgr->Send_BulletInfo(m_tWeaponInfo.type, m_fAngle, m_vBulletPos, m_vBulletDir);
 
