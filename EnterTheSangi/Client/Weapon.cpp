@@ -168,7 +168,7 @@ INT Weapon::Shoot_Bullet(float TimeDelta)
 	m_vBulletPos.x = vTmp.x;
 	m_vBulletPos.y = vTmp.y;
 
-	m_vBulletDir = m_pInputMgr->Get_MousePoint() - m_vBulletPos;
+	m_vBulletDir = m_pInputMgr->Get_MousePoint();
 	D3DXVec3Normalize(&m_vBulletDir, &m_vBulletDir);
 
 	m_pGameMgr->Add_GameObject(OBJECT::BULLET,
