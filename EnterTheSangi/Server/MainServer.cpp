@@ -120,8 +120,6 @@ void CMainServer::ClientThread(char id)
         m_state_lock.lock();
         while (m_game_state == SCENE::ID::STAGE)
         {
-            float fDelta = m_PerformanceCounter.update();
-            cout << "fps : " << 1.0f / fDelta << endl;
             m_state_lock.unlock();
             //스레드 동기화
             //타이머 필요
@@ -172,7 +170,7 @@ void CMainServer::ServerThread()
                 cl.StateUnlock();
             }
 
-            if(client_count <= MAX_CLIENTS)
+            if(client_count < MAX_CLIENTS)
                 DoAccept();
             m_state_lock.lock();
         }

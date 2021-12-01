@@ -27,11 +27,7 @@ typedef struct tagIndex32
 	unsigned long	_0, _1, _2;
 }INDEX32;
 
-struct srect
-{
-	svector2 pos_1; //좌상단
-	svector2 pos_2; //우하단
-};
+
 
 struct svector2
 {
@@ -39,6 +35,11 @@ struct svector2
 	short y;
 };
 
+struct srect
+{
+	svector2 pos_1; //좌상단
+	svector2 pos_2; //우하단
+};
 // For Client
 
 typedef struct tagCustomInfo
