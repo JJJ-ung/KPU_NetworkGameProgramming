@@ -70,3 +70,23 @@ void CBullet::StateUnlock()
 {
 	m_state_lock.unlock();
 }
+
+void CBullet::SetDirection(D3DXVECTOR3 dir)
+{
+	m_direction = dir;
+}
+
+D3DXVECTOR3 CBullet::GetDirection()
+{
+	return m_direction;
+}
+
+void CBullet::SetBulletSpeed(float speed)
+{
+	m_fSpeed = speed;
+}
+
+float CBullet::GetBulletSpeed()
+{
+	return m_fSpeed;
+}

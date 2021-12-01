@@ -15,7 +15,11 @@ public:
 	void                  SetBulletType(char bullet_type);
 	void                  SetID(char id);
 	void                  SetState(OBJECT_STATE::STATE state);
+	void				  SetDirection(D3DXVECTOR3 dir);
+	void				  SetBulletSpeed(float speed);
 
+	float			      GetBulletSpeed();
+	D3DXVECTOR3			  GetDirection();
 	char                  GetBulletType();
 	char                  GetID();
 	OBJECT_STATE::STATE   GetState();
@@ -29,9 +33,11 @@ public:
 	void                  StateUnlock();
 private:
 	char                  m_bullet_type; //ÃÑ¾Ë Á¾·ù
-	char                  m_id;   
+	char                  m_id;
+	float				  m_fSpeed;
 	OBJECT_STATE::STATE   m_state;
 	mutex                 m_state_lock;
+	D3DXVECTOR3			  m_direction;
 	const static OBJECT::TYPE m_object_type = OBJECT::BULLET;
 
 	

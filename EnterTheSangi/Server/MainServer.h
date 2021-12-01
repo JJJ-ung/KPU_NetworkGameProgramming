@@ -10,6 +10,17 @@
 #include <mutex>
 #include <chrono>
 #include <fstream>
+
+#define DIRECTINPUT_VERSION 0x0800
+#include <d3d9.h>
+#include <d3dx9.h>
+#include <dinput.h>
+#pragma comment(lib, "../Binary/Librarys/x64/d3d9.lib")
+#pragma comment(lib, "../Binary/Librarys/x64/d3dx9.lib")
+#pragma comment(lib, "../Binary/Librarys/x64/dxgi.lib")
+#pragma comment(lib, "../Binary/Librarys/x64/dxguid.lib")
+#pragma comment(lib, "../Binary/Librarys/x64/dinput8.lib")
+
 #include "Client.h"
 #include "Protocol.h"
 #include "Enum.h"
@@ -41,6 +52,7 @@ public:
 	void CollisionCheckTerrainBullet();
 	void CollisionCheckPlayerBullet();
 	void CollisionCheckPlayerChest();
+	void UpdateBullet();
 	template<class T1, class T2 >
 	bool CollisionCheck(T1& object_1, T2& object_2);
 	template<class T1>

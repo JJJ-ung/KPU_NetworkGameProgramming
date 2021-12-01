@@ -407,6 +407,7 @@ void CMainServer::ProcessPacket(char client_id)
 	player.SetState(STATE::TYPE(rp.m_state));
 	player.StateUnlock();
 	}
+
 	else if (packet_type == CS_PACKET_SHOOT_BULLET)
 	{
 	cs_packet_shoot_bullet rp;
@@ -430,7 +431,9 @@ void CMainServer::ProcessPacket(char client_id)
             m_bullets[i].SetID(i);
             //m_bullets[i].SetLook(rp.look);
             m_bullets[i].SetPosition(rp.position);
+            cout << "rp pos : (" << rp.position.x << ", " << rp.position.y << ") \n";
             m_bullets[i].SetLook(rp.angle);
+            m_bullets[i].SetDirection({ (float)rp.direction.x * 0.00001f, (float)rp.direction.y * 0.00001f, 0.f });
            // 서버에서 가지는 총알포지션 값에 델타타임 적용 필요 (서버 충돌체크용)
 
 
@@ -504,7 +507,6 @@ int CMainServer::DoRecv(char id)
     } while (left > 0);
 
     
-    cout << "client [" << int(id) << "] -> " << (void*)m_clients[id].GetBuf() << endl;
     return received;
 };
 
@@ -540,10 +542,33 @@ int CMainServer::DoAccept()
 void CMainServer::ServerProcess() 
 {
     //CollisionCheckTerrainPlayer();
+    UpdateBullet();
     CollisionCheckPlayerBullet();
     CollisionCheckTerrainBullet();
     CollisionCheckPlayerChest();
 };
+
+void CMainServer::UpdateBullet()
+{
+    for (int i = 0; i < MAX_BULLETS; ++i)
+    {
+        m_bullets[i].StateLock();
+        if (m_bullets[i].GetState() == OBJECT_STATE::ST_FREE)
+        {
+            m_bullets[i].StateUnlock();
+            continue;
+        }
+        m_bullets[i].StateUnlock();
+
+        D3DXVECTOR3 m_vDir = m_bullets[i].GetDirection();
+        D3DXVec3Normalize(&m_vDir, &m_vDir);
+        D3DXVECTOR3 m_vPosition{ (float)m_bullets[i].GetPosition().x, (float)m_bullets[i].GetPosition().y, 0.f };
+        m_vPosition += (m_vDir * 1.f * (1.f / 30.f));
+        m_bullets[i].SetPosition({ (short)m_vPosition.x, (short)m_vPosition.y });
+
+        cout << "bullet[" << i << "] pos : (" << m_bullets[i].GetPosition().x << ", " << m_bullets[i].GetPosition().y << ") \n";
+    }
+}
 
 void CMainServer::CollisionCheckTerrainPlayer()
 {
@@ -590,8 +615,9 @@ void CMainServer::CollisionCheckPlayerBullet()
             {            
                 //플레이어 체력 감소
                 // health를 여기서 감소시킬건데 총알 타입에 따른 데미지를 받아오는 친구가 있나..?
-
+                cout << "crash!!! \n";
                 char dmg;
+                dmg = 1;
                 //dmg=m_bullets[i].~~~~~~~  // 총알 종류에 따른 데미지값
              
                 player.ChangeHealth(-dmg);               

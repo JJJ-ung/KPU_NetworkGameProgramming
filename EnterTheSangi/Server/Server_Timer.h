@@ -18,14 +18,8 @@ public:
     float update()
     {
         QueryPerformanceCounter(&m_CurTime);
-
-        // delta time = current time - previous time
         m_dDeltaTime = (static_cast<double>(m_CurTime.QuadPart) - static_cast<double>(m_PrevTime.QuadPart)) / static_cast<double>(m_CountTime.QuadPart);
-        //while (m_dDeltaTime <=(1.f / 30.0f))
-        //{
-        //    QueryPerformanceCounter(&m_CurTime);
-        //    m_dDeltaTime = (static_cast<double>(m_CurTime.QuadPart) - static_cast<double>(m_PrevTime.QuadPart)) / static_cast<double>(m_CountTime.QuadPart);
-        //}
+
         m_fDeltaTime = static_cast<float>(m_dDeltaTime);
         m_PrevTime = m_CurTime;
 
@@ -38,7 +32,7 @@ public:
 
         if ((1.f / frame_limit) < m_arrTimers_TimeAcc)
         {
-            cout << "fps : " << (1.f / m_arrTimers_TimeAcc) << endl;
+            //cout << "fps : " << 1.f / m_arrTimers_TimeAcc << endl;
             m_arrTimers_TimeAcc = 0.f;
             return true;
         }
@@ -51,5 +45,5 @@ private:
     LARGE_INTEGER m_PrevTime;
     double m_dDeltaTime;
     float m_fDeltaTime;
-    float m_arrTimers_TimeAcc;
+    float m_arrTimers_TimeAcc = 0;
 };
