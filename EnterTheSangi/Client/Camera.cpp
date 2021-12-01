@@ -35,15 +35,15 @@ HRESULT Camera::Ready_GameObject()
 
 INT Camera::Update_GameObject(float TimeDelta)
 {
-	m_vAt = m_pGameMgr->Get_PlayerPos()+ m_vAspect;
-	m_vAt += m_pInputMgr->Get_MousePoint() * 0.2f;
-	m_vEye = m_vAt + m_vAspectEye;
-
 	return 0;
 }
 
 INT Camera::LateUpdate_GameObject(float TimeDelta)
 {
+	m_vAt = m_pGameMgr->Get_PlayerPos() + m_vAspect;
+	m_vAt += m_pInputMgr->Get_MousePoint() * 0.2f;
+	m_vEye = m_vAt + m_vAspectEye;
+
 	D3DXMatrixLookAtLH(&m_matView, &m_vEye, &m_vAt, &m_vUP);
 	m_pDevice->SetTransform(D3DTS_TEXTURE0, &m_matView);
 

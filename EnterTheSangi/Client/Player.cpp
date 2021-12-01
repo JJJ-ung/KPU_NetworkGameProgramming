@@ -40,6 +40,9 @@ HRESULT Player::Ready_GameObject(CLIENT t)
 	if (FAILED(Ready_AnimationInfo()))
 		return E_FAIL;
 
+	if (FAILED(Ready_Collision()))
+		return E_FAIL;
+
 	m_tClientInfo = t;
 	m_iObjectID = t.index;
 
@@ -57,6 +60,11 @@ HRESULT Player::Ready_GameObject(CLIENT t)
 
 	D3DXMatrixIdentity(&m_matWorld);
 
+
+	D3DXCreateLine(m_pDevice, &m_pLine);
+	m_pLine->SetWidth(2);
+
+
 	return GameObject::Ready_GameObject();
 }
 
@@ -64,25 +72,25 @@ INT Player::Update_GameObject(float time_delta)
 {
 	m_pStateMachine->Update_Component(time_delta);
 
-	D3DXVec3Normalize(&m_vDirection, &m_vDirection);
-	m_vPosition += m_vDirection * m_fSpeed * time_delta;
+	m_pNameTag->Update_Position(m_vPosition, D3DXVECTOR3(0.f, -100.f, 0.f));
 
 	//cout << m_vPosition.x << "/" << m_vPosition.y << "/" << m_vPosition.z << endl;
-
-	m_pNameTag->Update_Position(m_vPosition, D3DXVECTOR3(0.f, -100.f, 0.f));
 
 	D3DXMATRIX		matScale, matTrans;
 	D3DXMatrixScaling(&matScale, 3.f * m_fSide, 3.f, 3.f);
 	D3DXMatrixTranslation(&matTrans, m_vPosition.x, m_vPosition.y, m_vPosition.z);
 	m_matWorld = matScale * matTrans;
 
+	m_pGameMgr->Get_PlayerPos() = m_vPosition;
+
+	if (m_pInputMgr->KeyDown(KEY_F1))
+		m_bRenderCollision = !m_bRenderCollision;
+
 	return GameObject::Update_GameObject(time_delta);
 }
 
 INT Player::LateUpdate_GameObject(float time_delta)
 {
-	m_pGameMgr->Get_PlayerPos() = m_vPosition;
-
 	if (m_pInputMgr->Get_Angle() < 0.f)
 		m_fSide = -1.f;
 	else
@@ -103,12 +111,12 @@ HRESULT Player::Render_GameObject()
 
 	pEffect->SetMatrix("g_matWorld", &m_matWorld);
 
-	D3DXMATRIX		matTmp;
-	m_pDevice->GetTransform(D3DTS_TEXTURE0, &matTmp);
-	pEffect->SetMatrix("g_matView", &matTmp);
+	D3DXMATRIX		matView, matProj;
+	m_pDevice->GetTransform(D3DTS_TEXTURE0, &matView);
+	pEffect->SetMatrix("g_matView", &matView);
 
-	m_pDevice->GetTransform(D3DTS_PROJECTION, &matTmp);
-	pEffect->SetMatrix("g_matProj", &matTmp);
+	m_pDevice->GetTransform(D3DTS_PROJECTION, &matProj);
+	pEffect->SetMatrix("g_matProj", &matProj);
 
 	m_pShader->Set_Value("g_vCloth", &m_tClientInfo.custom.vCloth, sizeof(D3DXVECTOR3));
 	m_pShader->Set_Value("g_vBody", &m_tClientInfo.custom.vBody, sizeof(D3DXVECTOR3));
@@ -121,6 +129,14 @@ HRESULT Player::Render_GameObject()
 
 	pEffect->EndPass();
 	pEffect->End();
+
+	if(m_bRenderCollision)
+	{
+		for (auto t : m_vecColl)
+			Render_Rect(t, matView, matProj);
+
+		Render_Rect(m_tCollRect, matView, matProj);
+	}
 
 	return GameObject::Render_GameObject();
 }
@@ -135,6 +151,16 @@ INT Player::Update_Networking()
 INT Player::Recv_Networking(char c, void* p)
 {
 	return GameObject::Recv_Networking(c, p);
+}
+
+INT Player::Update_Movement(float TimeDelta)
+{
+	D3DXVec3Normalize(&m_vDirection, &m_vDirection);
+	m_vPosition += m_vDirection * m_fSpeed * TimeDelta;
+
+	Update_Collision(TimeDelta);
+
+	return 0;
 }
 
 bool Player::Update_Animation(float TimeDelta)
@@ -211,6 +237,92 @@ HRESULT Player::Ready_AnimationInfo()
 
 		m_mapAnimations.insert(MAPANI::value_type(tag, pAnimation));
 	}
+
+	return NOERROR;
+}
+
+HRESULT Player::Ready_Collision()
+{
+	wifstream fin;
+
+	fin.open(L"../Binary/Data/Collision.txt");
+	if (fin.fail()) return E_FAIL;
+
+	RECT t;
+	while (true)
+	{
+		fin >> t.left >> t.right >> t.top >> t.bottom;
+
+		if (fin.eof()) break;
+
+		t.left *= 4;
+		t.right *= 4;
+		t.top *= 4;
+		t.bottom *= 4;
+
+		m_vecColl.push_back(t);
+	}
+
+	return NOERROR;
+}
+
+INT Player::Update_Collision(float TimeDelta)
+{
+	m_tCollRect.right			= LONG(m_vPosition.x + 24.f);
+	m_tCollRect.left			= LONG(m_vPosition.x - 24.f);
+	m_tCollRect.top			= LONG(m_vPosition.y - 20.f);
+	m_tCollRect.bottom	= LONG(m_vPosition.y);
+
+	RECT tIntersect = {};
+	for(auto t : m_vecColl)
+	{
+		if(IntersectRect(&tIntersect, &m_tCollRect, &t))
+		{
+			LONG width = tIntersect.right - tIntersect.left;
+			LONG height = tIntersect.bottom - tIntersect.top;
+
+			if (width > height)
+			{
+				LONG CollCenter = t.bottom - (t.bottom - t.top) * 0.5;
+				LONG PlayerCenter = m_tCollRect.bottom - (m_tCollRect.bottom - m_tCollRect.top) * 0.5;
+				if (CollCenter < PlayerCenter) // 충돌체가 더 위에 있음
+					m_vPosition.y += height;
+				else
+					m_vPosition.y -= height;
+			}
+			//오른쪽 왼쪽 충돌
+			else
+			{
+				LONG CollCenter = t.right - (t.right - t.left) * 0.5;
+				LONG PlayerCenter = m_tCollRect.right - (m_tCollRect.right - m_tCollRect.left) * 0.5;
+				if (CollCenter < PlayerCenter) // 충돌체가 더 왼쪽에 있음
+					m_vPosition.x += width;
+				else
+					m_vPosition.x -= width;
+			}
+		}
+	}
+
+	return 0;
+}
+
+HRESULT Player::Render_Rect(RECT t, D3DXMATRIX view, D3DXMATRIX proj)
+{
+	D3DXVECTOR3 vLst[] =
+	{
+		{ (float)t.left,		(float)t.top,		0.f },
+		{ (float)t.right,	(float)t.top,		0.f },
+		{ (float)t.right,	(float)t.bottom,0.f },
+		{ (float)t.left,		(float)t.bottom,0.f },
+		{ (float)t.left,		(float)t.top,		0.f }
+	};
+	D3DXMATRIX		matTrans;
+	matTrans = view * proj;
+
+	m_pLine->Begin();
+	//m_pLine->Draw(vLst, 5, D3DCOLOR_XRGB(255, 0, 0));
+	m_pLine->DrawTransform(vLst, 5, &matTrans, D3DCOLOR_XRGB(255, 0, 0));
+	m_pLine->End();
 
 	return NOERROR;
 }

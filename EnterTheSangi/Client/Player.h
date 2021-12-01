@@ -25,6 +25,7 @@ public:
 public:
 	INT Update_Networking();
 	INT Recv_Networking(char c, void* p);
+	INT Update_Movement(float TimeDelta);
 
 public:
 	bool Update_Animation(float TimeDelta);
@@ -34,6 +35,11 @@ public:
 
 protected:
 	HRESULT Ready_AnimationInfo();
+
+protected:
+	HRESULT Ready_Collision();
+	INT Update_Collision(float TimeDelta);
+	HRESULT Render_Rect(RECT t, D3DXMATRIX view, D3DXMATRIX proj);
 
 protected:
 	int m_iHealth = 10;
@@ -52,8 +58,15 @@ protected:
 	StateMachine<Player>* m_pStateMachine = nullptr;
 
 protected:
+	RECT m_tCollRect = {};
+	vector<RECT> m_vecColl;
+	bool m_bRenderCollision = false;
+
+protected:
 	typedef map<wstring, Animation*> MAPANI;
 	map<wstring, Animation*> m_mapAnimations;
+
+	ID3DXLine* m_pLine;
 
 public:
 	static Player* Create(LPDIRECT3DDEVICE9 pGraphic_Device, CLIENT t);

@@ -96,6 +96,8 @@ INT Player_Run::Update(float time_delta)
 		!g_pInputMgr->KeyPressing(KEY_D)&& !g_pInputMgr->KeyPressing(KEY_A))
 		m_pOwner->Get_StateMachine()->Change_State(Player_Idle::Instance());
 
+	m_pOwner->Update_Movement(time_delta);
+
 	return State<Player>::Update(time_delta);
 }
 
@@ -134,6 +136,8 @@ INT Player_Dodge::Update(float time_delta)
 {
 	if(m_pOwner->Update_Animation(time_delta))
 		m_pOwner->Get_StateMachine()->Change_State(Player_Run::Instance());
+
+	m_pOwner->Update_Movement(time_delta);
 
 	return State<Player>::Update(time_delta);
 }
