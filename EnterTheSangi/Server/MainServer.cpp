@@ -428,7 +428,6 @@ void CMainServer::ProcessPacket(char client_id)
             m_bullets[i].SetState(OBJECT_STATE::ST_ALIVE);
             m_bullets[i].StateUnlock();
             m_bullets[i].SetBulletType(rp.bullet_type);
-            m_bullets[i].SetID(i);
             //m_bullets[i].SetLook(rp.look);
             m_bullets[i].SetPosition(rp.position);
             cout << "rp pos : (" << rp.position.x << ", " << rp.position.y << ") \n";
@@ -437,10 +436,11 @@ void CMainServer::ProcessPacket(char client_id)
            // 서버에서 가지는 총알포지션 값에 델타타임 적용 필요 (서버 충돌체크용)
 
 
-            sc_packet_put_bullet sp;
+            sc_packet_put_bullet sp;           
             sp.size = sizeof(sc_packet_put_bullet);
             sp.type = SC_PACKET_PUT_BULLET;
             sp.bullet_type = rp.bullet_type;
+            sp.bullet_id = i;
             sp.angle = rp.angle;
             sp.direction = rp.direction;
             sp.position = rp.position;
@@ -544,7 +544,7 @@ void CMainServer::ServerProcess()
     //CollisionCheckTerrainPlayer();
     UpdateBullet();
     CollisionCheckPlayerBullet();
-    CollisionCheckTerrainBullet();
+    //CollisionCheckTerrainBullet();
     CollisionCheckPlayerChest();
 };
 
@@ -615,7 +615,7 @@ void CMainServer::CollisionCheckPlayerBullet()
             {            
                 //플레이어 체력 감소
                 // health를 여기서 감소시킬건데 총알 타입에 따른 데미지를 받아오는 친구가 있나..?
-                cout << "crash!!! \n";
+                //cout << "crash!!! \n";
                 char dmg;
                 dmg = 1;
                 //dmg=m_bullets[i].~~~~~~~  // 총알 종류에 따른 데미지값
@@ -756,7 +756,7 @@ void CMainServer::InitChests()
 	for (int i = 0; i < MAX_CHESTS; ++i)
 	{
 		m_chests[i].SetID(i);
-        m_bullets[i].SetState(OBJECT_STATE::ST_ALIVE);
+        m_chests[i].SetState(OBJECT_STATE::ST_ALIVE);
 		m_chests[i].SetPosition(svector2{ (short)(i + 1)*200 ,(short)(i + 1)*200 });
         m_chests[i].SetWeaponID(rand() % MAX_WEAPON);
 	}
