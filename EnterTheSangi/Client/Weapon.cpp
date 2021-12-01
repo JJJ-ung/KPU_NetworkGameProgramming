@@ -45,6 +45,9 @@ HRESULT Weapon::Ready_GameObject(Player* pOwner, int iType)
 	m_pGameMgr = GameMgr::GetInstance();
 	if (!m_pGameMgr) return E_FAIL;
 
+	m_pNetworkMgr = NetworkMgr::GetInstance();
+	if (!m_pNetworkMgr) return E_FAIL;
+
 	m_tWeaponInfo = m_pResourceMgr->Find_WeaponData(iType);
 	if (m_tWeaponInfo.type == -1)
 		return E_FAIL;
@@ -171,11 +174,14 @@ INT Weapon::Shoot_Bullet(float TimeDelta)
 	m_vBulletDir = m_pInputMgr->Get_MousePoint();
 	D3DXVec3Normalize(&m_vBulletDir, &m_vBulletDir);
 
-	m_pGameMgr->Add_GameObject(OBJECT::BULLET,
+	if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::BULLET,
 		Bullet::Create(m_pDevice, m_tWeaponInfo.type,
 			m_vBulletPos, m_vBulletDir,
 			m_fSide, m_tWeaponInfo.size, m_fAngle,
-			m_tWeaponInfo.duration, m_tWeaponInfo.bulletspeed));
+			m_tWeaponInfo.duration, m_tWeaponInfo.bulletspeed))))
+		return E_FAIL;
+
+	m_pNetworkMgr->Send_BulletInfo(m_tWeaponInfo.type, m_fAngle, m_vBulletPos, m_vBulletDir);
 
 	return 0;
 }

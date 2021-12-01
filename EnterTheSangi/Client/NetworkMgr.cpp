@@ -61,6 +61,9 @@ HRESULT NetworkMgr::Send_ClientInfo(char type, void* p)
     case CS_PACKET_PLAYER_INFO:
         hr = send(m_socket, (char*)p, sizeof(cs_packet_player_info), 0);
         break;
+    case CS_PACKET_SHOOT_BULLET:
+        hr = send(m_socket, (char*)p, sizeof(cs_packet_shoot_bullet), 0);
+        break;
     default:
         cout << "None Send" << endl;
         hr = E_FAIL;
@@ -100,6 +103,20 @@ HRESULT NetworkMgr::Send_PlayerInfo(STATE::TYPE eState, D3DXVECTOR3 vPos, float 
     t.m_position.y = (short)vPos.y;
     t.m_look = (short)fAngle;
     return Send_ClientInfo(CS_PACKET_PLAYER_INFO, (void*)&t);
+}
+
+HRESULT NetworkMgr::Send_BulletInfo(int type, float angle, D3DXVECTOR3 vPos, D3DXVECTOR3 vDir)
+{
+    cs_packet_shoot_bullet t = {};
+    t.size = sizeof(cs_packet_shoot_bullet);
+    t.type = CS_PACKET_SHOOT_BULLET;
+    t.bullet_type = type;
+    t.angle = (short)angle;
+    t.position.x = (short)vPos.x;
+    t.position.y = (short)vPos.y;
+    t.direction.x = (short)vDir.x;
+    t.direction.y = (short)vDir.y;
+    return Send_ClientInfo(CS_PACKET_SHOOT_BULLET, (void*)&t);
 }
 
 unsigned NetworkMgr::Thread_Recv(void* pArg)

@@ -16,7 +16,7 @@ MainMap::~MainMap()
 	Free();
 }
 
-HRESULT MainMap::Ready_GameObject()
+HRESULT MainMap::Ready_GameObject(Player* pLocalPlayer)
 {
 	m_pRenderer = Renderer::GetInstance();
 	if (!m_pRenderer) return E_FAIL;
@@ -35,6 +35,9 @@ HRESULT MainMap::Ready_GameObject()
 
 	m_pGameMgr = GameMgr::GetInstance();
 	if (!m_pGameMgr) return E_FAIL;
+
+	if (!pLocalPlayer) return E_FAIL;
+	m_pPlayer = pLocalPlayer;
 
 	m_vCenter = { m_pTexture->Get_TextureInfo().Width * 0.5f, m_pTexture->Get_TextureInfo().Height * 0.5f, 0.f };
 
@@ -91,10 +94,10 @@ HRESULT MainMap::Render_GameObject()
 	return GameObject::Render_GameObject();
 }
 
-MainMap* MainMap::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
+MainMap* MainMap::Create(LPDIRECT3DDEVICE9 pGraphic_Device, Player* pLocalPlayer)
 {
 	MainMap* pInstance = new MainMap(pGraphic_Device);
-	if (FAILED(pInstance->Ready_GameObject()))
+	if (FAILED(pInstance->Ready_GameObject(pLocalPlayer)))
 		SafeDelete(pInstance);
 	return pInstance;
 }

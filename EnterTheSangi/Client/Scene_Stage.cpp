@@ -53,7 +53,7 @@ HRESULT Scene_Stage::Ready_Scene()
 	if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::CAMERA, Camera::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
-	if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::MAP, MainMap::Create(m_pGraphic_Device))))
+	if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::MAP, MainMap::Create(m_pGraphic_Device, p))))
 		return E_FAIL;
 
 	if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::UI, Mouse::Create(m_pGraphic_Device))))
