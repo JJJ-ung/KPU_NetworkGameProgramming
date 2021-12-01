@@ -71,6 +71,16 @@ void CClient::StateUnlock()
 	m_state_lock.unlock();
 }
 
+void  CClient::SocketLock()
+{
+	m_socket_lock.lock();
+}
+
+void  CClient::SocketUnlock()
+{
+	m_socket_lock.unlock();
+}
+
 void CClient::SetPlayerState(char t)
 {
 	m_player_state = t;
