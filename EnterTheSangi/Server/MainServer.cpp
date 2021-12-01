@@ -424,7 +424,7 @@ void CMainServer::ProcessPacket(char client_id)
         {
             m_bullets[i].SetState(OBJECT_STATE::ST_ALIVE);
             m_bullets[i].StateUnlock();
-            m_bullets[i].SetType(rp.bullet_type);
+            m_bullets[i].SetBulletType(rp.bullet_type);
             m_bullets[i].SetID(i);
             //m_bullets[i].SetLook(rp.look);
             m_bullets[i].SetPosition(rp.position);
@@ -665,14 +665,16 @@ void CMainServer::CollisionCheckPlayerChest()
 template<class T1, class T2 >
 bool CMainServer::CollisionCheck(T1& object_1, T2& object_2)
 {
-	if (abs(object_1.GetPosition().x - object_2.GetPosition().x) <=
-		(object_1.vGetWidthHf() + object_2.vGetWidthHf()))
-		return true;
-	if (abs(object_1.GetPosition().y - object_2.GetPosition().y) <=
-		(object_1.vGetHeightHf() + object_2.vGetHeightHf()))
-		return true;
+    //UP
+    if ((object_1.GetCollisionBox().pos_2.y) < object_2.GetCollisionBox().pos_1.y) return false;
+    //DOWN
+    if ((object_1.GetCollisionBox().pos_1.y) > object_2.GetCollisionBox().pos_2.y) return false;
+    //LEFT
+    if ((object_1.GetCollisionBox().pos_2.x) < object_2.GetCollisionBox().pos_1.x)return false;
+    //RIGHT
+    if ((object_1.GetCollisionBox().pos_1.x) > object_2.GetCollisionBox().pos_2.x)  return false;
 
-	return false;
+	return true;
 }
 
 template<class T1 >
@@ -681,13 +683,13 @@ bool CMainServer::TerrainCollisionCheck(T1& object_1) // 맵 안에 있으면 fa
     for (auto& map_rect : m_map_rects)
     {
         //UP
-        if ((object_1.GetPosition().y - object_1.vGetHeightHf()) <= map_rect.pos_1.y) return true;
+        if ((object_1.GetCollisionBox().pos_1.y) <= map_rect.pos_1.y) return true;
         //DOWN
-        if ((object_1.GetPosition().y + object_1.vGetHeightHf()) >= map_rect.pos_2.y) return true;
+        if ((object_1.GetCollisionBox().pos_2.y) >= map_rect.pos_2.y) return true;
         //LEFT
-        if ((object_1.GetPosition().x - object_1.vGetWidthHf()) <= map_rect.pos_1.x) return true;
+        if ((object_1.GetCollisionBox().pos_1.x) <= map_rect.pos_1.x)return true;
         //RIGHT
-        if ((object_1.GetPosition().x + object_1.vGetWidthHf()) >= map_rect.pos_2.x) return true;
+        if ((object_1.GetCollisionBox().pos_2.x) >= map_rect.pos_2.x)  return true;
     }
     return false;
 }
@@ -698,7 +700,24 @@ void CMainServer::InitBullets()
     {
         m_bullets[i].SetID(i);
         m_bullets[i].SetState(OBJECT_STATE::ST_FREE);
-    }
+	}
+
+    /*
+	wifstream fin;
+
+	fin.open(L"../Binary/Data/Info_Weapon.txt");
+	if (fin.fail())
+	{
+		cout << "file_error" << endl;
+		exit(-1);
+	}
+	while (true)
+	{
+		WEAPON t;
+		fin >> t.type >> t.damage >> t.shotspeed >> t.bulletspeed >> t.duration >> t.bulletoffset.x >> t.bulletoffset.y >> t.size;
+		if (fin.eof()) break;
+        m_bullet_data.push_back(t);
+	}	*/
 }
 
 void CMainServer::InitChests()
@@ -717,19 +736,19 @@ void CMainServer::InitPlayers()
     {
         CPlayer& player = cl.GetPlayer();
             player.SetState(STATE::TYPE::IDLE);
-            player.SetHealth(PLAYER_MAX_HP);  
-    }
-    //플레이어별 초기 좌표 설정 
+			player.SetHealth(PLAYER_MAX_HP);
+	}
+	//플레이어별 초기 좌표 설정 
 }
 
 void CMainServer::InitMapRects()
 {
 	// map_rect 값 넣어서 초기화
-	m_map_rects[0] = { {},{} };
-	m_map_rects[1] = { {},{} };
-	m_map_rects[2] = { {},{} };
-	m_map_rects[3] = { {},{} };
-	m_map_rects[4] = { {},{} };
+	m_map_rects[0] = { {-288 * 4,-627 * 4},{288 * 4,-245 * 4} };  //1번방
+	m_map_rects[1] = { {-32 * 4,-245 * 4},{32 * 4,-128 * 4} };    //1번 복도
+	m_map_rects[2] = { {-368 * 4,-128 * 4},{368 * 4,205 * 4} };   //2번방
+	m_map_rects[3] = { {-36 * 4,205 * 4},{36 * 4,355 * 4} };      //2번 복도
+	m_map_rects[4] = { {-353 * 4,355 * 4},{353 * 4,738 * 4} };    //3번방
 
 	//m_map_rects[MAX_MAP_RECT]
 }

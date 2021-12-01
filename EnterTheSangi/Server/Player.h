@@ -17,6 +17,7 @@ public:
 	float                GetHealth();
 	STATE::TYPE          GetState();
 
+	virtual srect        GetCollisionBox();
 	virtual float        vGetHeightHf();   //  return half height
 	virtual float        vGetWidthHf();    //  return half width
 	virtual OBJECT::TYPE vGetObjectType() const; // return object type
@@ -36,13 +37,11 @@ private:
 	DIR::DIR             m_direction;
 	char                 m_health;
 	bool                 m_is_invincible;
-	float                m_cool_time;
+
 
 	D3DXVECTOR3          m_body_color;
-	D3DXVECTOR3          m_cloth_color;
-	
-	static float         m_height_hf;
-	static float         m_width_hf;
+	D3DXVECTOR3          m_cloth_color;	
+
 	const static OBJECT::TYPE
 		m_object_type = OBJECT::PLAYER;
 };

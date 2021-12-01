@@ -2,6 +2,7 @@
 #include "GameObject.h"
 #include "Protocol.h"
 #include "Enum.h"
+#include "ObjectStatus.h"
 
 class CChest :public CGameObject
 {
@@ -11,6 +12,8 @@ public:
 
 	char                       GetID();
 	OBJECT_STATE::STATE        GetState();	
+
+	virtual srect              GetCollisionBox();
 	virtual float              vGetHeightHf();   //  return half height
 	virtual float              vGetWidthHf();    //  return half width
 	virtual OBJECT::TYPE       vGetObjectType()const; // return object type
@@ -21,7 +24,5 @@ public:
 private:
 	char                       m_id;
 	OBJECT_STATE::STATE        m_state;
-	static float               m_height_hf;
-	static float               m_width_hf;
 	const static OBJECT::TYPE  m_object_type = OBJECT::CHEST;
 };

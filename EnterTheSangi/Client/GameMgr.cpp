@@ -147,7 +147,7 @@ int GameMgr::Update_Networking()
 				++iter;
 		}
 	}
-
+	
 	return 0;
 }
 

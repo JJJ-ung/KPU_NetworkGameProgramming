@@ -10,9 +10,9 @@ CBullet::~CBullet()
 
 };
 
-void CBullet::SetType(char type)
+void CBullet::SetBulletType(char bullet_type)
 {
-	m_type = type;
+	m_bullet_type = bullet_type;
 }
 
 void CBullet::SetID(char id)
@@ -26,9 +26,9 @@ void CBullet::SetState(OBJECT_STATE::STATE state)
 	m_state = state;
 }
 
-char CBullet::GetType()
+char CBullet::GetBulletType()
 {
-	return m_type;
+	return m_bullet_type;
 }
 
 char CBullet::GetID()
@@ -40,6 +40,11 @@ OBJECT_STATE::STATE CBullet::GetState()
 {
 	return m_state;
 }
+
+srect CBullet::GetCollisionBox()
+{
+	return { {m_position.x - 0 , m_position.y - 0   },{m_position.x + 0, m_position.y + 0  } };//temp
+};
 
 float CBullet::vGetHeightHf()
 {

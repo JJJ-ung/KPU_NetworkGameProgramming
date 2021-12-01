@@ -33,6 +33,7 @@ struct svector2
 {
 	short x;
 	short y;
+
 };
 
 struct srect
