@@ -10,8 +10,8 @@ const char PLAYER_HEIGHT = 32 * 3;
 const char PLAYER_WIDTH = 32 * 3; 
 
 //chest
-const char CHEST_HEIGHT = 32 * 3; 
-const char CHEST_WIDTH = 32 * 3; 
+const char CHEST_HEIGHT = 25*3; 
+const char CHEST_WIDTH = 21*3; 
 
 //weapon
 

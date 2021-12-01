@@ -10,9 +10,10 @@ using namespace std;
 constexpr const char* SERVER_IP = "127.0.0.1";
 const int SERVER_PORT = 5000;
 const int MAX_CLIENTS = 3;
-const int MAX_BULLETS = 50;
+const int MAX_BULLETS = 100;
 const int MAX_CHESTS = 20;
 const int MAX_MAP_RECT = 5;
+const int MAX_WEAPON = 14;
 
 //constexpr unsigned int MAX_BUF_SIZE = 256;
 #define  MAX_NAME_SIZE 16

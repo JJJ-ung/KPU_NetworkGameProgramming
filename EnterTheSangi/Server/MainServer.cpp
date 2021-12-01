@@ -387,6 +387,7 @@ void CMainServer::ProcessPacket(char client_id)
             {
                 packet_put_chest.chest_id = chest.GetID();
                 packet_put_chest.position = chest.GetPosition();
+                packet_put_chest.weapon_id = chest.GetWeaponID();
                 for (auto& client : m_clients)
                     send(client.GetSocket(), (char*)&packet_put_chest, sizeof(sc_packet_put_chest), 0);
             }
@@ -644,13 +645,15 @@ void CMainServer::CollisionCheckPlayerChest()
 
                 //아이템 삭제 후 재생성 (실제로는 이동)
                 //맵 좌표 받고 좌표 생성 로직 최신화 필요
-                chest.SetPosition({ (short)(rand() % 1000), (short)(rand() % 1000) });
+                chest.SetPosition({ (short)(rand() % 300), (short)(rand() % 300) });
+                chest.SetWeaponID(rand() % MAX_WEAPON);
 
                 sc_packet_move_chest sp;
                 sp.type = SC_PACKET_MOVE_CHEST;
                 sp.size = sizeof(sc_packet_move_chest);
                 sp.chest_id = chest.GetID();
                 sp.position = chest.GetPosition();
+                sp.weapon_id = chest.GetWeaponID();
                 for (auto& client : m_clients)
                     send(client.GetSocket(), (char*)&sp, sizeof(sc_packet_move_chest), 0);
             }
@@ -726,7 +729,8 @@ void CMainServer::InitChests()
 	{
 		m_chests[i].SetID(i);
         m_bullets[i].SetState(OBJECT_STATE::ST_ALIVE);
-		m_chests[i].SetPosition(svector2{ (short)(i + 1) ,(short)(i + 1) });
+		m_chests[i].SetPosition(svector2{ (short)(i + 1)*100 ,(short)(i + 1)*100 });
+        m_chests[i].SetWeaponID(rand() % MAX_WEAPON);
 	}
 }
 

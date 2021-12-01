@@ -15,6 +15,11 @@ char CChest::GetID()
 	return m_id;
 }
 
+char CChest::GetWeaponID()
+{
+	return m_weapon_id;
+}
+
 OBJECT_STATE::STATE CChest::GetState()
 {
 	return m_state;
@@ -22,7 +27,7 @@ OBJECT_STATE::STATE CChest::GetState()
 
 srect CChest::GetCollisionBox()
 {
-	return { {m_position.x - 0 , m_position.y - 0  },{m_position.x + 0, m_position.y + 0  } }; //temp
+	return { {m_position.x - CHEST_WIDTH/2 , m_position.y - CHEST_HEIGHT / 2  },{m_position.x + CHEST_WIDTH / 2, m_position.y + CHEST_HEIGHT/2  } }; //temp
 };
 
 
@@ -49,4 +54,9 @@ void CChest::SetID(char id)
 void CChest::SetState(OBJECT_STATE::STATE state)
 {
 	m_state = state;
+}
+
+void CChest::SetWeaponID(char weapon_id)
+{
+	m_weapon_id = weapon_id;
 }
