@@ -115,6 +115,20 @@ void CMainServer::ClientThread(char id)
         }
         m_state_lock.unlock();
 
+		sc_packet_put_chest packet_put_chest;
+		packet_put_chest.type = SC_PACKET_PUT_CHEST;
+		packet_put_chest.size = sizeof(sc_packet_put_chest);
+		for (auto& chest : m_chests)
+		{
+			packet_put_chest.chest_id = chest.GetID();
+			packet_put_chest.position = chest.GetPosition();
+			packet_put_chest.weapon_id = chest.GetWeaponID();
+
+			send(m_clients[id].GetSocket(), (char*)&packet_put_chest, sizeof(sc_packet_put_chest), 0);
+			cout << "put chest: " << (int)packet_put_chest.chest_id << " at "
+				<< packet_put_chest.position.x << ", " << packet_put_chest.position.y << endl;
+
+		}
 
         //In Game
         m_state_lock.lock();
@@ -376,21 +390,7 @@ void CMainServer::ProcessPacket(char client_id)
             
             // 초기 상자 정보를 전송한다.
 
-            sc_packet_put_chest packet_put_chest;
-            packet_put_chest.type = SC_PACKET_PUT_CHEST;
-            packet_put_chest.size = sizeof(sc_packet_put_chest);
-            for (auto& chest : m_chests)
-            {
-                packet_put_chest.chest_id = chest.GetID();
-                packet_put_chest.position = chest.GetPosition();
-                packet_put_chest.weapon_id = chest.GetWeaponID();
-                for (auto& client : m_clients)
-                {
-                    send(client.GetSocket(), (char*)&packet_put_chest, sizeof(sc_packet_put_chest), 0);
-                    cout << "put chest: "<< (int)packet_put_chest.chest_id <<" at "
-                        << packet_put_chest.position.x<<", "<<packet_put_chest.position.y <<endl;
-                }
-            }
+           
             m_game_state = SCENE::STAGE;
             m_state_lock.unlock();
         }
@@ -732,7 +732,7 @@ void CMainServer::InitChests()
 	{
 		m_chests[i].SetID(i);
         m_bullets[i].SetState(OBJECT_STATE::ST_ALIVE);
-		m_chests[i].SetPosition(svector2{ (short)(i + 1)*50 ,(short)(i + 1)*50 });
+		m_chests[i].SetPosition(svector2{ (short)(i + 1)*200 ,(short)(i + 1)*200 });
         m_chests[i].SetWeaponID(rand() % MAX_WEAPON);
 	}
 }
