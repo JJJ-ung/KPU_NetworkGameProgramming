@@ -46,13 +46,6 @@ HRESULT MainMap::Ready_GameObject(Player* pLocalPlayer)
 
 INT MainMap::Update_GameObject(float time_delta)
 {
-	if(m_pInputMgr->KeyDown(KEY_SHIFT))
-	{
-		D3DXVECTOR3 v = m_pGameMgr->Get_PlayerPos();
-		v += m_pInputMgr->Get_MousePoint();
-		cout << v.x << ", " << v.y << endl;
-	}
-
 	return GameObject::Update_GameObject(time_delta);
 }
 

@@ -8,6 +8,7 @@
 #include "NetworkPlayer.h"
 #include "Weapon.h"
 #include "Bullet.h"
+#include "Chest.h"
 
 Scene_Stage::Scene_Stage(LPDIRECT3DDEVICE9 pGraphic_Device)
 	:Scene(pGraphic_Device)
@@ -63,6 +64,10 @@ HRESULT Scene_Stage::Ready_Scene()
 	if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::WEAPON, Weapon::Create(m_pGraphic_Device, p, 0))))
 		return E_FAIL;
 
+	//sc_packet_put_chest tt = { 0, 0, 0, 1, {0, 0} };
+	//if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::CHEST, Chest::Create(m_pGraphic_Device, tt))))
+	//	return E_FAIL;
+
 	//cout << "TestEnd" << endl;
 
 	return Scene::Ready_Scene();
@@ -83,10 +88,17 @@ HRESULT Scene_Stage::Setup_Recv(char c, void* recv)
 	m_pGameMgr->Recv_Networking(c, recv);
 	if(c == SC_PACKET_PUT_BULLET)
 	{
-		cout << "Add" << endl;
 		sc_packet_put_bullet t = {};
 		memcpy(&t, recv, sizeof(sc_packet_put_bullet));
 		if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::BULLET, Bullet::Create(m_pGraphic_Device, t))))
+			return E_FAIL;
+	}
+	if (c == SC_PACKET_PUT_CHEST)
+	{
+		cout << "add chest" << endl;
+		sc_packet_put_chest t = {};
+		memcpy(&t, recv, sizeof(sc_packet_put_chest));
+		if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::CHEST, Chest::Create(m_pGraphic_Device, t))))
 			return E_FAIL;
 	}
 
