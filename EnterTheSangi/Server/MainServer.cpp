@@ -372,11 +372,7 @@ void CMainServer::ProcessPacket(char client_id)
             sp.type = SC_PACKET_ALL_READY;     
             for (auto& cl : m_clients)
                 send(cl.GetSocket(), (char*)&sp, sizeof(sc_packet_all_ready), 0);
-
-            m_game_state = SCENE::STAGE;
-            m_state_lock.unlock();
-
-       
+                          
             
             // 초기 상자 정보를 전송한다.
 
@@ -389,8 +385,14 @@ void CMainServer::ProcessPacket(char client_id)
                 packet_put_chest.position = chest.GetPosition();
                 packet_put_chest.weapon_id = chest.GetWeaponID();
                 for (auto& client : m_clients)
+                {
                     send(client.GetSocket(), (char*)&packet_put_chest, sizeof(sc_packet_put_chest), 0);
+                    cout << "put chest: "<< (int)packet_put_chest.chest_id <<" at "
+                        << packet_put_chest.position.x<<", "<<packet_put_chest.position.y <<endl;
+                }
             }
+            m_game_state = SCENE::STAGE;
+            m_state_lock.unlock();
         }
     }
     else if (packet_type == CS_PACKET_PLAYER_INFO)
@@ -443,6 +445,7 @@ void CMainServer::ProcessPacket(char client_id)
             for (auto& client : m_clients)
             {
                 send(client.GetSocket(), (char*)&sp, sizeof(sc_packet_put_bullet), 0);
+               
             }
             break;  
         }
@@ -729,7 +732,7 @@ void CMainServer::InitChests()
 	{
 		m_chests[i].SetID(i);
         m_bullets[i].SetState(OBJECT_STATE::ST_ALIVE);
-		m_chests[i].SetPosition(svector2{ (short)(i + 1)*100 ,(short)(i + 1)*100 });
+		m_chests[i].SetPosition(svector2{ (short)(i + 1)*50 ,(short)(i + 1)*50 });
         m_chests[i].SetWeaponID(rand() % MAX_WEAPON);
 	}
 }
