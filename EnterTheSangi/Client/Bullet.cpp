@@ -35,7 +35,7 @@ HRESULT Bullet::Ready_GameObject(sc_packet_put_bullet tInfo)
 		return E_FAIL;
 	m_iType = tInfo.bullet_type;
 
-	m_vDir = { (float)tInfo.direction.x, (float)tInfo.direction.y, 0.f };
+	m_vDir = { (float)tInfo.direction.x * 0.00001f, (float)tInfo.direction.y * 0.00001f, 0.f };
 	D3DXVec3Normalize(&m_vDir, &m_vDir);
 
 	m_vPosition = { (float)tInfo.position.x, (float)tInfo.position.y, 0.f };

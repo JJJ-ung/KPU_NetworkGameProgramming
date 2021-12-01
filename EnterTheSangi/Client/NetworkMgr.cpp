@@ -114,8 +114,8 @@ HRESULT NetworkMgr::Send_BulletInfo(int type, float angle, D3DXVECTOR3 vPos, D3D
     t.angle = (short)angle;
     t.position.x = (short)vPos.x;
     t.position.y = (short)vPos.y;
-    t.direction.x = (short)vDir.x;
-    t.direction.y = (short)vDir.y;
+    t.direction.x = (short)vDir.x * 10000;
+    t.direction.y = (short)vDir.y * 10000;
     return Send_ClientInfo(CS_PACKET_SHOOT_BULLET, (void*)&t);
 }
 
