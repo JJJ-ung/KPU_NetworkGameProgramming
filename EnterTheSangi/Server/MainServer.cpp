@@ -182,21 +182,9 @@ void CMainServer::ServerThread()
         while (m_game_state == SCENE::ID::STAGE)
         {
             m_state_lock.unlock();
-
-            
-
-            ServerProcess();
-
-            auto time_t = chrono::high_resolution_clock::now();
-            if (time_t > m_server_timer)
-            {
-                // server process overflowed
-            }
-            else
-                Sleep(chrono::duration_cast<chrono::milliseconds>(m_server_timer - time_t).count());
-            m_server_timer += 1s / 60 * 2;
-
-            m_state_lock.lock();
+            if (m_PerformanceCounter.Frame_Limit(30.f))
+                ServerProcess();
+           m_state_lock.lock();
         }
         m_state_lock.unlock();
     }
