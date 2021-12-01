@@ -1,5 +1,6 @@
 #pragma once
 #include <d3dx9.h>
+#include <mutex>
 #include "Protocol.h"
 #include "GameObject.h"
 #include "Enum.h"
@@ -27,8 +28,11 @@ public:
 	void                 ChangeHealth(float delta_health); // add delta_health to player.health
 	void                 ChangeInvincibleMode();
 
+	void                 StateLock();
+	void                 StateUnlock();
 private:
 	STATE::TYPE          m_state;
+	mutex                m_state_lock;
 	DIR::DIR             m_direction;
 	char                 m_health;
 	bool                 m_is_invincible;

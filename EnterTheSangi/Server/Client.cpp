@@ -80,13 +80,3 @@ void  CClient::SocketUnlock()
 {
 	m_socket_lock.unlock();
 }
-
-void CClient::SetPlayerState(char t)
-{
-	m_player_state = t;
-}
-
-char CClient::GetPlayerState()
-{
-	return m_player_state;
-}

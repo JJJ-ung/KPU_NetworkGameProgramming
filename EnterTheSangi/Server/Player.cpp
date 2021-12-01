@@ -80,3 +80,13 @@ void CPlayer::ChangeInvincibleMode()
 {
 	m_is_invincible = !m_is_invincible;
 };
+
+void CPlayer::StateLock()
+{
+	m_state_lock.lock();
+}
+
+void CPlayer::StateUnlock()
+{
+	m_state_lock.unlock();
+}

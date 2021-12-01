@@ -394,17 +394,21 @@ void CMainServer::ProcessPacket(char client_id)
     }
     else if (packet_type == CS_PACKET_PLAYER_INFO)
     {
-        cs_packet_player_info rp;
-        memcpy(&rp, m_clients[client_id].GetBuf(), sizeof(cs_packet_player_info));
+	cs_packet_player_info rp;
+	memcpy(&rp, m_clients[client_id].GetBuf(), sizeof(cs_packet_player_info));
 
-        m_clients[client_id].GetPlayer().SetPosition(rp.m_position);
-        m_clients[client_id].GetPlayer().SetLook(rp.m_look);
-        m_clients[client_id].SetPlayerState(rp.m_state);
-    }
-    else if (packet_type == CS_PACKET_SHOOT_BULLET)
-    {
-    cs_packet_shoot_bullet rp;
-    memcpy(&rp, m_clients[client_id].GetBuf(), sizeof(cs_packet_shoot_bullet));
+	CPlayer& player = m_clients[client_id].GetPlayer();
+
+	player.SetPosition(rp.m_position);
+	player.SetLook(rp.m_look);
+    player.StateLock();
+	player.SetState(STATE::TYPE(rp.m_state));
+	player.StateUnlock();
+	}
+	else if (packet_type == CS_PACKET_SHOOT_BULLET)
+	{
+	cs_packet_shoot_bullet rp;
+	memcpy(&rp, m_clients[client_id].GetBuf(), sizeof(cs_packet_shoot_bullet));
     cout << "client [" << int(client_id) << "] recv : CS_PACKET_SHOOT_BULLET \n";
 
     for (int i=0;i<MAX_BULLETS;++i)
@@ -449,23 +453,27 @@ void CMainServer::ProcessPacket(char client_id)
     else
     {
 
-    }
+	}
 }
 
 void CMainServer::DoSend(char client_id)
 {
-    sc_packet_game_state sp;
-    
-    
-    for(int i = 0; i < MAX_CLIENTS; ++i)
-    {
-        sp.player[i].look = m_clients[i].GetPlayer().GetLook();
-        sp.player[i].position = m_clients[i].GetPlayer().GetPosition();
-        sp.player[i].state = m_clients[i].GetPlayerState();
-        sp.size = sizeof(sc_packet_game_state);
-        sp.type = SC_PACKET_GAME_STATE;
+	sc_packet_game_state sp;
 
-        // 죽은건 체력 0이면 클라에서 처리하자!
+
+	for (int i = 0; i < MAX_CLIENTS; ++i)
+	{
+		CPlayer& player = m_clients[i].GetPlayer();
+
+		sp.player[i].look = player.GetLook();
+		sp.player[i].position = player.GetPosition();
+		player.StateLock();
+		sp.player[i].state = player.GetState();
+		player.StateUnlock();
+		sp.size = sizeof(sc_packet_game_state);
+		sp.type = SC_PACKET_GAME_STATE;
+
+		// 죽은건 체력 0이면 클라에서 처리하자!
     }
     send(m_clients[client_id].GetSocket(), (char*)&sp, sizeof(sc_packet_game_state), 0);
 };
@@ -582,12 +590,16 @@ void CMainServer::CollisionCheckPlayerBullet()
 
                 char dmg;
                 //dmg=m_bullets[i].~~~~~~~  // 총알 종류에 따른 데미지값
+             
                 player.ChangeHealth(-dmg);               
 
                 //플레이어 사망 판정
-                if (player.GetHealth()==0)
+                if (player.GetHealth() == 0)
+                {
+                    player.StateLock();
                     player.SetState(STATE::TYPE::DEAD);
-                
+                    player.StateUnlock();
+                }
 
                 //불릿 삭제
                 m_bullets[i].StateLock();
