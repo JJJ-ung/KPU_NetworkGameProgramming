@@ -32,10 +32,24 @@ public:
         return m_fDeltaTime;
     }
 
+    bool Frame_Limit(float frame_limit)
+    {
+        m_arrTimers_TimeAcc += update();
+
+        if ((1.f / frame_limit) < m_arrTimers_TimeAcc)
+        {
+            cout << "fps : " << (1.f / m_arrTimers_TimeAcc) << endl;
+            m_arrTimers_TimeAcc = 0.f;
+            return true;
+        }
+        return false;
+    }
+
 private:
     LARGE_INTEGER m_CountTime;
     LARGE_INTEGER m_CurTime;
     LARGE_INTEGER m_PrevTime;
     double m_dDeltaTime;
     float m_fDeltaTime;
+    float m_arrTimers_TimeAcc;
 };
