@@ -39,6 +39,7 @@ void CMainServer::Init(const int server_port)
         temp.y = 0;
         m_clients[i].GetPlayer().SetPosition(temp);
         m_clients[i].GetPlayer().SetLook(0);
+        m_clients[i].GetPlayer().SetHealth(10);
     }
 
     for (auto& cl : m_clients)
@@ -53,6 +54,8 @@ void CMainServer::Init(const int server_port)
     for (int i = 0; i < MAX_CLIENTS; ++i)
         m_client_event[i] = CreateEvent(NULL, true, true, NULL);
     m_server_event = CreateEvent(NULL, true, false, NULL);
+
+    m_PerformanceCounter.reset();
 };
 
 void CMainServer::Activate()
@@ -117,6 +120,9 @@ void CMainServer::ClientThread(char id)
         m_state_lock.lock();
         while (m_game_state == SCENE::ID::STAGE)
         {
+            float fDelta = m_PerformanceCounter.update();
+            float fps = 1 / fDelta;
+            cout << "fps : " << fps << endl;
             m_state_lock.unlock();
             //스레드 동기화
             //타이머 필요
@@ -470,18 +476,13 @@ void CMainServer::DoSend(char client_id)
         sp.player[i].state = m_clients[i].GetPlayerState();
         sp.size = sizeof(sc_packet_game_state);
         sp.type = SC_PACKET_GAME_STATE;
-        //cout << sp.player[i].look << ", (" << sp.player[i].position.x << ", " << sp.player[i].position.y << "), " << sp.player[i].state << endl;
-    }
-    //for (auto& sc : m_clients)
-    //{
-    //    send(sc.GetSocket(), (char*)&sp, sizeof(sc_packet_game_state), 0);
-    //    //cout << "ingame data send! \n";
-    //}
 
+        //if (m_clients[i].GetPlayer().GetHealth() == 0)
+        //    sp.player[i].is_dead = true;
+        //else
+        //    sp.player[i].is_dead = false;
+    }
     send(m_clients[client_id].GetSocket(), (char*)&sp, sizeof(sc_packet_game_state), 0);
-    // 여기서 플레이어들 정보 취합후 일괄 전송
-    //for (auto& cl : m_clients)
-    //    send(cl.GetSocket(), (char*)&sp, sizeof(sc_packet_game_state), 0);
 };
 
 int CMainServer::DoRecv(char id)
@@ -540,8 +541,8 @@ int CMainServer::DoAccept()
     }
 };
 
-void CMainServer::ServerProcess() {
-
+void CMainServer::ServerProcess() 
+{
     //CollisionCheckTerrainPlayer();
     CollisionCheckPlayerBullet();
     CollisionCheckTerrainBullet();
@@ -585,12 +586,19 @@ void CMainServer::CollisionCheckPlayerBullet()
         CPlayer& player = client.GetPlayer();
         for (int i = 0; i > MAX_BULLETS; ++i)
         {
-            if (CollisionCheck(m_bullets[i], player) == true)
+            if (CollisionCheck(m_bullets[i], player) == true && player.GetHealth() > 0)
             {
                 //플레이어 체력 감소
+                float health = player.GetHealth();
+                
+                switch (m_bullets[i].GetType())
+                {
+                
+                }
+                // health를 여기서 감소시킬건데 총알 타입에 따른 데미지를 받아오는 친구가 있나..?
 
-                //플레이어 사망 판정
-
+                //플레이어 사망 판정 -> 그냥 체력이 0이면 충돌체크 끄자..
+                
                 //불릿 삭제
                 m_bullets[i].StateLock();
                 m_bullets[i].SetState(OBJECT_STATE::ST_FREE);
@@ -630,7 +638,7 @@ void CMainServer::CollisionCheckPlayerChest()
 
                 //아이템 삭제 후 재생성 (실제로는 이동)
                 //맵 좌표 받고 좌표 생성 로직 최신화 필요
-                chest.SetPosition({ rand() % 1000, rand() % 1000 });
+                chest.SetPosition({ (short)(rand() % 1000), (short)(rand() % 1000) });
 
                 sc_packet_move_chest sp;
                 sp.type = SC_PACKET_MOVE_CHEST;
@@ -677,7 +685,7 @@ void CMainServer::InitChests()
 	{
 		m_chests[i].SetID(i);
         m_bullets[i].SetState(OBJECT_STATE::ST_ALIVE);
-		m_chests[i].SetPosition(svector2{ i + 1 ,i + 1 });
+		m_chests[i].SetPosition(svector2{ (short)(i + 1) ,(short)(i + 1) });
 	}
 }
 

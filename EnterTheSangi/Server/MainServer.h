@@ -15,6 +15,7 @@
 #include "GameObject.h"
 #include "Chest.h"
 #include "Bullet.h"
+#include "Server_Timer.h"
 
 class CMainServer
 {
@@ -50,6 +51,7 @@ public:
 
 private:
 	SOCKET                   m_listen_socket;
+
 	std::array<CClient, 3>   m_clients;
 	std::vector<std::thread> m_client_threads;
 	std::vector<std::thread> m_server_threads;
@@ -60,7 +62,7 @@ private:
 
 	SCENE::ID                m_game_state;
 	std::mutex               m_state_lock;
-
+	Server_Timer			 m_PerformanceCounter;
 	std::array<CChest,MAX_CHESTS> m_chests;
 	std::array<CBullet, MAX_BULLETS> m_bullets;
 
