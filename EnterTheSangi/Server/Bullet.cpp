@@ -90,3 +90,13 @@ float CBullet::GetBulletSpeed()
 {
 	return m_fSpeed;
 }
+
+void CBullet::SetBulletPosition(D3DXVECTOR3 pos)
+{
+	m_bullet_pos = pos;
+}
+
+D3DXVECTOR3 CBullet::GetBulletPosition()
+{
+	return m_bullet_pos;
+}

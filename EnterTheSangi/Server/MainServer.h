@@ -83,4 +83,5 @@ private:
 	std::array<CChest,MAX_CHESTS> m_chests;
 	std::array<CBullet, MAX_BULLETS> m_bullets;
 	std::array<srect, MAX_MAP_RECT>  m_map_rects;
+	std::vector<WEAPON>				 m_weapon_info;
 };

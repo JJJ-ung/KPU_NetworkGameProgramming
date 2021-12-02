@@ -6,6 +6,18 @@ CMainServer::~CMainServer() {};
 int ttt;
 void CMainServer::Init(const int server_port)
 {
+    wifstream fin;
+    fin.open("../Binary/Data/info_Weapon.txt");
+    if (fin.fail())
+        cout << "file load fail \n";
+    while (true)
+    {
+        WEAPON t;
+        fin >> t.type >> t.damage >> t.shotspeed >> t.bulletspeed >> t.duration >> t.bulletoffset.x >> t.bulletoffset.y >> t.size;
+        if (fin.eof()) break;
+        m_weapon_info.emplace_back(t);
+    }
+
     int rt;
 
     WSADATA wsa;
@@ -430,11 +442,19 @@ void CMainServer::ProcessPacket(char client_id)
             m_bullets[i].SetBulletType(rp.bullet_type);
             //m_bullets[i].SetLook(rp.look);
             m_bullets[i].SetPosition(rp.position);
+            m_bullets[i].SetBulletPosition(D3DXVECTOR3{ (float)rp.position.x, (float)rp.position.y, 0.f });
             cout << "rp pos : (" << rp.position.x << ", " << rp.position.y << ") \n";
             m_bullets[i].SetLook(rp.angle);
             m_bullets[i].SetDirection({ (float)rp.direction.x * 0.00001f, (float)rp.direction.y * 0.00001f, 0.f });
            // 서버에서 가지는 총알포지션 값에 델타타임 적용 필요 (서버 충돌체크용)
-
+            for (auto& weapon : m_weapon_info)
+            {
+                if (weapon.type == rp.bullet_type)
+                {
+                    m_bullets[i].SetBulletSpeed(weapon.bulletspeed);
+                    break;
+                }
+            }
 
             sc_packet_put_bullet sp;           
             sp.size = sizeof(sc_packet_put_bullet);
@@ -543,7 +563,7 @@ void CMainServer::ServerProcess()
 {
     //CollisionCheckTerrainPlayer();
     UpdateBullet();
-    //CollisionCheckPlayerBullet();
+    CollisionCheckPlayerBullet();
     CollisionCheckTerrainBullet();
     CollisionCheckPlayerChest();
 };
@@ -559,14 +579,17 @@ void CMainServer::UpdateBullet()
             continue;
         }
         m_bullets[i].StateUnlock();
-
         D3DXVECTOR3 m_vDir = m_bullets[i].GetDirection();
+        //
         D3DXVec3Normalize(&m_vDir, &m_vDir);
-        D3DXVECTOR3 m_vPosition{ (float)m_bullets[i].GetPosition().x, (float)m_bullets[i].GetPosition().y, 0.f };
-        m_vPosition += (m_vDir * 1.f * (1.f / 30.f));
+        cout << m_vDir.x << ", " << m_vDir.y << endl;
+        D3DXVECTOR3 m_vPosition = m_bullets[i].GetBulletPosition();
+        float deltaTime = 1.f / 30.f;
+        m_vPosition += m_vDir * m_bullets[i].GetBulletSpeed() * deltaTime;
+        m_bullets[i].SetBulletPosition(m_vPosition);
         m_bullets[i].SetPosition({ (short)m_vPosition.x, (short)m_vPosition.y });
 
-        cout << "bullet[" << i << "] pos : (" << m_bullets[i].GetPosition().x << ", " << m_bullets[i].GetPosition().y << ") \n";
+        cout << "after : bullet[" << i << "] pos : (" << m_vPosition.x << ", " << m_vPosition.y << ") \n";
     }
 }
 
@@ -579,6 +602,13 @@ void CMainServer::CollisionCheckTerrainBullet()
 {
     for (int i = 0; i < MAX_BULLETS; ++i)
     {
+        m_bullets[i].StateLock();
+        if (m_bullets[i].GetState() == OBJECT_STATE::ST_FREE)
+        {
+            m_bullets[i].StateUnlock();
+            continue;
+        }
+        m_bullets[i].StateUnlock();
         if (TerrainCollisionCheck(m_bullets[i]))//벽 충돌시
         {
             //총알 삭제
