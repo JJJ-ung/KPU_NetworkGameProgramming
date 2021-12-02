@@ -70,7 +70,9 @@ HRESULT GameMgr::Delete_GameObject(OBJECT::TYPE eType, char iObjID)
 		{
 			SafeDelete(*iter);
 			iter = m_lstObj[eType].erase(iter);
+			return NOERROR;
 		}
+		++iter;
 	}
 	return NOERROR;
 }
