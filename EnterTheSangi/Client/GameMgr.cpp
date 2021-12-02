@@ -34,6 +34,9 @@ int GameMgr::Update_GameMgr(float TimeDelta)
 {
 	if (!m_pCurrScene) return -1;
 
+	if (FAILED(Delete_GameObject()))
+		return -1;
+
 	if (FAILED(Update_GameObject(TimeDelta)))
 		return -1;
 
@@ -59,21 +62,32 @@ HRESULT GameMgr::Add_GameObject(OBJECT::TYPE eType, GameObject* pObj)
 	return NOERROR;
 }
 
-HRESULT GameMgr::Delete_GameObject(OBJECT::TYPE eType, char iObjID)
+HRESULT GameMgr::Delete_GameObject()
 {
-	if (iObjID >= m_lstObj[eType].size())
-		return E_FAIL;
-
-	for (auto iter = m_lstObj[eType].begin(); iter != m_lstObj[eType].end(); )
+	for(int i = 0; i < OBJECT::END; ++i)
 	{
-		if ((*iter)->Get_ObjID() == iObjID)
+		if(m_vecDeleteItems[i].empty())
+			continue;
+
+		for(auto id : m_vecDeleteItems[i])
 		{
-			SafeDelete(*iter);
-			iter = m_lstObj[eType].erase(iter);
-			return NOERROR;
+			auto iter = find_if(m_lstObj[i].begin(), m_lstObj[i].end(), 
+				[&id](GameObject* p) {return p->Get_ObjID() == id; });
+			if(iter != m_lstObj[i].end())
+			{
+				SafeDelete(*iter);
+				iter = m_lstObj[i].erase(iter);
+			}
 		}
-		++iter;
+
+		m_vecDeleteItems[i].clear();
 	}
+	return NOERROR;
+}
+
+HRESULT GameMgr::Add_DeleteObject(OBJECT::TYPE eType, char iObjID)
+{
+	m_vecDeleteItems[eType].push_back(iObjID);
 	return NOERROR;
 }
 

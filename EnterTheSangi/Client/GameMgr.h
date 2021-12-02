@@ -18,7 +18,8 @@ public:
 public:
 	HRESULT Set_CurrScene(Scene* pScene);
 	HRESULT Add_GameObject(OBJECT::TYPE eType, GameObject* pObj);
-	HRESULT Delete_GameObject(OBJECT::TYPE eType, char iObjID);
+	HRESULT Delete_GameObject();
+	HRESULT Add_DeleteObject(OBJECT::TYPE eType, char iObjID);
 	GameObject* Get_GameObject(OBJECT::TYPE eType, char iObjID);
 
 public:
@@ -51,6 +52,7 @@ private:
 	typedef list<GameObject*> OBJLST;
 	OBJLST m_lstObj[OBJECT::END];
 	OBJLST m_lstPrototype[OBJECT::END];
+	vector<int> m_vecDeleteItems[OBJECT::END];
 
 private:
 	vector<CLIENT> m_vecClients;
