@@ -34,9 +34,6 @@ int GameMgr::Update_GameMgr(float TimeDelta)
 {
 	if (!m_pCurrScene) return -1;
 
-	if (FAILED(Delete_GameObject()))
-		return -1;
-
 	if (FAILED(Update_GameObject(TimeDelta)))
 		return -1;
 
