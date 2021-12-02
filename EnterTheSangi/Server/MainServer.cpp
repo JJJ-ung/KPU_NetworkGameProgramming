@@ -61,6 +61,7 @@ void CMainServer::Init(const int server_port)
 
     InitBullets();
     InitChests();
+    InitMapRects();
 
     m_game_state = SCENE::CUSTOMIZE;
     for (int i = 0; i < MAX_CLIENTS; ++i)
@@ -564,7 +565,7 @@ void CMainServer::ServerProcess()
     //CollisionCheckTerrainPlayer();
     UpdateBullet();
     //CollisionCheckPlayerBullet();
-    //CollisionCheckTerrainBullet();
+    CollisionCheckTerrainBullet();
     CollisionCheckPlayerChest();
 };
 
@@ -582,14 +583,14 @@ void CMainServer::UpdateBullet()
         D3DXVECTOR3 m_vDir = m_bullets[i].GetDirection();
         //
         D3DXVec3Normalize(&m_vDir, &m_vDir);
-        cout << m_vDir.x << ", " << m_vDir.y << endl;
+        //cout << m_vDir.x << ", " << m_vDir.y << endl;
         D3DXVECTOR3 m_vPosition = m_bullets[i].GetBulletPosition();
         float deltaTime = 1.f / 30.f;
         m_vPosition += m_vDir * m_bullets[i].GetBulletSpeed() * deltaTime;
         m_bullets[i].SetBulletPosition(m_vPosition);
         m_bullets[i].SetPosition({ (short)m_vPosition.x, (short)m_vPosition.y });
 
-        cout << "after : bullet[" << i << "] pos : (" << m_vPosition.x << ", " << m_vPosition.y << ") \n";
+        //cout << "after : bullet[" << i << "] pos : (" << m_vPosition.x << ", " << m_vPosition.y << ") \n";
     }
 }
 
@@ -752,8 +753,8 @@ bool CMainServer::CollisionCheck(T1& object_1, T2& object_2)
     if ((object_1.GetCollisionBox().pos_1.y) > object_2.GetCollisionBox().pos_2.y) return false;
     //LEFT
     if ((object_1.GetCollisionBox().pos_2.x) < object_2.GetCollisionBox().pos_1.x)return false;
-    //RIGHT
-    if ((object_1.GetCollisionBox().pos_1.x) > object_2.GetCollisionBox().pos_2.x)  return false;
+	//RIGHT
+	if ((object_1.GetCollisionBox().pos_1.x) > object_2.GetCollisionBox().pos_2.x)  return false;
 
 	return true;
 }
@@ -761,18 +762,16 @@ bool CMainServer::CollisionCheck(T1& object_1, T2& object_2)
 template<class T1 >
 bool CMainServer::TerrainCollisionCheck(T1& object_1) // 맵 안에 있으면 false, 벽이랑 닿거나 넘어가면 true
 {
-    for (auto& map_rect : m_map_rects)
-    {
-        //UP
-        if ((object_1.GetCollisionBox().pos_1.y) <= map_rect.pos_1.y) return true;
-        //DOWN
-        if ((object_1.GetCollisionBox().pos_2.y) >= map_rect.pos_2.y) return true;
-        //LEFT
-        if ((object_1.GetCollisionBox().pos_1.x) <= map_rect.pos_1.x)return true;
-        //RIGHT
-        if ((object_1.GetCollisionBox().pos_2.x) >= map_rect.pos_2.x)  return true;
+	int i = 0;
+	for (auto& map_rect : m_map_rects)
+	{
+		if (((object_1.GetCollisionBox().pos_1.y) > map_rect.pos_1.y)  //UP
+			&& ((object_1.GetCollisionBox().pos_2.y) < map_rect.pos_2.y) //DOWN
+			&& ((object_1.GetCollisionBox().pos_1.x) > map_rect.pos_1.x) //LEFT
+			&& ((object_1.GetCollisionBox().pos_2.x) < map_rect.pos_2.x)) //RIGHT
+			return false;
     }
-    return false;
+    	return true;
 }
 
 void CMainServer::InitBullets()
