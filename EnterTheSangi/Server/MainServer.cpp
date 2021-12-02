@@ -438,7 +438,7 @@ void CMainServer::ProcessPacket(char client_id)
         else if (m_bullets[i].GetState() == OBJECT_STATE::ST_FREE)
         {
             m_bullets[i].SetState(OBJECT_STATE::ST_ALIVE);
-            m_bullets[i].StateUnlock();
+           
             m_bullets[i].SetBulletType(rp.bullet_type);
             //m_bullets[i].SetLook(rp.look);
             m_bullets[i].SetPosition(rp.position);
@@ -455,6 +455,10 @@ void CMainServer::ProcessPacket(char client_id)
                     break;
                 }
             }
+            m_bullets[i].StateUnlock();
+
+            cout << "new_bullet, id: " << (int)i << endl;
+            cout << m_bullets[i].GetPosition().x << ", " << m_bullets[i].GetPosition().y << endl;
 
             sc_packet_put_bullet sp;           
             sp.size = sizeof(sc_packet_put_bullet);
@@ -562,10 +566,11 @@ int CMainServer::DoAccept()
 void CMainServer::ServerProcess() 
 {
     //CollisionCheckTerrainPlayer();
-    UpdateBullet();
+    
     //CollisionCheckPlayerBullet();
     //CollisionCheckTerrainBullet();
     CollisionCheckPlayerChest();
+    UpdateBullet();
 };
 
 void CMainServer::UpdateBullet()
@@ -616,6 +621,8 @@ void CMainServer::CollisionCheckTerrainBullet()
             m_bullets[i].SetState(OBJECT_STATE::ST_FREE);
             m_bullets[i].StateUnlock();
 
+            cout << "remove_bullet, id: " << (int)i << endl;
+            cout << m_bullets[i].GetPosition().x << ", " << m_bullets[i].GetPosition().y << endl;
 
             sc_packet_remove_bullet sp;
             sp.type = SC_PACKET_REMOVE_BULLET;
@@ -678,6 +685,8 @@ void CMainServer::CollisionCheckPlayerBullet()
                 sp.type = SC_PACKET_REMOVE_BULLET;
                 sp.size = sizeof(sc_packet_remove_bullet);
                 sp.bullet_id = m_bullets[i].GetID();
+
+        
 
                 for (auto& client : m_clients)
                 {
