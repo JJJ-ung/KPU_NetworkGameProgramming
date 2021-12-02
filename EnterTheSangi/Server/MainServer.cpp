@@ -61,6 +61,7 @@ void CMainServer::Init(const int server_port)
 
     InitBullets();
     InitChests();
+    InitMapRects();
 
     m_game_state = SCENE::CUSTOMIZE;
     for (int i = 0; i < MAX_CLIENTS; ++i)
@@ -568,7 +569,7 @@ void CMainServer::ServerProcess()
     //CollisionCheckTerrainPlayer();
     
     //CollisionCheckPlayerBullet();
-    //CollisionCheckTerrainBullet();
+    CollisionCheckTerrainBullet();
     CollisionCheckPlayerChest();
     UpdateBullet();
 };
@@ -770,18 +771,19 @@ bool CMainServer::CollisionCheck(T1& object_1, T2& object_2)
 template<class T1 >
 bool CMainServer::TerrainCollisionCheck(T1& object_1) // 맵 안에 있으면 false, 벽이랑 닿거나 넘어가면 true
 {
-    for (auto& map_rect : m_map_rects)
-    {
-        //UP
-        if ((object_1.GetCollisionBox().pos_1.y) <= map_rect.pos_1.y) return true;
-        //DOWN
-        if ((object_1.GetCollisionBox().pos_2.y) >= map_rect.pos_2.y) return true;
-        //LEFT
-        if ((object_1.GetCollisionBox().pos_1.x) <= map_rect.pos_1.x)return true;
-        //RIGHT
-        if ((object_1.GetCollisionBox().pos_2.x) >= map_rect.pos_2.x)  return true;
-    }
-    return false;
+	for (auto& map_rect : m_map_rects)
+	{
+		//UP
+        if (((object_1.GetCollisionBox().pos_1.y) > map_rect.pos_1.y) &&
+            //DOWN
+            ((object_1.GetCollisionBox().pos_2.y) < map_rect.pos_2.y) &&
+            //LEFT
+            ((object_1.GetCollisionBox().pos_1.x) > map_rect.pos_1.x) &&
+            //RIGHT
+            ((object_1.GetCollisionBox().pos_2.x) < map_rect.pos_2.x))
+            return false;
+	}
+    return true;
 }
 
 void CMainServer::InitBullets()
@@ -816,7 +818,7 @@ void CMainServer::InitChests()
 	{
 		m_chests[i].SetID(i);
         m_chests[i].SetState(OBJECT_STATE::ST_ALIVE);
-		m_chests[i].SetPosition(svector2{ (short)(i + 1)*200 ,(short)(i + 1)*200 });
+		m_chests[i].SetPosition(svector2{ (short)((i + 1)*200) ,(short)((i + 1)*200 )});
         m_chests[i].SetWeaponID(rand() % MAX_WEAPON);
 	}
 }
