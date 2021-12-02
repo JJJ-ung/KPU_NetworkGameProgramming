@@ -499,7 +499,7 @@ void CMainServer::DoSend(char client_id)
 		sp.size = sizeof(sc_packet_game_state);
 		sp.type = SC_PACKET_GAME_STATE;
 
-		// 죽은건 체력 0이면 클라에서 처리하자!
+		// 죽은건 체력 0이면 클라에서F 처리하자!
     }
     send(m_clients[client_id].GetSocket(), (char*)&sp, sizeof(sc_packet_game_state), 0);
 };
@@ -563,8 +563,8 @@ void CMainServer::ServerProcess()
 {
     //CollisionCheckTerrainPlayer();
     UpdateBullet();
-    CollisionCheckPlayerBullet();
-    CollisionCheckTerrainBullet();
+    //CollisionCheckPlayerBullet();
+    //CollisionCheckTerrainBullet();
     CollisionCheckPlayerChest();
 };
 
@@ -641,8 +641,17 @@ void CMainServer::CollisionCheckPlayerBullet()
 
         for (int i = 0; i < MAX_BULLETS; ++i)
         {
+            m_bullets[i].StateLock();
+            if (m_bullets[i].GetState() == OBJECT_STATE::ST_FREE)
+            {
+                m_bullets[i].StateUnlock();
+                continue;
+            }
+            m_bullets[i].StateUnlock();
+
             if (CollisionCheck(m_bullets[i], player) == true )
             {            
+                cout << "player id : " << (int)client.GetID() << "crash...? \n";
                 //플레이어 체력 감소
                 // health를 여기서 감소시킬건데 총알 타입에 따른 데미지를 받아오는 친구가 있나..?
                 //cout << "crash!!! \n";
