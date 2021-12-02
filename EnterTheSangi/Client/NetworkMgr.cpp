@@ -10,7 +10,6 @@ NetworkMgr::NetworkMgr()
 
 NetworkMgr::~NetworkMgr()
 {
-    closesocket(m_socket);
     Free();
 }
 
@@ -159,7 +158,7 @@ unsigned NetworkMgr::Thread_Recv(void* pArg)
 void NetworkMgr::Free()
 {
     m_bFinish = true;
-    WaitForSingleObject(m_hThread, INFINITE);
+    WaitForSingleObject(m_hThread, 1000);
     CloseHandle(m_hThread);
     DeleteCriticalSection(&m_Crt);
     cout << "Thread Closed" << endl;

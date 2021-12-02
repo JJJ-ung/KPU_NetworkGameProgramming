@@ -93,7 +93,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     pTimerMgr->DestroyInstance();
     g_pInputMgr->DestroyInstance();
 
+#ifdef _DEBUG
     _CrtDumpMemoryLeaks();
+#endif
 
     return (int) msg.wParam;
 }
