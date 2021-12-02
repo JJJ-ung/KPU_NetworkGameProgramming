@@ -1,5 +1,4 @@
 # KPU_NetworkGameProgramming
 
-## 모작 게임 : Enter the gungeon
-![Alt text](/Binary/Resource/Logo_0.png)
-<img src="/path/to/img.jpg" width="450px" height="300px" title="px(픽셀) 크기 설정" alt="RubberDuck"></img><br/>
+## 게임 : Enter the gungeon (By. JJUNG)
+![Logo_0](https://user-images.githubusercontent.com/34495911/144363475-f0eeee67-6ff3-414d-86ce-3ba422eb978a.png)
