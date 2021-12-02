@@ -61,16 +61,18 @@ HRESULT GameMgr::Add_GameObject(OBJECT::TYPE eType, GameObject* pObj)
 
 HRESULT GameMgr::Delete_GameObject(OBJECT::TYPE eType, char iObjID)
 {
+	if (iObjID > m_lstObj[eType].size())
+		return E_FAIL;
+
 	for (auto iter = m_lstObj[eType].begin(); iter != m_lstObj[eType].end(); )
 	{
 		if ((*iter)->Get_ObjID() == iObjID)
 		{
 			SafeDelete(*iter);
-			m_lstObj[eType].erase(iter);
-			return NOERROR;
+			iter = m_lstObj[eType].erase(iter);
 		}
 	}
-	return E_FAIL;
+	return NOERROR;
 }
 
 GameObject* GameMgr::Get_GameObject(OBJECT::TYPE eType, char iObjID)
