@@ -93,6 +93,7 @@ HRESULT Scene_Stage::Setup_Recv(char c, void* recv)
 	{
 		sc_packet_put_bullet t = {};
 		memcpy(&t, recv, sizeof(sc_packet_put_bullet));
+		cout << "Add " << t.bullet_id << endl;
 		if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::BULLET, Bullet::Create(m_pGraphic_Device, t))))
 			return E_FAIL;
 	}
@@ -118,6 +119,7 @@ HRESULT Scene_Stage::Setup_Recv(char c, void* recv)
 	{
 		sc_packet_remove_bullet t = {};
 		memcpy(&t, recv, sizeof(sc_packet_remove_bullet));
+		cout << "Delete " << t.bullet_id << endl;
 		if (FAILED(m_pGameMgr->Delete_GameObject(OBJECT::BULLET, t.bullet_id)))
 			return E_FAIL;
 	}
