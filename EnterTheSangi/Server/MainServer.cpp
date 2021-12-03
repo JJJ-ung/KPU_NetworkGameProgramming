@@ -171,9 +171,32 @@ void CMainServer::ClientThread(char id)
         }
         m_state_lock.unlock();
         
-        //수신 성공시 suspend thread
-        //모든 클라이언트로부터 recv 혹은 timeout시 서버 연산
-        //이후 resume thread
+        //게임 종료시 
+        //어케?
+        m_state_lock.lock();
+        while (m_game_state == SCENE::ID::END)
+        {
+            m_state_lock.unlock();
+            //스레드 동기화
+            //타이머 필요
+            ret = DoRecv(id);
+            if (ret == SOCKET_ERROR)
+            {
+                m_state_lock.lock();
+                continue;
+            }
+            else if (ret == 0)
+            {
+                m_state_lock.lock();
+                continue;
+            }
+            //ProcessPacket(id);
+
+      
+
+            m_state_lock.lock();
+        }
+        m_state_lock.unlock();
     }
 }
 
@@ -212,6 +235,19 @@ void CMainServer::ServerThread()
             if (m_PerformanceCounter.Frame_Limit(30.f))
                 ServerProcess();
            m_state_lock.lock();
+        }
+        m_state_lock.unlock();
+
+        //Game End      
+        //게임 종료시 리셋 후 다시? 어캐?
+        m_state_lock.lock();
+        while (m_game_state == SCENE::ID::END)
+        {
+            m_state_lock.unlock();
+
+
+
+            m_state_lock.lock();
         }
         m_state_lock.unlock();
     }
@@ -583,6 +619,7 @@ void CMainServer::ServerProcess()
     CollisionCheckTerrainBullet();
     CollisionCheckPlayerChest();
     UpdateBullet();
+    CheckGameEnd();
 };
 
 void CMainServer::UpdateBullet()
@@ -872,7 +909,7 @@ char CMainServer::GetRandomWeapon()
 {
     static uniform_int_distribution<int> weapon_uid{ 0,MAX_WEAPON };
 
-    return weapon_uid(dre);
+    return weapon_uid(m_dre);
 }
 
 svector2 CMainServer::GetRandomPosition()
@@ -880,7 +917,7 @@ svector2 CMainServer::GetRandomPosition()
 	static uniform_int_distribution<int> uid(0, m_max_spawn_point);
 
 
-	int rand_num = uid(dre);
+	int rand_num = uid(m_dre);
 	svector2 rst;
 
 	for (int i = 0; i < MAX_MAP_RECT; ++i)
@@ -889,8 +926,8 @@ svector2 CMainServer::GetRandomPosition()
 		{
             uniform_int_distribution<int> uid_x(0, (m_map_rects[i].pos_2.x - m_map_rects[i].pos_1.x - CHEST_WIDTH));
             uniform_int_distribution<int> uid_y(0, (m_map_rects[i].pos_2.y - m_map_rects[i].pos_1.y - CHEST_HEIGHT));
-            rst.x = m_map_rects[i].pos_1.x +uid_x(dre);
-			rst.y = m_map_rects[i].pos_1.y+uid_y(dre);
+            rst.x = m_map_rects[i].pos_1.x +uid_x(m_dre);
+			rst.y = m_map_rects[i].pos_1.y+uid_y(m_dre);
 			break;
 		}
 		else
@@ -954,4 +991,55 @@ void CMainServer::Disconnect(char id)
         send(cl.GetSocket(), (char*)&sp, sizeof(sc_packet_remove_object), 0); // 연결을 종료하면 클라쪽에서도 안보여야 정상일듯?
     }
     m_clients[id].StateUnlock();
+}
+
+void CMainServer::CheckGameEnd()
+{
+    char winner = -1;
+    char alive_player_num = 0;
+    for (int i = 0; i < MAX_CLIENTS; ++i)
+    {
+        m_clients[i].GetPlayer().StateLock();
+		if (m_clients[i].GetPlayer().GetState() != STATE::TYPE::DEAD)
+		{
+			winner = i;
+			alive_player_num += 1;
+		}
+		m_clients[i].GetPlayer().StateUnlock();
+	}
+
+	if (alive_player_num == 0) //전원 사망
+	{
+		sc_packet_game_end packet;
+		packet.size = sizeof(sc_packet_game_end);
+		packet.type = SC_PACKET_GAME_END;
+		packet.winner_id = winner;
+		for (auto& client : m_clients)
+			send(client.GetSocket(), (char*)&packet, sizeof(sc_packet_game_end), 0);
+
+        m_state_lock.lock();
+        m_game_state = SCENE::ID::END;
+        m_state_lock.unlock();
+
+		cout << "Game End, No Winner" << endl;
+	}
+	else if (alive_player_num == 1) //1명 생존
+	{
+        sc_packet_game_end packet;
+        packet.size = sizeof(sc_packet_game_end);
+        packet.type = SC_PACKET_GAME_END;
+        packet.winner_id = winner;
+        for (auto& client : m_clients)
+            send(client.GetSocket(), (char*)&packet, sizeof(sc_packet_game_end), 0);
+
+        m_state_lock.lock();
+        m_game_state = SCENE::ID::END;
+        m_state_lock.unlock();
+
+		cout << "Game End, Winner: " << (int)winner << endl;
+	}
+	else
+	{
+
+	}
 }

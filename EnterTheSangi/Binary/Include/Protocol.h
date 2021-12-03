@@ -43,8 +43,9 @@ const char SC_PACKET_PUT_CHEST = 10;
 const char SC_PACKET_MOVE_CHEST = 11;
 const char SC_PACKET_REMOVE_CHEST = 12;
 const char SC_PACKET_CHANGE_WEAPON = 13;
+const char SC_PACKET_GAME_END = 14;
 
-const char SC_PACKET_TYPE_END = 14;
+const char SC_PACKET_TYPE_END = 15;
 
 
 //--------------------------------------------------
@@ -203,4 +204,11 @@ struct sc_packet_change_weapon
 	char           type;
 	char           id;
 	char           weapon_id;
+};
+
+struct sc_packet_game_end
+{
+	unsigned char  size;
+	char           type;
+	char           winner_id; // -1: ¹«½ÂºÎ
 };

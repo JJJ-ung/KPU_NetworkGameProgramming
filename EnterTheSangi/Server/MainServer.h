@@ -38,7 +38,6 @@ public:
 
 	void Init(const int server_port);
 	void Activate();
-
 	void Disconnect(char id);
 
 	void ClientThread(char id);
@@ -48,29 +47,30 @@ public:
 	int  DoRecv(char id);
 	int  DoAccept();
 	void ProcessPacket(char id);
+
+	char GetNewID();
+	bool IsAllClientsReady();
+
 	void ServerProcess();
 	void CollisionCheckTerrainPlayer();
 	void CollisionCheckTerrainBullet();
 	void CollisionCheckPlayerBullet();
 	void CollisionCheckPlayerChest();
-	void UpdateBullet();
 	template<class T1, class T2 >
 	bool CollisionCheck(T1& object_1, T2& object_2);
 	template<class T1>
 	bool TerrainCollisionCheck(T1& object_1);
+	void UpdateBullet();
 
 	void InitBullets();
 	void InitChests();
-	void InitPlayers();   
+	void InitPlayers();
 	void InitMapRects();
 	void InitRandomSpawner();
 
 	svector2 GetRandomPosition();
 	char     GetRandomWeapon();
-	char GetNewID();
-	bool IsAllClientsReady();
-	char CreatBullet();
-
+	void     CheckGameEnd();
 
 private:
 	SOCKET                   m_listen_socket;
@@ -86,13 +86,13 @@ private:
 	SCENE::ID                m_game_state;
 	std::mutex               m_state_lock;
 	Server_Timer			 m_PerformanceCounter;
-	std::array<CChest,MAX_CHESTS> m_chests;
+	std::array<CChest,MAX_CHESTS>    m_chests;
 	std::array<CBullet, MAX_BULLETS> m_bullets;
 	std::array<srect, MAX_MAP_RECT>  m_map_rects;
 	std::vector<WEAPON>				 m_weapon_info;
 
 
-	default_random_engine    dre{ std::random_device{}() };
+	default_random_engine    m_dre{ std::random_device{}() };
 	int                      m_max_spawn_point;
 	std::array<int, MAX_MAP_RECT> m_max_spawn_point_by_rect;
 };
