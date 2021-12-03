@@ -273,10 +273,7 @@ void CMainServer::ProcessPacket(char client_id)
                 other.StateUnlock();
                 continue;
             }
-
-
         }
-
         // 접속한 대상에게 다른 클라이언트 정보도 다 보냄!
         for (auto& cl : m_clients)
         {
@@ -313,10 +310,7 @@ void CMainServer::ProcessPacket(char client_id)
                 continue;
             }
         }
-
     }
-
-
     else if (packet_type == CS_PACKET_CHANGE_COLOR)
     {
         cout << "Client [" << int(client_id) << "] : " << "Change Color\n";
@@ -587,7 +581,7 @@ void CMainServer::UpdateBullet()
         }
         m_bullets[i].StateUnlock();
         D3DXVECTOR3 m_vDir = m_bullets[i].GetDirection();
-        //
+        
         D3DXVec3Normalize(&m_vDir, &m_vDir);
         cout << m_vDir.x << ", " << m_vDir.y << endl;
         D3DXVECTOR3 m_vPosition = m_bullets[i].GetBulletPosition();
@@ -829,6 +823,8 @@ void CMainServer::InitPlayers()
         CPlayer& player = cl.GetPlayer();
             player.SetState(STATE::TYPE::IDLE);
 			player.SetHealth(PLAYER_MAX_HP);
+            player.SetPosition(GetRandomPosition());
+            player.SetWeapon(-1);
 	}
 	//플레이어별 초기 좌표 설정 
 }
