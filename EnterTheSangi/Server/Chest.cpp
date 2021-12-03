@@ -1,3 +1,4 @@
+#pragma once
 #include "Chest.h"
 
 CChest::CChest()

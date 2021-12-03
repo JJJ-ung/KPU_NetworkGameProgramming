@@ -59,9 +59,10 @@ void CMainServer::Init(const int server_port)
         cl.SetState(ST_FREE);
     }
 
+    InitMapRects();
+    InitRandomSpawner();
     InitBullets();
     InitChests();
-    InitMapRects();
 
     m_game_state = SCENE::CUSTOMIZE;
     for (int i = 0; i < MAX_CLIENTS; ++i)
@@ -716,24 +717,22 @@ void CMainServer::CollisionCheckPlayerChest()
             // 서버 쓰레드(싱글)에서 처리하므로 chset 스테이트락 사용x            
             if (CollisionCheck(chest, player) == true)
             {
-                //무기 선택 (랜덤? 사전 설정?)
-                char rand_weapon= rand() % MAX_WEAPON;
+                //플레이어 무기 랜덤 변경
+                player.SetWeapon(GetRandomWeapon());
                 
                 sc_packet_change_weapon weapon_change_packet;
                 weapon_change_packet.size = sizeof(weapon_change_packet);
                 weapon_change_packet.type = SC_PACKET_CHANGE_WEAPON;
                 weapon_change_packet.id = client.GetID();
-                weapon_change_packet.weapon_id = rand_weapon;
+                weapon_change_packet.weapon_id = player.GetWeapon();
                 for (auto& client : m_clients)
                     send(client.GetSocket(), (char*)&weapon_change_packet, sizeof(sc_packet_change_weapon), 0);
-
-                //플레이어 무기 변경
-                player.SetWeapon(rand_weapon);
-
+                                        
+            
 
                 //아이템 삭제 후 재생성 (실제로는 이동)
                 //맵 좌표 받고 좌표 생성 로직 최신화 필요
-                chest.SetPosition({ (short)(rand() % 300), (short)(rand() % 300) });
+                chest.SetPosition(GetRandomPosition());
                 chest.SetWeaponID(rand() % MAX_WEAPON);
 
                 sc_packet_move_chest sp;
@@ -818,8 +817,8 @@ void CMainServer::InitChests()
 	{
 		m_chests[i].SetID(i);
         m_chests[i].SetState(OBJECT_STATE::ST_ALIVE);
-		m_chests[i].SetPosition(svector2{ (short)((i + 1)*200) ,(short)((i + 1)*200 )});
-        m_chests[i].SetWeaponID(rand() % MAX_WEAPON);
+        m_chests[i].SetPosition(GetRandomPosition());
+        m_chests[i].SetWeaponID(rand() % MAX_WEAPON);      
 	}
 }
 
@@ -844,6 +843,48 @@ void CMainServer::InitMapRects()
 	m_map_rects[4] = { {-353 * 4,355 * 4},{353 * 4,738 * 4} };    //3번방
 
 	//m_map_rects[MAX_MAP_RECT]
+}
+
+void CMainServer::InitRandomSpawner()
+{
+    for (int i = 0; i < MAX_MAP_RECT; ++i)
+    {
+        m_max_spawn_point_by_rect[i] = (m_map_rects[i].pos_2.x - m_map_rects[i].pos_1.x - CHEST_WIDTH) *
+            (m_map_rects[i].pos_2.y - m_map_rects[i].pos_1.y - CHEST_HEIGHT);
+        m_max_spawn_point += m_max_spawn_point_by_rect[i];
+    }
+    //cout << m_max_spawn_point << endl;
+}
+
+char CMainServer::GetRandomWeapon()
+{
+    static uniform_int_distribution<int> weapon_uid{ 0,MAX_WEAPON };
+
+    return weapon_uid(dre);
+}
+
+svector2 CMainServer::GetRandomPosition()
+{
+	static uniform_int_distribution<int> uid(0, m_max_spawn_point);
+
+
+	int rand_num = uid(dre);
+	svector2 rst;
+
+	for (int i = 0; i < MAX_MAP_RECT; ++i)
+	{
+		if (rand_num < m_max_spawn_point_by_rect[i])
+		{
+            uniform_int_distribution<int> uid_x(0, (m_map_rects[i].pos_2.x - m_map_rects[i].pos_1.x - CHEST_WIDTH));
+            uniform_int_distribution<int> uid_y(0, (m_map_rects[i].pos_2.y - m_map_rects[i].pos_1.y - CHEST_HEIGHT));
+            rst.x = m_map_rects[i].pos_1.x +uid_x(dre);
+			rst.y = m_map_rects[i].pos_1.y+uid_y(dre);
+			break;
+		}
+		else
+            rand_num -= m_max_spawn_point_by_rect[i];
+	}
+    return rst;
 }
 
 char CMainServer::GetNewID()

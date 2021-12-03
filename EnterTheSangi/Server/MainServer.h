@@ -10,6 +10,7 @@
 #include <mutex>
 #include <chrono>
 #include <fstream>
+#include <random>
 
 #define DIRECTINPUT_VERSION 0x0800
 #include <d3d9.h>
@@ -62,9 +63,14 @@ public:
 	void InitChests();
 	void InitPlayers();   
 	void InitMapRects();
+	void InitRandomSpawner();
+
+	svector2 GetRandomPosition();
+	char     GetRandomWeapon();
 	char GetNewID();
 	bool IsAllClientsReady();
 	char CreatBullet();
+
 
 private:
 	SOCKET                   m_listen_socket;
@@ -84,4 +90,9 @@ private:
 	std::array<CBullet, MAX_BULLETS> m_bullets;
 	std::array<srect, MAX_MAP_RECT>  m_map_rects;
 	std::vector<WEAPON>				 m_weapon_info;
+
+
+	default_random_engine    dre{ std::random_device{}() };
+	int                      m_max_spawn_point;
+	std::array<int, MAX_MAP_RECT> m_max_spawn_point_by_rect;
 };

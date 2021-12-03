@@ -1,3 +1,4 @@
+#pragma once
 #include "MainServer.h"
 #include "Protocol.h"
 
