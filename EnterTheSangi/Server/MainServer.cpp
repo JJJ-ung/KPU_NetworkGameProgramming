@@ -391,6 +391,19 @@ void CMainServer::ProcessPacket(char client_id)
             sc_packet_all_ready sp;
             sp.size = sizeof(sc_packet_all_ready);
             sp.type = SC_PACKET_ALL_READY;     
+
+            for (int i = 0; i < MAX_CLIENTS; ++i)
+            {
+                CPlayer& player = m_clients[i].GetPlayer();
+        
+                player.StateLock();
+                sp.player[i].state = player.GetState();
+                sp.player[i].position = player.GetPosition();
+                sp.player[i].look = player.GetLook();
+                sp.player[i].weapon = player.GetWeapon();
+                sp.player[i].health = player.GetHealth();
+                player.StateUnlock();
+            }
             for (auto& cl : m_clients)
                 send(cl.GetSocket(), (char*)&sp, sizeof(sc_packet_all_ready), 0);
                           
@@ -488,14 +501,17 @@ void CMainServer::DoSend(char client_id)
 
 
 	for (int i = 0; i < MAX_CLIENTS; ++i)
-	{
+	{      
 		CPlayer& player = m_clients[i].GetPlayer();
 
-		sp.player[i].look = player.GetLook();
-		sp.player[i].position = player.GetPosition();
 		player.StateLock();
 		sp.player[i].state = player.GetState();
-		player.StateUnlock();
+		sp.player[i].position = player.GetPosition();
+		sp.player[i].look = player.GetLook();
+		sp.player[i].weapon = player.GetWeapon();
+		sp.player[i].health = player.GetHealth();
+        player.StateUnlock();
+
 		sp.size = sizeof(sc_packet_game_state);
 		sp.type = SC_PACKET_GAME_STATE;
 

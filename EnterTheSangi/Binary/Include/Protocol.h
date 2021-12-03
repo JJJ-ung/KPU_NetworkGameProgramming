@@ -140,10 +140,11 @@ struct sc_packet_ready    //준비 설정, 해제 둘 다 해당 패킷 사용
 	bool           is_ready;
 };
 
-struct sc_packet_all_ready // 모든 플레이어가 준비 완료임을 알림
+struct sc_packet_all_ready // 모든 플레이어가 준비 완료임을 알림, 초기 플레이어 정보 송신
 {
 	unsigned char   size;
 	char            type;
+	player_info_for_packet player[3];
 };
 
 struct sc_packet_game_state  //매 프레임마다 게임 전체 정보 전달
@@ -151,8 +152,6 @@ struct sc_packet_game_state  //매 프레임마다 게임 전체 정보 전달
 	unsigned char  size;
 	char           type;
 	player_info_for_packet player[3];
-	//아이템 정보 추가 필요
-
 };
 
 struct sc_packet_put_bullet
