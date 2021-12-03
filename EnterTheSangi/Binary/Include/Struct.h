@@ -1,6 +1,8 @@
 #pragma once
 #include <string>
+#include <math.h>
 #include "Enum.h"
+
 // For Rendering / DirectX
 
 using namespace std;
@@ -33,7 +35,75 @@ struct svector2
 {
 	short x;
 	short y;
+	
+	svector2() {};
+	svector2(svector2& svector)
+	{
+		this->x = svector.x;
+		this->y = svector.y;
+	}
+	svector2(const svector2& svector)
+	{
+		this->x = svector.x;
+		this->y = svector.y;
+	}
+	svector2(short _x, short _y)
+	{
+		this->x = _x;
+		this->y = _y;
+	}
 
+	svector2 operator-(const svector2& rhs)
+	{
+		return svector2{this->x - rhs.x, this->y - rhs.y};
+	}
+};
+
+struct fvector2
+{
+	float x;
+	float y;
+
+	fvector2() { x = 0.f; y = 0.f; };
+	fvector2(svector2 svector)
+	{
+		this->x = (float)svector.x;
+		this->y = (float)svector.y;
+	}
+	fvector2(const fvector2& fvector)
+	{
+		this->x = fvector.x;
+		this->y = fvector.y;
+	}
+	fvector2(fvector2& fvector)
+	{
+		this->x = fvector.x;
+		this->y = fvector.y;
+	}
+	fvector2(float _x, float _y)
+	{
+		this->x = _x;
+		this->y = _y;
+	}
+
+	fvector2 GetUnitVector()
+	{
+		fvector2 unit_vector;
+		float size = sqrt(pow(this->x, 2) + pow(this->y, 2));
+		unit_vector.x = this->x / size;
+		unit_vector.y = this->y / size;
+		return unit_vector;
+	}
+
+	float AbsDotVector(fvector2& vector)
+	{
+		return abs(this->x * vector.x + this->y * vector.y);
+	}
+
+	fvector2 operator-(fvector2& rhs)
+	{	
+		return fvector2{ this->x - rhs.x,this->y - rhs.y };
+	}
 };
 
 struct srect

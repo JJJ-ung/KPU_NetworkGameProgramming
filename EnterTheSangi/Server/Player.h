@@ -26,9 +26,9 @@ public:
 	void                 SetBodyColor(D3DXVECTOR3 body_color);
 	void                 SetClothColor(D3DXVECTOR3 cloth_color);
 	void                 SetState(STATE::TYPE state);
-	void                 SetHealth(float health);         // set player.health to health
+	void                 SetHealth(char health);         // set player.health to health
 	void                 SetWeapon(char weapon);
-	void                 ChangeHealth(float delta_health); // add delta_health to player.health
+	void                 ChangeHealth(char delta_health); // add delta_health to player.health
 	void                 ChangeInvincibleMode();
 
 	void                 StateLock();

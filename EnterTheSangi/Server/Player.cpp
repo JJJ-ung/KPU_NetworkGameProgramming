@@ -67,7 +67,7 @@ void CPlayer::SetState(STATE::TYPE state)
 	m_state = state;
 };
 
-void CPlayer::SetHealth(float health)
+void CPlayer::SetHealth(char health)
 {
 	m_health = health;
 };
@@ -77,7 +77,7 @@ void CPlayer::SetWeapon(char weapon)
 	m_weapon = weapon;
 }
 
-void CPlayer::ChangeHealth(float delta_health)
+void CPlayer::ChangeHealth(char delta_health)
 {
 
 	m_health += delta_health;

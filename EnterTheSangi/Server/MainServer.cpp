@@ -722,17 +722,14 @@ void CMainServer::CollisionCheckPlayerBullet()
             }
             m_bullets[i].StateUnlock();
 
-            if (CollisionCheck(m_bullets[i], player) == true )
+            if (BulletCollisionCheck(m_bullets[i], player) == true )
             {            
                 cout << "player id : " << (int)client.GetID() << "crash...? \n";
                 //플레이어 체력 감소
                 // health를 여기서 감소시킬건데 총알 타입에 따른 데미지를 받아오는 친구가 있나..?
-                //cout << "crash!!! \n";
-                char dmg;
-                dmg = 1;
-                //dmg=m_bullets[i].~~~~~~~  // 총알 종류에 따른 데미지값
-             
-                player.ChangeHealth(-dmg);               
+                //cout << "crash!!! \n"; 
+                    
+                player.ChangeHealth(-m_weapon_info[m_bullets[i].GetBulletType()].damage);
 
                 //플레이어 사망 판정
                 if (player.GetHealth() == 0)
@@ -829,6 +826,33 @@ bool CMainServer::CollisionCheck(T1& object_1, T2& object_2)
     if ((object_1.GetCollisionBox().pos_1.x) > object_2.GetCollisionBox().pos_2.x)  return false;
 
 	return true;
+}
+
+template<class T1 >
+bool CMainServer::BulletCollisionCheck(CBullet& bullet, T1& object_1) // 회전한 bullet - object간 
+{
+	fvector2 vector[4];
+	D3DXVECTOR2 bullet_vector = m_weapon_info[bullet.GetBulletType()].bulletoffset;
+	vector[0].x = bullet.GetDirection().x * bullet_vector.y;
+	vector[0].y = bullet.GetDirection().y * bullet_vector.y;
+	vector[1].x = bullet.GetDirection().x * bullet_vector.x;
+	vector[1].y = bullet.GetDirection().y * bullet_vector.x;
+	vector[2].y = (object_1.GetCollisionBox().pos_2.y - object_1.GetCollisionBox().pos_1.y) / 2;
+	vector[3].x = (object_1.GetCollisionBox().pos_2.x - object_1.GetCollisionBox().pos_1.x) / 2;
+
+    fvector2 dist{ bullet.GetPosition() - object_1.GetPosition() };
+	for (int i = 0; i < 4; ++i)
+    {     
+        fvector2 unit_vector{ vector[i].GetUnitVector() };
+        float sum = 0.f;
+        for (int j = 0; j < 4; ++j)
+        {
+            sum += vector[j].AbsDotVector(unit_vector);
+        }
+        if (dist.AbsDotVector(unit_vector) > sum)
+            return false;
+    }
+    return true;
 }
 
 template<class T1 >
