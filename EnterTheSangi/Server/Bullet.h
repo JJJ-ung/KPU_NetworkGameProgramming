@@ -18,7 +18,11 @@ public:
 	void				  SetDirection(D3DXVECTOR3 dir);
 	void				  SetBulletSpeed(float speed);
 	void				  SetBulletPosition(D3DXVECTOR3 pos);
+	void				  SetBulletAliveTime(float time);
+	void				  SetUpdateBulletTime(float time);
 
+	float				  GetUpdateBulletTime();
+	float				  GetBulletAliveTime();
 	float			      GetBulletSpeed();
 	D3DXVECTOR3			  GetDirection();
 	D3DXVECTOR3			  GetBulletPosition();
@@ -37,6 +41,8 @@ private:
 	char                  m_bullet_type; //ÃÑ¾Ë Á¾·ù
 	char                  m_id;
 	float				  m_fSpeed;
+	float				  m_alive_time;
+	float				  m_time_update;
 	OBJECT_STATE::STATE   m_state;
 	mutex                 m_state_lock;
 	D3DXVECTOR3			  m_direction;

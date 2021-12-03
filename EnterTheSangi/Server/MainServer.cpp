@@ -461,6 +461,8 @@ void CMainServer::ProcessPacket(char client_id)
                 if (weapon.type == rp.bullet_type)
                 {
                     m_bullets[i].SetBulletSpeed(weapon.bulletspeed);
+                    m_bullets[i].SetBulletAliveTime(weapon.duration);
+                    m_bullets[i].SetUpdateBulletTime(0);
                     break;
                 }
             }
@@ -579,7 +581,7 @@ void CMainServer::ServerProcess()
 {
     //CollisionCheckTerrainPlayer();
     
-    //CollisionCheckPlayerBullet();
+    CollisionCheckPlayerBullet();
     CollisionCheckTerrainBullet();
     CollisionCheckPlayerChest();
     UpdateBullet();
@@ -599,14 +601,29 @@ void CMainServer::UpdateBullet()
         D3DXVECTOR3 m_vDir = m_bullets[i].GetDirection();
         
         D3DXVec3Normalize(&m_vDir, &m_vDir);
-        cout << m_vDir.x << ", " << m_vDir.y << endl;
         D3DXVECTOR3 m_vPosition = m_bullets[i].GetBulletPosition();
         float deltaTime = 1.f / 30.f;
         m_vPosition += m_vDir * m_bullets[i].GetBulletSpeed() * deltaTime;
         m_bullets[i].SetBulletPosition(m_vPosition);
         m_bullets[i].SetPosition({ (short)m_vPosition.x, (short)m_vPosition.y });
+        
+        m_bullets[i].SetUpdateBulletTime(m_bullets[i].GetUpdateBulletTime() + deltaTime);
 
-        cout << "after : bullet[" << i << "] pos : (" << m_vPosition.x << ", " << m_vPosition.y << ") \n";
+        if (m_bullets[i].GetUpdateBulletTime() >= m_bullets[i].GetBulletAliveTime()) // 이경우 지속시간이 초과된 경우! 삭제함
+        {
+            m_bullets[i].StateLock();
+            m_bullets[i].SetState(OBJECT_STATE::ST_FREE);
+            m_bullets[i].StateUnlock();
+            m_bullets[i].SetBulletAliveTime(0);
+            m_bullets[i].SetUpdateBulletTime(0);
+            cout << "time out remove_bullet, id: " << (int)i << endl;
+
+            sc_packet_remove_bullet sp;
+            sp.type = SC_PACKET_REMOVE_BULLET;
+            sp.size = sizeof(sc_packet_remove_bullet);
+            sp.bullet_id = i;
+        }
+
     }
 }
 

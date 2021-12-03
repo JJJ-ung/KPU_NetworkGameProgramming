@@ -101,3 +101,23 @@ D3DXVECTOR3 CBullet::GetBulletPosition()
 {
 	return m_bullet_pos;
 }
+
+void CBullet::SetBulletAliveTime(float time)
+{
+	m_alive_time = time;
+}
+
+float CBullet::GetBulletAliveTime()
+{
+	return m_alive_time;
+}
+
+void CBullet::SetUpdateBulletTime(float time)
+{
+	m_time_update = time;
+}
+
+float CBullet::GetUpdateBulletTime()
+{
+	return m_time_update;
+}
