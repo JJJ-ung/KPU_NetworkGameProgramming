@@ -123,6 +123,9 @@ void CMainServer::ClientThread(char id)
         }
         m_state_lock.unlock();
 
+
+        this_thread::sleep_for(chrono::milliseconds{ 100 });
+
 		sc_packet_put_chest packet_put_chest;
 		packet_put_chest.type = SC_PACKET_PUT_CHEST;
 		packet_put_chest.size = sizeof(sc_packet_put_chest);
@@ -155,22 +158,16 @@ void CMainServer::ClientThread(char id)
             }
             ProcessPacket(id);
 
-            //m_server_event 다시 죽여야하는데 어디서?
-            // 전체 데이터 송신
-
             SetEvent(hEvent[id]);
             m_state_lock.lock();
         }
         m_state_lock.unlock();
-        
-        //게임 종료시 
-        //어케?
+
         m_state_lock.lock();
         while (m_game_state == SCENE::ID::END)
         {
             m_state_lock.unlock();
-            //스레드 동기화
-            //타이머 필요
+
             ret = DoRecv(id);
             if (ret == SOCKET_ERROR)
             {
@@ -207,18 +204,21 @@ void CMainServer::ServerThread()
                 cl.StateLock();
                 if (cl.GetState() != ST_FREE)
                     client_count++;
-                cl.StateUnlock();
-            }
+				cl.StateUnlock();
+			}
 
-            if(client_count < MAX_CLIENTS)
-                DoAccept();
-            m_state_lock.lock();
-        }
-        m_state_lock.unlock();
-        cout << "Now InGame loop \n";
-        m_server_timer = chrono::high_resolution_clock::now() + 1s / 60 * 2;
-        //In Game
-        
+			if (client_count < MAX_CLIENTS)
+				DoAccept();
+			m_state_lock.lock();
+		}
+		m_state_lock.unlock();
+		cout << "Now InGame loop \n";
+
+        this_thread::sleep_for(chrono::milliseconds{ 1000 });
+
+		m_server_timer = chrono::high_resolution_clock::now() + 1s / 60 * 2;
+		//In Game
+
         for (int i = 0; i < MAX_CLIENTS; ++i)
             DoSend(i);
 
@@ -228,7 +228,7 @@ void CMainServer::ServerThread()
             m_state_lock.unlock();
             if (m_PerformanceCounter.Frame_Limit(30.f)) {
                 ServerProcess();
-                WaitForMultipleObjects(3, hEvent, TRUE, INFINITE);
+                WaitForMultipleObjects(3, hEvent, TRUE, 2000);
                 for (int i = 0; i < MAX_CLIENTS; ++i)
                 {
                     DoSend(i);
@@ -239,8 +239,6 @@ void CMainServer::ServerThread()
         }
         m_state_lock.unlock();
 
-        //Game End      
-        //게임 종료시 리셋 후 다시? 어캐?
         m_state_lock.lock();
         while (m_game_state == SCENE::ID::END)
         {
@@ -251,6 +249,7 @@ void CMainServer::ServerThread()
             m_state_lock.lock();
         }
         m_state_lock.unlock();
+    
     }
 };
 
@@ -260,6 +259,9 @@ void CMainServer::ProcessPacket(char client_id)
 
     if (packet_type == CS_PACKET_LOGIN)
     {
+        cout << "client1_state: " << m_clients[0].GetState() << endl;
+        cout << "client1_state: " << m_clients[1].GetState() << endl;
+        cout << "client1_state: " << m_clients[2].GetState() << endl;
         cout << "Login Packet\n";
         cs_packet_login rp;
         memcpy(&rp, m_clients[client_id].GetBuf(), sizeof(cs_packet_login));
@@ -327,6 +329,7 @@ void CMainServer::ProcessPacket(char client_id)
                 else if (m_clients[cl.GetID()].GetState() == ST_INROBBY)
                     o_packet.is_ready = false;
                 else cout << "STATE ERROR" << endl;
+                
                 cl.StateUnlock();
 
                 o_packet.id = cl.GetID();
@@ -1037,6 +1040,7 @@ void CMainServer::CheckGameEnd()
         m_state_lock.unlock();
 
 		cout << "Game End, No Winner" << endl;
+        InitForNewGame();
 	}
 	else if (alive_player_num == 1) //1명 생존
 	{
@@ -1052,5 +1056,29 @@ void CMainServer::CheckGameEnd()
         m_state_lock.unlock();
 
 		cout << "Game End, Winner: " << (int)winner << endl;
+        InitForNewGame();
 	}
+}
+
+void CMainServer::InitForNewGame()
+{
+    //클라소켓 정리
+
+    //객체 초기화
+
+    for (int i = 0; i < MAX_CLIENTS; ++i)
+    {
+        m_clients[i].Disconnect();
+    }
+
+    //값 재설정
+    InitPlayers();
+    InitBullets();
+    InitChests();
+
+    m_state_lock.lock();
+    m_game_state = SCENE::ID::CUSTOMIZE;
+    m_state_lock.unlock();
+
+    cout << "game reset for new game "<< m_game_state << endl;
 }

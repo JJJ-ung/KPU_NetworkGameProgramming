@@ -80,3 +80,13 @@ void  CClient::SocketUnlock()
 {
 	m_socket_lock.unlock();
 }
+
+void CClient::Disconnect()
+{
+	memset(m_buff, NULL, BUF_SIZE);
+	memset(m_name, NULL, MAX_NAME_SIZE);
+	StateLock();
+	m_state = ST_FREE;
+	StateUnlock();
+	closesocket(m_socket);
+};

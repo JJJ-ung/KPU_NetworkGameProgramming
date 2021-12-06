@@ -31,6 +31,7 @@ public:
 	void SocketLock();
 	void SocketUnlock();
 
+	void Disconnect();
 
 private:
 	SOCKET         m_socket;

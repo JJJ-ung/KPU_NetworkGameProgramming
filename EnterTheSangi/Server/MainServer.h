@@ -77,6 +77,8 @@ public:
 	char     GetRandomWeapon();
 	void     CheckGameEnd();
 
+	void InitForNewGame();
+
 private:
 	SOCKET                   m_listen_socket;
 
