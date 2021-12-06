@@ -82,6 +82,17 @@ int Scene_Stage::Update_Scene(float time_delta)
 
 HRESULT Scene_Stage::Render_Scene()
 {
+	if(m_bSceneChange)
+	{
+		m_pGameMgr->Clear_Scene();
+		Scene_Ending* pScene = Scene_Ending::Create(m_pGraphic_Device, m_iWinner);
+		if (FAILED(m_pGameMgr->Set_CurrScene(pScene)))
+		{
+			cout << "Failed To Change Scene" << endl;
+			return E_FAIL;
+		}
+	}
+
 	return Scene::Render_Scene();
 }
 
@@ -144,13 +155,8 @@ HRESULT Scene_Stage::Setup_Recv(char c, void* recv)
 	{
 		sc_packet_game_end t = {};
 		memcpy(&t, recv, sizeof(sc_packet_game_end));
-		m_pGameMgr->Clear_Scene();
-		Scene_Ending* pScene = Scene_Ending::Create(m_pGraphic_Device, t.winner_id);
-		if (FAILED(m_pGameMgr->Set_CurrScene(pScene)))
-		{
-			cout << "Failed To Change Scene" << endl;
-			return E_FAIL;
-		}
+		m_iWinner = t.winner_id;
+		m_bSceneChange = true;
 	}
 
 	return Scene::Setup_Recv(c, recv);

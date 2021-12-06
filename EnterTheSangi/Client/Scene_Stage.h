@@ -15,6 +15,10 @@ public:
 public:
 	virtual HRESULT Setup_Recv(char type, void* pRecv);
 
+private:
+	int m_iWinner = -1;
+	bool m_bSceneChange = false;
+
 public:
 	static Scene_Stage* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
 	virtual void Free();
