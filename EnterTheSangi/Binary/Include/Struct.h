@@ -160,7 +160,7 @@ struct player_info_for_packet
 	short					look;
 	char					weapon;
 	char					health;
-	bool					is_shooting;
+	bool						is_shooting;
 }typedef player_info;
 
 struct bullet_info_for_packet

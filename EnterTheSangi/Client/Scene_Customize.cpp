@@ -109,6 +109,22 @@ HRESULT Scene_Customize::Update_PlayerReady(sc_packet_ready* tRecv)
 	return m_pPostCard[tRecv->id]->Setup_Ready(tRecv->is_ready);
 }
 
+HRESULT Scene_Customize::Update_PlayerInfo(sc_packet_game_state* tRecv)
+{
+	if (!m_bReady)
+		return E_FAIL;
+
+	for(int i = 0; i < 3; ++i)
+	{
+		player_info_for_packet t = tRecv->player[i];
+		m_pGameMgr->Get_ClientInfos()[i].startpos = D3DXVECTOR3(t.position.x, t.position.y, 0.f);
+	}
+
+	m_bSceneChange = true;
+
+	return NOERROR;
+}
+
 HRESULT Scene_Customize::Setup_Recv(char c, void* recv)
 {
 	if (!recv) return E_FAIL;
@@ -128,7 +144,11 @@ HRESULT Scene_Customize::Setup_Recv(char c, void* recv)
 			return E_FAIL;
 		break;
 	case SC_PACKET_ALL_READY:
-		m_bSceneChange = true;
+		m_bReady = true;
+		break;
+	case SC_PACKET_GAME_STATE:
+		if (FAILED(Update_PlayerInfo((sc_packet_game_state*)recv)))
+			return E_FAIL;
 		break;
 	default:
 		break;
