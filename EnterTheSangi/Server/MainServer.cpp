@@ -767,7 +767,7 @@ void CMainServer::CollisionCheckPlayerChest()
             if (CollisionCheck(chest, player) == true)
             {
                 //플레이어 무기 랜덤 변경
-                player.SetWeapon(GetRandomWeapon());
+                player.SetWeapon(chest.GetWeaponID());
                 
                 sc_packet_change_weapon weapon_change_packet;
                 weapon_change_packet.size = sizeof(weapon_change_packet);
