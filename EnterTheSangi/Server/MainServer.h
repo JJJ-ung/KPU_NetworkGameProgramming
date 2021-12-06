@@ -96,6 +96,7 @@ private:
 	std::array<srect, MAX_MAP_RECT>  m_map_rects;
 	std::vector<WEAPON>				 m_weapon_info;
 
+	HANDLE							 hEvent[3];
 
 	default_random_engine    m_dre{ std::random_device{}() };
 	int                      m_max_spawn_point;

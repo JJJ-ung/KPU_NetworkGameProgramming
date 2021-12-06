@@ -60,6 +60,9 @@ void CMainServer::Init(const int server_port)
         cl.SetState(ST_FREE);
     }
 
+    for (int i = 0; i < MAX_CLIENTS; ++i)
+        hEvent[i] = CreateEvent(NULL, FALSE, FALSE, NULL);
+
     InitMapRects();
     InitRandomSpawner();
     InitBullets();
@@ -120,7 +123,7 @@ void CMainServer::ClientThread(char id)
         }
         m_state_lock.unlock();
 
-        Sleep(100);
+        this_thread::sleep_for(100ms);
 
 		sc_packet_put_chest packet_put_chest;
 		packet_put_chest.type = SC_PACKET_PUT_CHEST;
@@ -156,8 +159,8 @@ void CMainServer::ClientThread(char id)
 
             //m_server_event 다시 죽여야하는데 어디서?
             // 전체 데이터 송신
-            DoSend(id);
 
+            SetEvent(hEvent[id]);
             m_state_lock.lock();
         }
         m_state_lock.unlock();
@@ -221,8 +224,15 @@ void CMainServer::ServerThread()
         while (m_game_state == SCENE::ID::STAGE)
         {
             m_state_lock.unlock();
-            if (m_PerformanceCounter.Frame_Limit(30.f))
+            if (m_PerformanceCounter.Frame_Limit(30.f)) {
                 ServerProcess();
+                WaitForMultipleObjects(3, hEvent, TRUE, INFINITE);
+                for (int i = 0; i < MAX_CLIENTS; ++i)
+                {
+                    DoSend(i);
+                    ResetEvent(hEvent[i]);
+                }
+            }
            m_state_lock.lock();
         }
         m_state_lock.unlock();
