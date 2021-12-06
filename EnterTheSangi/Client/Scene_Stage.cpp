@@ -48,7 +48,7 @@ HRESULT Scene_Stage::Ready_Scene()
 		}
 		else
 		{
-			if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::NETWORK_PLAYER, NetworkPlayer::Create(m_pGraphic_Device, t))))
+			if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::PLAYER, NetworkPlayer::Create(m_pGraphic_Device, t))))
 				return E_FAIL;
 		}
 	}
@@ -63,8 +63,8 @@ HRESULT Scene_Stage::Ready_Scene()
 	if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::UI, Mouse::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
-	if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::WEAPON, Weapon::Create(m_pGraphic_Device, p, 0))))
-		return E_FAIL;
+	//if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::WEAPON, Weapon::Create(m_pGraphic_Device, p, 0))))
+	//	return E_FAIL;
 
 	//sc_packet_put_chest tt = { 0, 0, 0, 1, {0, 0} };
 	//if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::CHEST, Chest::Create(m_pGraphic_Device, tt))))
@@ -132,7 +132,14 @@ HRESULT Scene_Stage::Setup_Recv(char c, void* recv)
 		if (FAILED(m_pGameMgr->Add_DeleteObject(OBJECT::CHEST, t.chest_id)))
 			return E_FAIL;
 	}
-
+	if (c == SC_PACKET_CHANGE_WEAPON)
+	{
+		sc_packet_change_weapon t = {};
+		memcpy(&t, recv, sizeof(sc_packet_change_weapon));
+		Player* p = (Player*)m_pGameMgr->Get_GameObject(OBJECT::PLAYER, t.id);
+		if (!p) return E_FAIL;
+		if(FAILED(p->Change_Weapon(t))) return E_FAIL;
+	}
 	if (c == SC_PACKET_GAME_END)
 	{
 		sc_packet_game_end t = {};

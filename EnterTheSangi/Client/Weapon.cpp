@@ -27,11 +27,13 @@ float Weapon::Get_Y()
 	return y;
 }
 
-HRESULT Weapon::Ready_GameObject(Player* pOwner, int iType)
+HRESULT Weapon::Ready_GameObject(Player* pOwner, int iType, bool bNetwork)
 {
 	if (!pOwner)
 		return E_FAIL;
 	m_pOwner = pOwner;
+
+	m_bNetwork = bNetwork;
 
 	m_pRenderer = Renderer::GetInstance();
 	if (!m_pRenderer) return E_FAIL;
@@ -67,20 +69,26 @@ HRESULT Weapon::Ready_GameObject(Player* pOwner, int iType)
 
 INT Weapon::Update_GameObject(float time_delta)
 {
+	if (m_bDeleteWeapon)
+		return OBJDEAD;
+
 	Update_Rendering(time_delta);
 
-	if(!m_bShoot)
+	if(!m_bNetwork)
 	{
-		m_fTime += time_delta;
-		if (m_fTime > m_tWeaponInfo.shotspeed)
+		if (!m_bShoot)
 		{
-			m_fTime = 0.f;
-			m_bShoot = true;
+			m_fTime += time_delta;
+			if (m_fTime > m_tWeaponInfo.shotspeed)
+			{
+				m_fTime = 0.f;
+				m_bShoot = true;
+			}
 		}
-	}
 
-	if (m_pInputMgr->KeyDown(KEY_LBUTTON))
-		Shoot_Bullet(time_delta);
+		if (m_pInputMgr->KeyDown(KEY_LBUTTON))
+			Shoot_Bullet(time_delta);
+	}
 
 	return GameObject::Update_GameObject(time_delta);
 }
@@ -137,8 +145,10 @@ INT Weapon::Update_Rendering(float TimeDelta)
 	}
 #endif
 
-	m_fAngle = m_pInputMgr->Get_Angle() * -1.f;
-	if (m_pInputMgr->Get_Angle() < 0.f)
+	if(!m_bNetwork)
+		m_fAngle = m_pInputMgr->Get_Angle() * -1.f;
+
+	if (m_fAngle > 0.f)
 		m_fSide = -1.f;
 	else
 		m_fSide = 1.f;
@@ -179,10 +189,10 @@ INT Weapon::Shoot_Bullet(float TimeDelta)
 	return 0;
 }
 
-Weapon* Weapon::Create(LPDIRECT3DDEVICE9 pGraphic_Device, Player* pOwner, int iType)
+Weapon* Weapon::Create(LPDIRECT3DDEVICE9 pGraphic_Device, Player* pOwner, int iType, bool bNetwork)
 {
 	Weapon* pInstance = new Weapon(pGraphic_Device);
-	if (FAILED(pInstance->Ready_GameObject(pOwner, iType)))
+	if (FAILED(pInstance->Ready_GameObject(pOwner, iType, bNetwork)))
 		SafeDelete(pInstance);
 	return pInstance;
 }

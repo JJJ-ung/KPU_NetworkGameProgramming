@@ -7,6 +7,7 @@
 #include "Animation.h"
 #include "ShaderMgr.h"
 #include "ResourceMgr.h"
+#include "Weapon.h"
 
 NetworkPlayer::NetworkPlayer(LPDIRECT3DDEVICE9 pGraphic_Device)
 	:Player(pGraphic_Device)
@@ -53,7 +54,7 @@ HRESULT NetworkPlayer::Ready_GameObject(CLIENT t)
 	if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::UI, m_pNameTag = Font::Create(m_pDevice, t.name, 0.5f, true, true))))
 		return E_FAIL;
 	if (!m_pNameTag) return E_FAIL;
-	m_pNameTag->Update_Position(m_vPosition, D3DXVECTOR3(0.f, 48.f, 0.f));
+	m_pNameTag->Update_Position(m_vPosition, D3DXVECTOR3(0.f, -100.f, 0.f));
 
 	return NOERROR;
 }
@@ -62,7 +63,7 @@ INT NetworkPlayer::Update_GameObject(float time_delta)
 {
 	m_pCurrAnimation->Update_Component(time_delta);
 
-	m_pNameTag->Update_Position(m_vPosition, D3DXVECTOR3(0.f, -48.f, 0.f));
+	m_pNameTag->Update_Position(m_vPosition, D3DXVECTOR3(0.f, -100.f, 0.f));
 
 	return NOEVENT;
 }
@@ -113,6 +114,31 @@ HRESULT NetworkPlayer::Render_GameObject()
 	pEffect->End();
 
 	return GameObject::Render_GameObject();
+}
+
+HRESULT NetworkPlayer::Update_Weapon(float fLook)
+{
+	if (!m_pWeapon)
+		return NOERROR;
+
+	m_pWeapon->Get_Angle() = fLook * -1.f;
+
+	return NOERROR;
+}
+
+HRESULT NetworkPlayer::Change_Weapon(sc_packet_change_weapon t)
+{
+	if (m_pWeapon)
+	{
+		m_pWeapon->Get_Delete() = true;
+		m_pWeapon = nullptr;
+	}
+
+	if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::WEAPON, m_pWeapon = Weapon::Create(m_pDevice, this, t.weapon_id, true))))
+		return E_FAIL;
+	if (!m_pWeapon) return E_FAIL;
+
+	return NOERROR;
 }
 
 INT NetworkPlayer::Update_Networking()
@@ -166,6 +192,8 @@ INT NetworkPlayer::Recv_Networking(char c, void* p)
 		m_tClientInfo.custom.vBody = D3DXVECTOR3(0.5f, 0.5f, 0.5f);
 		m_tClientInfo.custom.vCloth = D3DXVECTOR3(0.2f, 0.2f, 0.2f);
 	}
+
+	Update_Weapon(player.look);
 
 	return 0;
 }

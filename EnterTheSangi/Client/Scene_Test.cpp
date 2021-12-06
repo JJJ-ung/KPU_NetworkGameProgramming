@@ -44,7 +44,7 @@ HRESULT Scene_Test::Ready_Scene()
 		}
 		else
 		{
-			if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::NETWORK_PLAYER, NetworkPlayer::Create(m_pGraphic_Device, t))))
+			if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::PLAYER, NetworkPlayer::Create(m_pGraphic_Device, t))))
 				return E_FAIL;
 		}
 	}
@@ -59,7 +59,7 @@ HRESULT Scene_Test::Ready_Scene()
 	if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::UI, Mouse::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
-	if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::WEAPON, Weapon::Create(m_pGraphic_Device, p, 0))))
+	if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::WEAPON, Weapon::Create(m_pGraphic_Device, p, 0, true))))
 		return E_FAIL;
 
 	//cout << "TestEnd" << endl;

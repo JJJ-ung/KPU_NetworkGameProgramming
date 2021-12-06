@@ -24,7 +24,7 @@ HRESULT EndingPlayer::Ready_GameObject(int iID, bool bWin)
 	m_pResourceMgr = ResourceMgr::GetInstance();
 	if (!m_pResourceMgr) return E_FAIL;
 
-	m_pShader = ShaderMgr::GetInstance()->Get_ShaderReference(L"Default");
+	m_pShader = ShaderMgr::GetInstance()->Get_ShaderReference(L"Player");
 	if (!m_pShader) return E_FAIL;
 
 	m_pGameMgr = GameMgr::GetInstance();
@@ -38,17 +38,19 @@ HRESULT EndingPlayer::Ready_GameObject(int iID, bool bWin)
 
 	m_tInfo = m_pGameMgr->Get_ClientInfos()[iID];
 
-	if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::UI, m_pFont = Font::Create(m_pDevice, m_tInfo.name, 0.5f, true, true))))
-		return E_FAIL;
-	if (!m_pFont) return E_FAIL;
-	m_pFont->Update_Position(m_vPosition, D3DXVECTOR3(0.f, 100.f, 0.f));
-
 	D3DXVECTOR3 vEye = D3DXVECTOR3(1280.f * -0.5f, 720.f * -0.5f, -1.f);
 	D3DXVECTOR3 vAt = D3DXVECTOR3(1280.f * -0.5f, 720.f * -0.5f, 0.f);
 	D3DXVECTOR3 vUP = D3DXVECTOR3(0.f, 1.f, 0.f);
 	D3DXMatrixLookAtLH(&m_matView, &vEye, &vAt, &vUP);
 
-	m_vPosition.x = (iID - 1) * 300.f;
+	m_vPosition.x = (iID - 1) * 400.f;
+	m_vPosition.y = 0.f;
+	m_vPosition.z = 0.f;
+
+	if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::UI, m_pFont = Font::Create(m_pDevice, m_tInfo.name, 1.f, true, true))))
+		return E_FAIL;
+	if (!m_pFont) return E_FAIL;
+	m_pFont->Update_Position(m_vPosition, D3DXVECTOR3(0.f, 100.f, 0.f));
 
 	return GameObject::Ready_GameObject();
 }
@@ -64,6 +66,8 @@ INT EndingPlayer::LateUpdate_GameObject(float time_delta)
 {
 	m_pRenderer->Add_RenderList(Renderer::RENDER_NONALPHA, this);
 
+	m_pDevice->SetTransform(D3DTS_TEXTURE0, &m_matView);
+
 	return GameObject::LateUpdate_GameObject(time_delta);
 }
 
@@ -76,7 +80,7 @@ HRESULT EndingPlayer::Render_GameObject()
 		return E_FAIL;
 
 	D3DXMATRIX		matScale, matTrans, matWorld;
-	D3DXMatrixScaling(&matScale, 3.f, 3.f, 3.f);
+	D3DXMatrixScaling(&matScale, 5.f, 5.f, 5.f);
 	D3DXMatrixTranslation(&matTrans, m_vPosition.x, m_vPosition.y, m_vPosition.z);
 	matWorld = matScale * matTrans;
 	pEffect->SetMatrix("g_matWorld", &matWorld);
@@ -89,6 +93,8 @@ HRESULT EndingPlayer::Render_GameObject()
 
 	m_pShader->Set_Value("g_vCloth", &m_tInfo.custom.vCloth, sizeof(D3DXVECTOR3));
 	m_pShader->Set_Value("g_vBody", &m_tInfo.custom.vBody, sizeof(D3DXVECTOR3));
+
+	pEffect->SetFloat("g_fAlpha", 1.f);
 
 	pEffect->Begin(nullptr, 0);
 	pEffect->BeginPass(0);

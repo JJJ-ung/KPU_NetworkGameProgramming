@@ -4,6 +4,7 @@
 
 class Font;
 class Health;
+class Weapon;
 class Animation;
 class Player : public GameObject
 {
@@ -12,6 +13,7 @@ public:
 	virtual ~Player();
 
 public:
+	int& Get_Health() { return m_iHealth; }
 	float& Get_Speed() { return m_fSpeed; }
 	STATE::TYPE& Get_State() { return m_eState; }
 	D3DXVECTOR3& Get_Dir() { return m_vDirection; }
@@ -34,6 +36,9 @@ public:
 	STATE::DIR Compute_Direction();
 	wstring Direction_Tag(wstring strTag);
 
+public:
+	virtual HRESULT Change_Weapon(sc_packet_change_weapon t);
+
 protected:
 	HRESULT Ready_AnimationInfo();
 
@@ -55,6 +60,7 @@ protected:
 protected:
 	CLIENT m_tClientInfo = {};
 	Font* m_pNameTag = nullptr;
+	Weapon* m_pWeapon = nullptr;
 	Animation* m_pCurrAnimation = nullptr;
 	StateMachine<Player>* m_pStateMachine = nullptr;
 

@@ -14,6 +14,10 @@ public:
 	virtual HRESULT Render_GameObject();
 
 public:
+	HRESULT Update_Weapon(float fLook);
+	virtual HRESULT Change_Weapon(sc_packet_change_weapon t);
+
+public:
 	INT Update_Networking();
 	INT Recv_Networking(char c, void* p);
 

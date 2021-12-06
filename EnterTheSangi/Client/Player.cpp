@@ -7,6 +7,7 @@
 #include "Animation.h"
 #include "ShaderMgr.h"
 #include "ResourceMgr.h"
+#include "Weapon.h"
 
 Player::Player(LPDIRECT3DDEVICE9 pGraphic_Device)
 	:GameObject(pGraphic_Device)
@@ -57,7 +58,7 @@ HRESULT Player::Ready_GameObject(CLIENT t)
 	if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::UI, m_pNameTag = Font::Create(m_pDevice, t.name, 0.5f, true, true))))
 		return E_FAIL;
 	if (!m_pNameTag) return E_FAIL;
-	m_pNameTag->Update_Position(m_vPosition, D3DXVECTOR3(0.f, 100.f, 0.f));
+	m_pNameTag->Update_Position(m_vPosition, D3DXVECTOR3(0.f, -100.f, 0.f));
 
 	D3DXMatrixIdentity(&m_matWorld);
 
@@ -234,6 +235,21 @@ wstring Player::Direction_Tag(wstring strTag)
 	else
 		out += L"_Back";
 	return out;
+}
+
+HRESULT Player::Change_Weapon(sc_packet_change_weapon t)
+{
+	if(m_pWeapon)
+	{
+		m_pWeapon->Get_Delete() = true;
+		m_pWeapon = nullptr;
+	}
+
+	if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::WEAPON, m_pWeapon = Weapon::Create(m_pDevice, this, t.weapon_id, false))))
+		return E_FAIL;
+	if (!m_pWeapon) return E_FAIL;
+
+	return NOERROR;
 }
 
 HRESULT Player::Ready_AnimationInfo()

@@ -165,7 +165,7 @@ void InputMgr::Update_Text(WPARAM message)
 {
 	if (!m_bTextMode) return;
 
-	if (m_strText.length() == 16)
+	if (m_strText.length() == 14)
 		return;
 
 	if (message == VK_BACK)

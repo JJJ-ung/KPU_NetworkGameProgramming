@@ -14,7 +14,7 @@ namespace SCENE
 
 namespace OBJECT
 {
-	enum TYPE { MAP, PLAYER, NETWORK_PLAYER, WEAPON, BULLET, CHEST, CAMERA, UI, END };
+	enum TYPE { MAP, PLAYER, WEAPON, BULLET, CHEST, CAMERA, UI, END };
 }
 
 namespace DIR

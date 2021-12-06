@@ -10,9 +10,12 @@ public:
 
 public:
 	virtual float Get_Y();
+	bool& Get_Delete() { return m_bDeleteWeapon; }
+	float& Get_Angle() { return m_fAngle; }
+	float& Get_Side() { return m_fSide; }
 
 public:
-	virtual HRESULT Ready_GameObject(Player* pOwner, int iType);
+	virtual HRESULT Ready_GameObject(Player* pOwner, int iType, bool bNetwork);
 	virtual INT Update_GameObject(float TimeDelta);
 	virtual INT LateUpdate_GameObject(float TimeDelta);
 	virtual HRESULT Render_GameObject();
@@ -39,11 +42,13 @@ private:
 	D3DXMATRIX matScale, matRot, matRev, matParent, matFlip, matBullet;
 
 private:
-	bool m_bShoot = true;
 	float m_fTime = 0.f;
+	bool m_bShoot = true;
+	bool m_bNetwork = false;
+	bool m_bDeleteWeapon = false;
 
 public:
-	static Weapon* Create(LPDIRECT3DDEVICE9 pGraphic_Device, Player* pOwner, int iType);
+	static Weapon* Create(LPDIRECT3DDEVICE9 pGraphic_Device, Player* pOwner, int iType, bool bNetwork);
 	virtual void Free();
 };
 
