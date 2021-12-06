@@ -44,19 +44,16 @@ int Scene_Customize::Update_Scene(float time_delta)
 
 HRESULT Scene_Customize::Render_Scene()
 {
-	if(m_bReady)
+	if (m_bSceneChange)
 	{
-		if (m_bSceneChange)
+		m_pGameMgr->Clear_Scene();
+		Scene_Stage* pScene = Scene_Stage::Create(m_pGraphic_Device);
+		if (FAILED(m_pGameMgr->Set_CurrScene(pScene)))
 		{
-			m_pGameMgr->Clear_Scene();
-			Scene_Stage* pScene = Scene_Stage::Create(m_pGraphic_Device);
-			if (FAILED(m_pGameMgr->Set_CurrScene(pScene)))
-			{
-				cout << "Failed To Change Scene" << endl;
-				return E_FAIL;
-			}
-			cout << "SceneChange" << endl;
+			cout << "Failed To Change Scene" << endl;
+			return E_FAIL;
 		}
+		cout << "SceneChange" << endl;
 	}
 
 	return Scene::Render_Scene();
@@ -113,21 +110,6 @@ HRESULT Scene_Customize::Update_PlayerReady(sc_packet_ready* tRecv)
 	return m_pPostCard[tRecv->id]->Setup_Ready(tRecv->is_ready);
 }
 
-HRESULT Scene_Customize::Update_PlayerInfo(sc_packet_game_state* tRecv)
-{
-	for(int i = 0; i < 3; ++i)
-	{
-		player_info_for_packet t = tRecv->player[i];
-		m_pGameMgr->Get_ClientInfos()[i].startpos = D3DXVECTOR3(t.position.x, t.position.y, 0.f);
-	}
-
-	m_bSceneChange = true;
-
-	cout << "GameState" << endl;
-
-	return NOERROR;
-}
-
 HRESULT Scene_Customize::Setup_Recv(char c, void* recv)
 {
 	if (!recv) return E_FAIL;
@@ -148,11 +130,7 @@ HRESULT Scene_Customize::Setup_Recv(char c, void* recv)
 		break;
 	case SC_PACKET_ALL_READY:
 		cout << "Ready" << endl;
-		m_bReady = true;
-		break;
-	case SC_PACKET_GAME_STATE:
-		if (FAILED(Update_PlayerInfo((sc_packet_game_state*)recv)))
-			return E_FAIL;
+		m_bSceneChange = true;
 		break;
 	default:
 		break;

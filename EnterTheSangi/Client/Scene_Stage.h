@@ -16,8 +16,12 @@ public:
 	virtual HRESULT Setup_Recv(char type, void* pRecv);
 
 private:
+	HRESULT Setup_Scene(sc_packet_game_state* recv);
+
+private:
 	int m_iWinner = -1;
 	bool m_bSceneChange = false;
+	bool m_bSetupScene = false;
 
 public:
 	static Scene_Stage* Create(LPDIRECT3DDEVICE9 pGraphic_Device);

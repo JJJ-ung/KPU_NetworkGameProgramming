@@ -29,49 +29,6 @@ HRESULT Scene_Stage::Ready_Scene()
 	m_pInputMgr = InputMgr::GetInstance();
 	if (!m_pInputMgr) return E_FAIL;
 
-	Player* p = nullptr;
-
-#ifdef TEST
-	CLIENT t(true, 0, m_pGameMgr->Get_ClientPlayerName(),
-		D3DXVECTOR3(rand() % 10 * 0.1f, rand() % 10 * 0.1f, rand() % 10 * 0.1f),
-		D3DXVECTOR3(rand() % 10 * 0.1f, rand() % 10 * 0.1f, rand() % 10 * 0.1f), D3DXVECTOR3(0.f, 0.f, 0.f));
-	m_pGameMgr->Get_ClientInfos()[0] = t;
-	if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::PLAYER, p = Player::Create(m_pGraphic_Device, m_pGameMgr->Get_ClientInfos()[0]))))
-		return E_FAIL;
-#else
-	for (auto t : m_pGameMgr->Get_ClientInfos())
-	{
-		if (t.islocal)
-		{
-			if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::PLAYER, p = Player::Create(m_pGraphic_Device, t))))
-				return E_FAIL;
-		}
-		else
-		{
-			if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::PLAYER, NetworkPlayer::Create(m_pGraphic_Device, t))))
-				return E_FAIL;
-		}
-	}
-#endif
-
-	if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::CAMERA, Camera::Create(m_pGraphic_Device))))
-		return E_FAIL;
-
-	if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::MAP, MainMap::Create(m_pGraphic_Device, p))))
-		return E_FAIL;
-
-	if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::UI, Mouse::Create(m_pGraphic_Device))))
-		return E_FAIL;
-
-	//if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::WEAPON, Weapon::Create(m_pGraphic_Device, p, 0))))
-	//	return E_FAIL;
-
-	//sc_packet_put_chest tt = { 0, 0, 0, 1, {0, 0} };
-	//if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::CHEST, Chest::Create(m_pGraphic_Device, tt))))
-	//	return E_FAIL;
-
-	//cout << "TestEnd" << endl;
-
 	return Scene::Ready_Scene();
 }
 
@@ -99,7 +56,15 @@ HRESULT Scene_Stage::Render_Scene()
 HRESULT Scene_Stage::Setup_Recv(char c, void* recv)
 {
 	if(c == SC_PACKET_GAME_STATE)
+	{
+		if(!m_bSetupScene)
+		{
+			if (FAILED(Setup_Scene((sc_packet_game_state *)recv)))
+				return E_FAIL;
+			m_bSetupScene = true;
+		}
 		m_pGameMgr->Recv_Networking(c, recv);
+	}
 
 	// �߰� ����
 	if(c == SC_PACKET_PUT_BULLET)
@@ -160,6 +125,41 @@ HRESULT Scene_Stage::Setup_Recv(char c, void* recv)
 	}
 
 	return Scene::Setup_Recv(c, recv);
+}
+
+HRESULT Scene_Stage::Setup_Scene(sc_packet_game_state* recv)
+{
+	for (int i = 0; i < 3; ++i)
+	{
+		player_info_for_packet t = recv->player[i];
+		m_pGameMgr->Get_ClientInfos()[i].startpos = D3DXVECTOR3(t.position.x, t.position.y, 0.f);
+	}
+
+	Player* p = nullptr;
+	for (auto t : m_pGameMgr->Get_ClientInfos())
+	{
+		if (t.islocal)
+		{
+			if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::PLAYER, p = Player::Create(m_pGraphic_Device, t))))
+				return E_FAIL;
+		}
+		else
+		{
+			if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::PLAYER, NetworkPlayer::Create(m_pGraphic_Device, t))))
+				return E_FAIL;
+		}
+	}
+
+	if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::CAMERA, Camera::Create(m_pGraphic_Device))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::MAP, MainMap::Create(m_pGraphic_Device, p))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameMgr->Add_GameObject(OBJECT::UI, Mouse::Create(m_pGraphic_Device))))
+		return E_FAIL;
+
+	return NOERROR;
 }
 
 Scene_Stage* Scene_Stage::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
