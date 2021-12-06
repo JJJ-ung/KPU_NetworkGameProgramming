@@ -480,7 +480,7 @@ void CMainServer::ProcessPacket(char client_id)
                 else if (m_bullets[i].GetState() == OBJECT_STATE::ST_FREE)
                 {
                     m_bullets[i].SetState(OBJECT_STATE::ST_ALIVE);
-                    m_bullets[i].SetID(rp.id);
+                    m_bullets[i].SetShooterID(rp.id);
                     m_bullets[i].SetBulletType(rp.bullet_type);
                     //m_bullets[i].SetLook(rp.look);
                     m_bullets[i].SetPosition(rp.position);
@@ -712,7 +712,7 @@ void CMainServer::CollisionCheckPlayerBullet()
             }
             m_bullets[i].StateUnlock();
 
-            if (BulletCollisionCheck(m_bullets[i], player) == true && (m_bullets[i].GetID() != client.GetID()) && player.GetHealth() > 0)
+            if (BulletCollisionCheck(m_bullets[i], player) == true && (m_bullets[i].GetShooterID() != client.GetID()) && player.GetHealth() > 0)
             {            
                 
                 //플레이어 체력 감소
@@ -743,6 +743,8 @@ void CMainServer::CollisionCheckPlayerBullet()
                 {
                     send(client.GetSocket(), (char*)&sp, sizeof(sc_packet_remove_bullet), 0);
                 }
+
+                cout << "send remove packet bullet_id [" << (int)m_bullets[i].GetID() << endl;
             }
             else
             {
@@ -1017,8 +1019,6 @@ void CMainServer::CheckGameEnd()
 			alive_player_num += 1;
 		}
 	}
-
-    cout << "alive_player_num : " << alive_player_num << endl;
 
 	if (alive_player_num == 0) //전원 사망
 	{

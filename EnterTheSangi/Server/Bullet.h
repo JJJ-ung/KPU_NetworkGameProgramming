@@ -14,6 +14,7 @@ public:
 
 	void                  SetBulletType(char bullet_type);
 	void                  SetID(char id);
+	void				  SetShooterID(char id);
 	void                  SetState(OBJECT_STATE::STATE state);
 	void				  SetDirection(D3DXVECTOR3 dir);
 	void				  SetBulletSpeed(float speed);
@@ -28,6 +29,7 @@ public:
 	D3DXVECTOR3			  GetBulletPosition();
 	char                  GetBulletType();
 	char                  GetID();
+	char				  GetShooterID();
 	OBJECT_STATE::STATE   GetState();
 
 	virtual srect         GetCollisionBox();
@@ -40,6 +42,7 @@ public:
 private:
 	char                  m_bullet_type; //ÃÑ¾Ë Á¾·ù
 	char                  m_id;
+	char				  m_shooter_id;
 	float				  m_fSpeed;
 	float				  m_alive_time;
 	float				  m_time_update;

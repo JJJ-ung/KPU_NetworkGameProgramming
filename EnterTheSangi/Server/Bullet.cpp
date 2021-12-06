@@ -121,3 +121,13 @@ float CBullet::GetUpdateBulletTime()
 {
 	return m_time_update;
 }
+
+void CBullet::SetShooterID(char id)
+{
+	m_shooter_id = id;
+}
+
+char CBullet::GetShooterID()
+{
+	return m_shooter_id;
+}
