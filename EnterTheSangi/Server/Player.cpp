@@ -81,7 +81,7 @@ void CPlayer::ChangeHealth(char delta_health)
 {
 
 	m_health += delta_health;
-	if (m_health < 0)
+	if (m_health <= 0)
 		m_health = 0;
 	else if (m_health > PLAYER_MAX_HP)
 		m_health = PLAYER_MAX_HP;

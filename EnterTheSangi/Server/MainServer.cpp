@@ -460,67 +460,69 @@ void CMainServer::ProcessPacket(char client_id)
 	player.StateUnlock();
 	}
 
-	else if (packet_type == CS_PACKET_SHOOT_BULLET)
-	{
-	cs_packet_shoot_bullet rp;
-	memcpy(&rp, m_clients[client_id].GetBuf(), sizeof(cs_packet_shoot_bullet));
-    cout << "client [" << int(client_id) << "] recv : CS_PACKET_SHOOT_BULLET \n";
-
-    for (int i=0;i<MAX_BULLETS;++i)
+    else if (packet_type == CS_PACKET_SHOOT_BULLET)
     {
-    
-        m_bullets[i].StateLock();
-        if (m_bullets[i].GetState() == OBJECT_STATE::ST_ALIVE)
+        if (m_clients[client_id].GetPlayer().GetHealth() > 0)
         {
-            m_bullets[i].StateUnlock();
-            continue;
-        }
-        else if (m_bullets[i].GetState() == OBJECT_STATE::ST_FREE)
-        {
-            m_bullets[i].SetState(OBJECT_STATE::ST_ALIVE);
-           
-            m_bullets[i].SetBulletType(rp.bullet_type);
-            //m_bullets[i].SetLook(rp.look);
-            m_bullets[i].SetPosition(rp.position);
-            m_bullets[i].SetBulletPosition(D3DXVECTOR3{ (float)rp.position.x, (float)rp.position.y, 0.f });
-            cout << "rp pos : (" << rp.position.x << ", " << rp.position.y << ") \n";
-            m_bullets[i].SetLook(rp.angle);
-            m_bullets[i].SetDirection({ (float)rp.direction.x * 0.00001f, (float)rp.direction.y * 0.00001f, 0.f });
-           // 서버에서 가지는 총알포지션 값에 델타타임 적용 필요 (서버 충돌체크용)
-            for (auto& weapon : m_weapon_info)
+            cs_packet_shoot_bullet rp;
+            memcpy(&rp, m_clients[client_id].GetBuf(), sizeof(cs_packet_shoot_bullet));
+            cout << "client [" << int(client_id) << "] recv : CS_PACKET_SHOOT_BULLET \n";
+
+            for (int i = 0; i < MAX_BULLETS; ++i)
             {
-                if (weapon.type == rp.bullet_type)
+
+                m_bullets[i].StateLock();
+                if (m_bullets[i].GetState() == OBJECT_STATE::ST_ALIVE)
                 {
-                    m_bullets[i].SetBulletSpeed(weapon.bulletspeed);
-                    m_bullets[i].SetBulletAliveTime(weapon.duration);
-                    m_bullets[i].SetUpdateBulletTime(0);
+                    m_bullets[i].StateUnlock();
+                    continue;
+                }
+                else if (m_bullets[i].GetState() == OBJECT_STATE::ST_FREE)
+                {
+                    m_bullets[i].SetState(OBJECT_STATE::ST_ALIVE);
+
+                    m_bullets[i].SetBulletType(rp.bullet_type);
+                    //m_bullets[i].SetLook(rp.look);
+                    m_bullets[i].SetPosition(rp.position);
+                    m_bullets[i].SetBulletPosition(D3DXVECTOR3{ (float)rp.position.x, (float)rp.position.y, 0.f });
+                    cout << "rp pos : (" << rp.position.x << ", " << rp.position.y << ") \n";
+                    m_bullets[i].SetLook(rp.angle);
+                    m_bullets[i].SetDirection({ (float)rp.direction.x * 0.00001f, (float)rp.direction.y * 0.00001f, 0.f });
+                    // 서버에서 가지는 총알포지션 값에 델타타임 적용 필요 (서버 충돌체크용)
+                    for (auto& weapon : m_weapon_info)
+                    {
+                        if (weapon.type == rp.bullet_type)
+                        {
+                            m_bullets[i].SetBulletSpeed(weapon.bulletspeed);
+                            m_bullets[i].SetBulletAliveTime(weapon.duration);
+                            m_bullets[i].SetUpdateBulletTime(0);
+                            break;
+                        }
+                    }
+                    m_bullets[i].StateUnlock();
+
+                    cout << "new_bullet, id: " << (int)i << endl;
+                    cout << m_bullets[i].GetPosition().x << ", " << m_bullets[i].GetPosition().y << endl;
+
+                    sc_packet_put_bullet sp;
+                    sp.size = sizeof(sc_packet_put_bullet);
+                    sp.type = SC_PACKET_PUT_BULLET;
+                    sp.bullet_type = rp.bullet_type;
+                    sp.bullet_id = i;
+                    sp.angle = rp.angle;
+                    sp.direction = rp.direction;
+                    sp.position = rp.position;
+                    for (auto& client : m_clients)
+                    {
+                        send(client.GetSocket(), (char*)&sp, sizeof(sc_packet_put_bullet), 0);
+
+                    }
                     break;
                 }
+                // bullet 최대개수가 꽉참
+                cout << "BULLET_OVERFLOW" << endl;
             }
-            m_bullets[i].StateUnlock();
-
-            cout << "new_bullet, id: " << (int)i << endl;
-            cout << m_bullets[i].GetPosition().x << ", " << m_bullets[i].GetPosition().y << endl;
-
-            sc_packet_put_bullet sp;           
-            sp.size = sizeof(sc_packet_put_bullet);
-            sp.type = SC_PACKET_PUT_BULLET;
-            sp.bullet_type = rp.bullet_type;
-            sp.bullet_id = i;
-            sp.angle = rp.angle;
-            sp.direction = rp.direction;
-            sp.position = rp.position;
-            for (auto& client : m_clients)
-            {
-                send(client.GetSocket(), (char*)&sp, sizeof(sc_packet_put_bullet), 0);
-               
-            }
-            break;  
         }
-        // bullet 최대개수가 꽉참
-        cout << "BULLET_OVERFLOW" << endl;
-    }
-
     }
     else
     {
@@ -712,13 +714,13 @@ void CMainServer::CollisionCheckPlayerBullet()
 
             if (BulletCollisionCheck(m_bullets[i], player) == true )
             {            
-                cout << "player id : " << (int)client.GetID() << "crash...? \n";
+                
                 //플레이어 체력 감소
                    
                 player.ChangeHealth(-m_weapon_info[m_bullets[i].GetBulletType()].damage);
-
+                cout << "player id : " << (int)client.GetID() << "HP : " << player.GetHealth() << endl;
                 //플레이어 사망 판정
-                if (player.GetHealth() == 0)
+                if (player.GetHealth() <= 0)
                 {
                     player.StateLock();
                     player.SetState(STATE::TYPE::DEAD);
@@ -807,9 +809,9 @@ bool CMainServer::CollisionCheck(T1& object_1, T2& object_2)
     //DOWN
     if ((object_1.GetCollisionBox().pos_1.y) > object_2.GetCollisionBox().pos_2.y) return false;
     //LEFT
-    if ((object_1.GetCollisionBox().pos_2.x) < object_2.GetCollisionBox().pos_1.x)return false;
+    if ((object_1.GetCollisionBox().pos_2.x) < object_2.GetCollisionBox().pos_1.x) return false;
     //RIGHT
-    if ((object_1.GetCollisionBox().pos_1.x) > object_2.GetCollisionBox().pos_2.x)  return false;
+    if ((object_1.GetCollisionBox().pos_1.x) > object_2.GetCollisionBox().pos_2.x) return false;
 
 	return true;
 }
@@ -1006,17 +1008,17 @@ void CMainServer::Disconnect(char id)
 void CMainServer::CheckGameEnd()
 {
     char winner = -1;
-    char alive_player_num = 0;
+    int alive_player_num = 0;
     for (int i = 0; i < MAX_CLIENTS; ++i)
     {
-        m_clients[i].GetPlayer().StateLock();
-		if (m_clients[i].GetPlayer().GetState() != STATE::TYPE::DEAD)
+		if (m_clients[i].GetPlayer().GetHealth() > 0)
 		{
 			winner = i;
 			alive_player_num += 1;
 		}
-		m_clients[i].GetPlayer().StateUnlock();
 	}
+
+    cout << "alive_player_num : " << alive_player_num << endl;
 
 	if (alive_player_num == 0) //전원 사망
 	{
