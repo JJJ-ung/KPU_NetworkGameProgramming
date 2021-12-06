@@ -64,6 +64,7 @@ void CMainServer::Init(const int server_port)
 
     InitMapRects();
     InitRandomSpawner();
+    InitPlayers();
     InitBullets();
     InitChests();
 
