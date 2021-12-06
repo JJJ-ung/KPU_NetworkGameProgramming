@@ -104,11 +104,12 @@ HRESULT NetworkMgr::Send_PlayerInfo(STATE::TYPE eState, D3DXVECTOR3 vPos, float 
     return Send_ClientInfo(CS_PACKET_PLAYER_INFO, (void*)&t);
 }
 
-HRESULT NetworkMgr::Send_BulletInfo(int type, float angle, D3DXVECTOR3 vPos, D3DXVECTOR3 vDir)
+HRESULT NetworkMgr::Send_BulletInfo(int type, int owner, float angle, D3DXVECTOR3 vPos, D3DXVECTOR3 vDir)
 {
     cs_packet_shoot_bullet t = {};
     t.size = sizeof(cs_packet_shoot_bullet);
     t.type = CS_PACKET_SHOOT_BULLET;
+    t.id = owner;
     t.bullet_type = type;
     t.angle = (short)angle;
     t.position.x = (short)vPos.x;

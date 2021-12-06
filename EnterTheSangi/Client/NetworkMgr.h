@@ -24,7 +24,7 @@ public:
 	HRESULT Send_ColorInfo(D3DXVECTOR3 body, D3DXVECTOR3 cloth);
 	HRESULT Send_ReadyInfo(bool ready);
 	HRESULT Send_PlayerInfo(STATE::TYPE eState, D3DXVECTOR3 vPos, float fAngle);
-	HRESULT Send_BulletInfo(int type, float angle, D3DXVECTOR3 vPos, D3DXVECTOR3 vDir);
+	HRESULT Send_BulletInfo(int type, int owner, float angle, D3DXVECTOR3 vPos, D3DXVECTOR3 vDir);
 ///////////////////////////////////////////////////////////////////////////////////////
 
 // For Recv /////////////////////////////////////////////////////////////////////////

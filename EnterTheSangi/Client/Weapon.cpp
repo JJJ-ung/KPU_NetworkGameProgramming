@@ -64,6 +64,8 @@ HRESULT Weapon::Ready_GameObject(Player* pOwner, int iType, bool bNetwork)
 
 	D3DXMatrixIdentity(&m_matWorld);
 
+	m_iOwnerID = m_pOwner->Get_ObjID();
+
 	return GameObject::Ready_GameObject();
 }
 
@@ -184,7 +186,7 @@ INT Weapon::Shoot_Bullet(float TimeDelta)
 	m_vBulletDir = m_pInputMgr->Get_MousePoint();
 	D3DXVec3Normalize(&m_vBulletDir, &m_vBulletDir);
 
-	m_pNetworkMgr->Send_BulletInfo(m_tWeaponInfo.type, m_fAngle, m_vBulletPos, m_vBulletDir);
+	m_pNetworkMgr->Send_BulletInfo(m_tWeaponInfo.type, m_iOwnerID, m_fAngle, m_vBulletPos, m_vBulletDir);
 
 	return 0;
 }

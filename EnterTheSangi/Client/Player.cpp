@@ -90,6 +90,15 @@ INT Player::Update_GameObject(float time_delta)
 	if (m_pInputMgr->KeyDown(KEY_F1))
 		m_bRenderCollision = !m_bRenderCollision;
 
+	if (m_iHealth == 0)
+	{
+		if(m_pWeapon)
+		{
+			m_pWeapon->Get_Delete() = true;
+			m_pWeapon = nullptr;
+		}
+	}
+
 	return GameObject::Update_GameObject(time_delta);
 }
 

@@ -34,6 +34,7 @@ private:
 	D3DXVECTOR3 m_vBulletPos{ 0.f, 0.f, 0.f };
 
 private:
+	int m_iOwnerID = -1;
 	float m_fSide = 1.f;
 	float m_fAngle = 0.f;
 

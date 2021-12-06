@@ -65,6 +65,15 @@ INT NetworkPlayer::Update_GameObject(float time_delta)
 
 	m_pNameTag->Update_Position(m_vPosition, D3DXVECTOR3(0.f, -100.f, 0.f));
 
+	if (m_iHealth == 0)
+	{
+		if (m_pWeapon)
+		{
+			m_pWeapon->Get_Delete() = true;
+			m_pWeapon = nullptr;
+		}
+	}
+
 	return NOEVENT;
 }
 
