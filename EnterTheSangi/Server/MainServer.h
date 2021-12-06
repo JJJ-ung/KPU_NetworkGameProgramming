@@ -99,6 +99,7 @@ private:
 	HANDLE							 hEvent[3];
 
 	default_random_engine    m_dre{ std::random_device{}() };
-	int                      m_max_spawn_point;
+
+	int                      m_max_spawn_point = 2;
 	std::array<int, MAX_MAP_RECT> m_max_spawn_point_by_rect;
 };

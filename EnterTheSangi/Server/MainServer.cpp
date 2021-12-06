@@ -3,7 +3,6 @@
 
 CMainServer::CMainServer() {};
 CMainServer::~CMainServer() {};
-int ttt;
 void CMainServer::Init(const int server_port)
 {
     // 무기 데이터 파일 로드
@@ -299,7 +298,7 @@ void CMainServer::ProcessPacket(char client_id)
             if (ST_INROBBY == other.GetState() || ST_READY == other.GetState())
             {
                 other.StateUnlock();
-                ttt = send(other.GetSocket(), (char*)&packet, sizeof(sc_packet_login_other_client), 0);
+                send(other.GetSocket(), (char*)&packet, sizeof(sc_packet_login_other_client), 0);
             }
             else
             {
@@ -334,7 +333,7 @@ void CMainServer::ProcessPacket(char client_id)
                 o_packet.cloth_color = cl.GetPlayer().GetClothColor();
                 o_packet.type = SC_PACKET_LOGIN_OTHER_CLIENT;
 
-                ttt = send(m_clients[client_id].GetSocket(), (char*)&o_packet, sizeof(sc_packet_login_other_client), 0);
+                send(m_clients[client_id].GetSocket(), (char*)&o_packet, sizeof(sc_packet_login_other_client), 0);
             }
             else
             {
@@ -918,14 +917,14 @@ void CMainServer::InitRandomSpawner()
 
 char CMainServer::GetRandomWeapon()
 {
-    static uniform_int_distribution<int> weapon_uid{ 0,MAX_WEAPON };
+    uniform_int_distribution<int> weapon_uid{ 0, MAX_WEAPON };
 
     return weapon_uid(m_dre);
 }
 
 svector2 CMainServer::GetRandomPosition()
 {
-	static uniform_int_distribution<int> uid(0, m_max_spawn_point);
+    uniform_int_distribution<int> uid{ 0, m_max_spawn_point };
 
 
 	int rand_num = uid(m_dre);
@@ -935,8 +934,8 @@ svector2 CMainServer::GetRandomPosition()
 	{
 		if (rand_num < m_max_spawn_point_by_rect[i])
 		{
-            uniform_int_distribution<int> uid_x(0, (m_map_rects[i].pos_2.x - m_map_rects[i].pos_1.x - CHEST_WIDTH));
-            uniform_int_distribution<int> uid_y(0, (m_map_rects[i].pos_2.y - m_map_rects[i].pos_1.y - CHEST_HEIGHT));
+            uniform_int_distribution<int> uid_x{ 0, (m_map_rects[i].pos_2.x - m_map_rects[i].pos_1.x - (short)CHEST_WIDTH) };
+            uniform_int_distribution<int> uid_y{ 0, (m_map_rects[i].pos_2.y - m_map_rects[i].pos_1.y - (short)CHEST_HEIGHT) };
             rst.x = m_map_rects[i].pos_1.x +uid_x(m_dre);
 			rst.y = m_map_rects[i].pos_1.y+uid_y(m_dre);
 			break;
