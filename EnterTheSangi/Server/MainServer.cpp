@@ -123,8 +123,6 @@ void CMainServer::ClientThread(char id)
         }
         m_state_lock.unlock();
 
-        this_thread::sleep_for(100ms);
-
 		sc_packet_put_chest packet_put_chest;
 		packet_put_chest.type = SC_PACKET_PUT_CHEST;
 		packet_put_chest.size = sizeof(sc_packet_put_chest);
@@ -220,6 +218,10 @@ void CMainServer::ServerThread()
         cout << "Now InGame loop \n";
         m_server_timer = chrono::high_resolution_clock::now() + 1s / 60 * 2;
         //In Game
+        
+        for (int i = 0; i < MAX_CLIENTS; ++i)
+            DoSend(i);
+
         m_state_lock.lock();
         while (m_game_state == SCENE::ID::STAGE)
         {
