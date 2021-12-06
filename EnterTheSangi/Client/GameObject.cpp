@@ -18,6 +18,9 @@ HRESULT GameObject::Ready_GameObject()
 
 INT GameObject::Update_GameObject(float TimeDelta)
 {
+	if (m_bDelete)
+		return OBJDEAD;
+
 	return 0;
 }
 

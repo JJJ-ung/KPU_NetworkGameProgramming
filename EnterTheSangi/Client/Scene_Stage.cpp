@@ -133,14 +133,14 @@ HRESULT Scene_Stage::Setup_Recv(char c, void* recv)
 		sc_packet_remove_bullet t = {};
 		memcpy(&t, recv, sizeof(sc_packet_remove_bullet));
 		cout << "Delete " << t.bullet_id << endl;
-		if (FAILED(m_pGameMgr->Add_DeleteObject(OBJECT::BULLET, t.bullet_id)))
+		if (FAILED(m_pGameMgr->Delete_GameObject(OBJECT::BULLET, t.bullet_id)))
 			return E_FAIL;
 	}
 	if (c == SC_PACKET_REMOVE_CHEST)
 	{
 		sc_packet_remove_chest t = {};
 		memcpy(&t, recv, sizeof(sc_packet_remove_chest));
-		if (FAILED(m_pGameMgr->Add_DeleteObject(OBJECT::CHEST, t.chest_id)))
+		if (FAILED(m_pGameMgr->Delete_GameObject(OBJECT::CHEST, t.chest_id)))
 			return E_FAIL;
 	}
 	if (c == SC_PACKET_CHANGE_WEAPON)

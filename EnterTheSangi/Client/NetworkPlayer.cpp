@@ -74,7 +74,7 @@ INT NetworkPlayer::Update_GameObject(float time_delta)
 		}
 	}
 
-	return NOEVENT;
+	return GameObject::Update_GameObject(time_delta);
 }
 
 INT NetworkPlayer::LateUpdate_GameObject(float time_delta)

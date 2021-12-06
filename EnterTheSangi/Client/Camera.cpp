@@ -35,7 +35,7 @@ HRESULT Camera::Ready_GameObject()
 
 INT Camera::Update_GameObject(float TimeDelta)
 {
-	return 0;
+	return GameObject::Update_GameObject(TimeDelta);
 }
 
 INT Camera::LateUpdate_GameObject(float TimeDelta)

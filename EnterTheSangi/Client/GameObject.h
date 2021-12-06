@@ -15,6 +15,7 @@ public:
 	virtual ~GameObject();
 
 public:
+	bool& Get_Delete() { return m_bDelete; }
 	char& Get_ObjID() { return m_iObjectID; }
 	D3DXVECTOR3& Get_Position() { return m_vPosition; }
 	virtual float Get_Y() { return m_vPosition.y; }
@@ -34,6 +35,7 @@ protected:
 
 protected:
 	char m_iObjectID = -1;
+	bool m_bDelete = false;
 	D3DXVECTOR3 m_vPosition{ 0.f, 0.f, 0.f };
 
 protected:
