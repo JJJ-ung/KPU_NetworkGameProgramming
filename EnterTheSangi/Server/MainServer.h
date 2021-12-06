@@ -52,16 +52,19 @@ public:
 	bool IsAllClientsReady();
 
 	void ServerProcess();
-	void CollisionCheckTerrainPlayer();
 	void CollisionCheckTerrainBullet();
 	void CollisionCheckPlayerBullet();
 	void CollisionCheckPlayerChest();
+
 	template<class T1, class T2 >
 	bool CollisionCheck(T1& object_1, T2& object_2);
+
 	template<class T1 >
 	bool BulletCollisionCheck(CBullet& bullet, T1& object_1);
+
 	template<class T1>
 	bool TerrainCollisionCheck(T1& object_1);
+
 	void UpdateBullet();
 
 	void InitBullets();

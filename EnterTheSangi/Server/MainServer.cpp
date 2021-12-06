@@ -6,6 +6,7 @@ CMainServer::~CMainServer() {};
 int ttt;
 void CMainServer::Init(const int server_port)
 {
+    // 무기 데이터 파일 로드
     wifstream fin;
     fin.open("../Binary/Data/info_Weapon.txt");
     if (fin.fail())
@@ -82,20 +83,11 @@ void CMainServer::Activate()
         //err_quit("listen()")
     };
 
-    //클라이언트별로 하나씩 할당되는 스레드.
-    //for (int i = 0; i < MAX_CLIENTS; ++i)
-    //    
-    //for (auto& th : m_client_threads)
-    //    th.join();
-
     //accept만을 위한 스레드. 주스레드에서 accpet 상관 없이 서버 연산을 돌리기 위함.
     for (int i = 0; i < 1; ++i)
         m_server_threads.emplace_back(&CMainServer::ServerThread, this);
     for (auto& th : m_server_threads)
         th.join();
-
-    //accept()
-
 };
 
 void CMainServer::ClientThread(char id)
@@ -111,7 +103,6 @@ void CMainServer::ClientThread(char id)
 
             if (m_clients[id].GetState() != ST_FREE) {
                 ret = DoRecv(id);
-                //cout << "Client [" << int(id) << "] recv data\n";
                 if (ret == SOCKET_ERROR)
                 {
                     Disconnect(id);
@@ -191,8 +182,6 @@ void CMainServer::ClientThread(char id)
                 continue;
             }
             //ProcessPacket(id);
-
-      
 
             m_state_lock.lock();
         }
@@ -300,9 +289,7 @@ void CMainServer::ProcessPacket(char client_id)
             if (ST_INROBBY == other.GetState() || ST_READY == other.GetState())
             {
                 other.StateUnlock();
-
                 ttt = send(other.GetSocket(), (char*)&packet, sizeof(sc_packet_login_other_client), 0);
-                cout << "me -> other : " << ttt << endl;
             }
             else
             {
@@ -338,7 +325,6 @@ void CMainServer::ProcessPacket(char client_id)
                 o_packet.type = SC_PACKET_LOGIN_OTHER_CLIENT;
 
                 ttt = send(m_clients[client_id].GetSocket(), (char*)&o_packet, sizeof(sc_packet_login_other_client), 0);
-                cout << "other -> me : " << ttt << endl;
             }
             else
             {
@@ -614,9 +600,7 @@ int CMainServer::DoAccept()
 };
 
 void CMainServer::ServerProcess() 
-{
-    //CollisionCheckTerrainPlayer();
-    
+{ 
     CollisionCheckPlayerBullet();
     CollisionCheckTerrainBullet();
     CollisionCheckPlayerChest();
@@ -662,11 +646,6 @@ void CMainServer::UpdateBullet()
         }
 
     }
-}
-
-void CMainServer::CollisionCheckTerrainPlayer()
-{
-    //클라이언트에서 합니다
 }
 
 void CMainServer::CollisionCheckTerrainBullet()
@@ -726,9 +705,7 @@ void CMainServer::CollisionCheckPlayerBullet()
             {            
                 cout << "player id : " << (int)client.GetID() << "crash...? \n";
                 //플레이어 체력 감소
-                // health를 여기서 감소시킬건데 총알 타입에 따른 데미지를 받아오는 친구가 있나..?
-                //cout << "crash!!! \n"; 
-                    
+                   
                 player.ChangeHealth(-m_weapon_info[m_bullets[i].GetBulletType()].damage);
 
                 //플레이어 사망 판정
@@ -880,23 +857,6 @@ void CMainServer::InitBullets()
         m_bullets[i].SetID(i);
         m_bullets[i].SetState(OBJECT_STATE::ST_FREE);
 	}
-
-    /*
-	wifstream fin;
-
-	fin.open(L"../Binary/Data/Info_Weapon.txt");
-	if (fin.fail())
-	{
-		cout << "file_error" << endl;
-		exit(-1);
-	}
-	while (true)
-	{
-		WEAPON t;
-		fin >> t.type >> t.damage >> t.shotspeed >> t.bulletspeed >> t.duration >> t.bulletoffset.x >> t.bulletoffset.y >> t.size;
-		if (fin.eof()) break;
-        m_bullet_data.push_back(t);
-	}	*/
 }
 
 void CMainServer::InitChests()
@@ -1078,9 +1038,5 @@ void CMainServer::CheckGameEnd()
         m_state_lock.unlock();
 
 		cout << "Game End, Winner: " << (int)winner << endl;
-	}
-	else
-	{
-
 	}
 }
