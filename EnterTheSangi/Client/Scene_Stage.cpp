@@ -10,6 +10,8 @@
 #include "Bullet.h"
 #include "Chest.h"
 
+#include "Scene_Ending.h"
+
 Scene_Stage::Scene_Stage(LPDIRECT3DDEVICE9 pGraphic_Device)
 	:Scene(pGraphic_Device)
 {
@@ -129,6 +131,19 @@ HRESULT Scene_Stage::Setup_Recv(char c, void* recv)
 		memcpy(&t, recv, sizeof(sc_packet_remove_chest));
 		if (FAILED(m_pGameMgr->Add_DeleteObject(OBJECT::CHEST, t.chest_id)))
 			return E_FAIL;
+	}
+
+	if (c == SC_PACKET_GAME_END)
+	{
+		sc_packet_game_end t = {};
+		memcpy(&t, recv, sizeof(sc_packet_game_end));
+		m_pGameMgr->Clear_Scene();
+		Scene_Ending* pScene = Scene_Ending::Create(m_pGraphic_Device, t.winner_id);
+		if (FAILED(m_pGameMgr->Set_CurrScene(pScene)))
+		{
+			cout << "Failed To Change Scene" << endl;
+			return E_FAIL;
+		}
 	}
 
 	return Scene::Setup_Recv(c, recv);

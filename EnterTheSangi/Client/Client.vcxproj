@@ -161,10 +161,12 @@
     <ClInclude Include="Component.h" />
     <ClInclude Include="CustomPlayer.h" />
     <ClInclude Include="DeviceMgr.h" />
+    <ClInclude Include="EndingPlayer.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="GameMgr.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="Health.h" />
     <ClInclude Include="InputMgr.h" />
     <ClInclude Include="Loading.h" />
     <ClInclude Include="MainApp.h" />
@@ -180,6 +182,7 @@
     <ClInclude Include="ResourceMgr.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Scene_Customize.h" />
+    <ClInclude Include="Scene_Ending.h" />
     <ClInclude Include="Scene_Loading.h" />
     <ClInclude Include="Scene_Stage.h" />
     <ClInclude Include="Scene_Test.h" />
@@ -212,9 +215,11 @@
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="CustomPlayer.cpp" />
     <ClCompile Include="DeviceMgr.cpp" />
+    <ClCompile Include="EndingPlayer.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="GameMgr.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="Health.cpp" />
     <ClCompile Include="InputMgr.cpp" />
     <ClCompile Include="Loading.cpp" />
     <ClCompile Include="MainApp.cpp" />
@@ -229,6 +234,7 @@
     <ClCompile Include="ResourceMgr.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Scene_Customize.cpp" />
+    <ClCompile Include="Scene_Ending.cpp" />
     <ClCompile Include="Scene_Loading.cpp" />
     <ClCompile Include="Scene_Stage.cpp" />
     <ClCompile Include="Scene_Test.cpp" />

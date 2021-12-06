@@ -53,7 +53,7 @@ INT Font::Update_GameObject(float time_delta)
 
 INT Font::LateUpdate_GameObject(float time_delta)
 {
-	m_pRenderer->Add_RenderList(Renderer::RENDER_UI, this);
+	m_pRenderer->Add_RenderList(Renderer::RENDER_ALPHA, this);
 
 	return GameObject::LateUpdate_GameObject(time_delta);
 }

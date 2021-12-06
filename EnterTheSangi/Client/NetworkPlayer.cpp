@@ -98,6 +98,11 @@ HRESULT NetworkPlayer::Render_GameObject()
 	m_pShader->Set_Value("g_vCloth", &m_tClientInfo.custom.vCloth, sizeof(D3DXVECTOR3));
 	m_pShader->Set_Value("g_vBody", &m_tClientInfo.custom.vBody, sizeof(D3DXVECTOR3));
 
+	if (m_bDead)
+		pEffect->SetFloat("g_fAlpha", 0.5f);
+	else
+		pEffect->SetFloat("g_fAlpha", 1.f);
+
 	pEffect->Begin(nullptr, 0);
 	pEffect->BeginPass(0);
 
@@ -118,6 +123,9 @@ INT NetworkPlayer::Update_Networking()
 INT NetworkPlayer::Recv_Networking(char c, void* p)
 {
 	// 받아 온 정보 업뎃
+	if (c != SC_PACKET_GAME_STATE)
+		return 0;
+
 	sc_packet_game_state t;
 	memcpy(&t, p, sizeof(sc_packet_game_state));
 
@@ -152,8 +160,14 @@ INT NetworkPlayer::Recv_Networking(char c, void* p)
 	Change_Animation(strAnimation);
 
 	m_iHealth = player.health;
+	if (m_iHealth == 0)
+	{
+		m_bDead = true;
+		m_tClientInfo.custom.vBody = D3DXVECTOR3(0.5f, 0.5f, 0.5f);
+		m_tClientInfo.custom.vCloth = D3DXVECTOR3(0.2f, 0.2f, 0.2f);
+	}
 
-	return Player::Recv_Networking(c, p);
+	return 0;
 }
 
 NetworkPlayer* NetworkPlayer::Create(LPDIRECT3DDEVICE9 pGraphic_Device, CLIENT t)

@@ -3,6 +3,7 @@
 #include "PlayerState.h"
 
 class Font;
+class Health;
 class Animation;
 class Player : public GameObject
 {
@@ -56,6 +57,10 @@ protected:
 	Font* m_pNameTag = nullptr;
 	Animation* m_pCurrAnimation = nullptr;
 	StateMachine<Player>* m_pStateMachine = nullptr;
+
+protected:
+	Health* m_pHealth = nullptr;
+	bool m_bDead = false;
 
 protected:
 	RECT m_tCollRect = {};

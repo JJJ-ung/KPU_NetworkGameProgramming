@@ -118,6 +118,13 @@ HRESULT Renderer::Render_NonAlpha()
 
 HRESULT Renderer::Render_Alpha()
 {
+	for (auto& pGameObject : m_RenderList[RENDER_ALPHA])
+	{
+		if (nullptr != pGameObject)
+			pGameObject->Render_GameObject();
+	}
+	m_RenderList[RENDER_ALPHA].clear();
+
 	return NOERROR;
 }
 

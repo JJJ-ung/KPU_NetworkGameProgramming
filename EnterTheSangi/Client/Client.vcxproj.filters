@@ -146,6 +146,15 @@
     <Filter Include="03 Scene\03 Stage">
       <UniqueIdentifier>{b0e8321d-965c-405d-aa67-8ae2d3ac4de7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03 Scene\04 Ending">
+      <UniqueIdentifier>{2ea446fd-710b-4384-8c15-0bd15bd87585}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01 GameObject\04 UI\98 Ending">
+      <UniqueIdentifier>{72b93573-8877-4b91-b36e-5efb5d76da27}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01 GameObject\04 UI\98 Ending\EndingPlayer">
+      <UniqueIdentifier>{fb0f514e-b276-4dfe-8393-6945da5681d4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -279,6 +288,15 @@
     </ClInclude>
     <ClInclude Include="Scene_Stage.h">
       <Filter>03 Scene\03 Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene_Ending.h">
+      <Filter>03 Scene\04 Ending</Filter>
+    </ClInclude>
+    <ClInclude Include="EndingPlayer.h">
+      <Filter>01 GameObject\04 UI\98 Ending\EndingPlayer</Filter>
+    </ClInclude>
+    <ClInclude Include="Health.h">
+      <Filter>01 GameObject\04 UI\04 Health</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -414,6 +432,15 @@
     </ClCompile>
     <ClCompile Include="Scene_Stage.cpp">
       <Filter>03 Scene\03 Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene_Ending.cpp">
+      <Filter>03 Scene\04 Ending</Filter>
+    </ClCompile>
+    <ClCompile Include="EndingPlayer.cpp">
+      <Filter>01 GameObject\04 UI\98 Ending\EndingPlayer</Filter>
+    </ClCompile>
+    <ClCompile Include="Health.cpp">
+      <Filter>01 GameObject\04 UI\04 Health</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
