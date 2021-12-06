@@ -44,14 +44,18 @@ int Scene_Customize::Update_Scene(float time_delta)
 
 HRESULT Scene_Customize::Render_Scene()
 {
-	if(m_bSceneChange)
+	if(m_bReady)
 	{
-		m_pGameMgr->Clear_Scene();
-		Scene_Stage* pScene = Scene_Stage::Create(m_pGraphic_Device);
-		if (FAILED(m_pGameMgr->Set_CurrScene(pScene)))
+		if (m_bSceneChange)
 		{
-			cout << "Failed To Change Scene" << endl;
-			return E_FAIL;
+			m_pGameMgr->Clear_Scene();
+			Scene_Stage* pScene = Scene_Stage::Create(m_pGraphic_Device);
+			if (FAILED(m_pGameMgr->Set_CurrScene(pScene)))
+			{
+				cout << "Failed To Change Scene" << endl;
+				return E_FAIL;
+			}
+			cout << "SceneChange" << endl;
 		}
 	}
 
@@ -111,9 +115,6 @@ HRESULT Scene_Customize::Update_PlayerReady(sc_packet_ready* tRecv)
 
 HRESULT Scene_Customize::Update_PlayerInfo(sc_packet_game_state* tRecv)
 {
-	if (!m_bReady)
-		return E_FAIL;
-
 	for(int i = 0; i < 3; ++i)
 	{
 		player_info_for_packet t = tRecv->player[i];
@@ -121,6 +122,8 @@ HRESULT Scene_Customize::Update_PlayerInfo(sc_packet_game_state* tRecv)
 	}
 
 	m_bSceneChange = true;
+
+	cout << "GameState" << endl;
 
 	return NOERROR;
 }
@@ -144,6 +147,7 @@ HRESULT Scene_Customize::Setup_Recv(char c, void* recv)
 			return E_FAIL;
 		break;
 	case SC_PACKET_ALL_READY:
+		cout << "Ready" << endl;
 		m_bReady = true;
 		break;
 	case SC_PACKET_GAME_STATE:
