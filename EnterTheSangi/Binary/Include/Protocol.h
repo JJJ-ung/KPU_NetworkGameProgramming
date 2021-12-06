@@ -85,6 +85,7 @@ struct cs_packet_player_info
 struct cs_packet_shoot_bullet
 {
 	unsigned char  size;
+	char		   id;
 	char           type;
 	char           bullet_type;
 	short		   angle;

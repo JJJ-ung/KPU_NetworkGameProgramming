@@ -480,7 +480,7 @@ void CMainServer::ProcessPacket(char client_id)
                 else if (m_bullets[i].GetState() == OBJECT_STATE::ST_FREE)
                 {
                     m_bullets[i].SetState(OBJECT_STATE::ST_ALIVE);
-
+                    m_bullets[i].SetID(rp.id);
                     m_bullets[i].SetBulletType(rp.bullet_type);
                     //m_bullets[i].SetLook(rp.look);
                     m_bullets[i].SetPosition(rp.position);
@@ -712,7 +712,7 @@ void CMainServer::CollisionCheckPlayerBullet()
             }
             m_bullets[i].StateUnlock();
 
-            if (BulletCollisionCheck(m_bullets[i], player) == true )
+            if (BulletCollisionCheck(m_bullets[i], player) == true && (m_bullets[i].GetID() != client.GetID()) && player.GetHealth() > 0)
             {            
                 
                 //플레이어 체력 감소
