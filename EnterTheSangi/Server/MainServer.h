@@ -85,8 +85,7 @@ private:
 	std::array<CClient, 3>   m_clients;
 	std::vector<std::thread> m_client_threads;
 	std::vector<std::thread> m_server_threads;
-	chrono::high_resolution_clock
-		::time_point         m_server_timer;
+	chrono::high_resolution_clock::time_point         m_server_timer;
 	HANDLE                   m_client_event[MAX_CLIENTS];
 	HANDLE                   m_server_event;
 
