@@ -124,7 +124,7 @@ void CMainServer::ClientThread(char id)
         m_state_lock.unlock();
 
 
-        this_thread::sleep_for(chrono::milliseconds{ 100 });
+        this_thread::sleep_for(chrono::milliseconds{ 500 });
 
 		sc_packet_put_chest packet_put_chest;
 		packet_put_chest.type = SC_PACKET_PUT_CHEST;
@@ -214,7 +214,7 @@ void CMainServer::ServerThread()
 		m_state_lock.unlock();
 		cout << "Now InGame loop \n";
 
-        this_thread::sleep_for(chrono::milliseconds{ 1000 });
+        this_thread::sleep_for(chrono::milliseconds{ 500 });
 
 		m_server_timer = chrono::high_resolution_clock::now() + 1s / 60 * 2;
 		//In Game
@@ -772,7 +772,7 @@ void CMainServer::CollisionCheckPlayerChest()
         for (auto& chest : m_chests)
         {
             // 서버 쓰레드(싱글)에서 처리하므로 chset 스테이트락 사용x            
-            if (CollisionCheck(chest, player) == true)
+            if (CollisionCheck(chest, player) == true && player.GetHealth() > 0)
             {
                 //플레이어 무기 랜덤 변경
                 player.SetWeapon(chest.GetWeaponID());
@@ -1028,6 +1028,7 @@ void CMainServer::CheckGameEnd()
 
 	if (alive_player_num == 0) //전원 사망
 	{
+        this_thread::sleep_for(chrono::milliseconds{ 500 });
 		sc_packet_game_end packet;
 		packet.size = sizeof(sc_packet_game_end);
 		packet.type = SC_PACKET_GAME_END;
@@ -1044,6 +1045,7 @@ void CMainServer::CheckGameEnd()
 	}
 	else if (alive_player_num == 1) //1명 생존
 	{
+        this_thread::sleep_for(chrono::milliseconds{ 500 });
         sc_packet_game_end packet;
         packet.size = sizeof(sc_packet_game_end);
         packet.type = SC_PACKET_GAME_END;
