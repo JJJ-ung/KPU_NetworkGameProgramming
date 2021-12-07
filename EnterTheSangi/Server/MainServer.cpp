@@ -71,14 +71,14 @@ void CMainServer::Init(const int server_port)
     m_game_state = SCENE::CUSTOMIZE;
     for (int i = 0; i < MAX_CLIENTS; ++i)
         m_client_event[i] = CreateEvent(NULL, true, true, NULL);
-    m_server_event = CreateEvent(NULL, true, true, NULL);
+    m_server_event = CreateEvent(NULL, true, false, NULL);
 
     m_PerformanceCounter.reset();
 };
 
 void CMainServer::Activate()
 {
-    int rt; 
+    int rt;
 
     //listen()
     rt = listen(m_listen_socket, SOMAXCONN);
@@ -124,6 +124,20 @@ void CMainServer::ClientThread(char id)
         m_state_lock.unlock();
 
 
+        this_thread::sleep_for(chrono::milliseconds{ 100 });
+
+		sc_packet_put_chest packet_put_chest;
+		packet_put_chest.type = SC_PACKET_PUT_CHEST;
+		packet_put_chest.size = sizeof(sc_packet_put_chest);
+		for (auto& chest : m_chests)
+		{
+			packet_put_chest.chest_id = chest.GetID();
+			packet_put_chest.position = chest.GetPosition();
+			packet_put_chest.weapon_id = chest.GetWeaponID();
+
+			send(m_clients[id].GetSocket(), (char*)&packet_put_chest, sizeof(sc_packet_put_chest), 0);
+		}
+
         //In Game
         m_state_lock.lock();
         while (m_game_state == SCENE::ID::STAGE)
@@ -165,6 +179,7 @@ void CMainServer::ClientThread(char id)
                 m_state_lock.lock();
                 continue;
             }
+            //ProcessPacket(id);
 
             m_state_lock.lock();
         }
@@ -178,7 +193,7 @@ void CMainServer::ServerThread()
     int client_count;
     for (;;)
     {  //In Robby
-        bool is_item_spawn = false;
+        
         m_state_lock.lock();
         while (m_game_state == SCENE::ID::CUSTOMIZE)
         {
@@ -199,37 +214,25 @@ void CMainServer::ServerThread()
 		m_state_lock.unlock();
 		cout << "Now InGame loop \n";
 
+        this_thread::sleep_for(chrono::milliseconds{ 1000 });
+
+		m_server_timer = chrono::high_resolution_clock::now() + 1s / 60 * 2;
 		//In Game
-        m_server_timer = chrono::steady_clock::now() + 2s;
+
+        for (int i = 0; i < MAX_CLIENTS; ++i)
+            DoSend(i);
 
         m_state_lock.lock();
         while (m_game_state == SCENE::ID::STAGE)
         {
             m_state_lock.unlock();
             if (m_PerformanceCounter.Frame_Limit(30.f)) {
-                if (m_server_timer < chrono::steady_clock::now() && is_item_spawn == false)
-                {
-                    sc_packet_put_chest packet_put_chest;
-                    packet_put_chest.type = SC_PACKET_PUT_CHEST;
-                    packet_put_chest.size = sizeof(sc_packet_put_chest);
-                    for (auto& chest : m_chests)
-                    {
-                        packet_put_chest.chest_id = chest.GetID();
-                        packet_put_chest.position = chest.GetPosition();
-                        packet_put_chest.weapon_id = chest.GetWeaponID();
-
-                        for(int id = 0; id < MAX_CLIENTS; ++id)
-                            send(m_clients[id].GetSocket(), (char*)&packet_put_chest, sizeof(sc_packet_put_chest), 0);
-                    }
-                    is_item_spawn = true;
-                }
                 ServerProcess();
                 WaitForMultipleObjects(3, hEvent, TRUE, 2000);
                 for (int i = 0; i < MAX_CLIENTS; ++i)
                 {
                     DoSend(i);
                     ResetEvent(hEvent[i]);
-                    cout << "this send!! fuck client \n";
                 }
             }
            m_state_lock.lock();
@@ -440,14 +443,12 @@ void CMainServer::ProcessPacket(char client_id)
             }
             for (auto& cl : m_clients)
                 send(cl.GetSocket(), (char*)&sp, sizeof(sc_packet_all_ready), 0);
-
-            for (int i = 0; i < MAX_CLIENTS; ++i)
-            {
-                DoSend(i);
-            }
                           
-            m_game_state = SCENE::STAGE;
+            
             // 초기 상자 정보를 전송한다.
+
+           
+            m_game_state = SCENE::STAGE;
             m_state_lock.unlock();
         }
     }
