@@ -14,7 +14,7 @@ public:
 		 
 	D3DXVECTOR3          GetBodyColor();
 	D3DXVECTOR3          GetClothColor();
-	float                GetHealth();
+	char                GetHealth();
 	STATE::TYPE          GetState();
 	char                 GetWeapon();
 

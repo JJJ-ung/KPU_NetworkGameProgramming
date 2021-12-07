@@ -37,7 +37,7 @@ D3DXVECTOR3 CPlayer::GetClothColor()
 	return m_cloth_color;
 };
 
-float CPlayer::GetHealth()
+char CPlayer::GetHealth()
 {
 	return m_health;
 };

@@ -726,7 +726,7 @@ void CMainServer::CollisionCheckPlayerBullet()
                 player.ChangeHealth(-m_weapon_info[m_bullets[i].GetBulletType()].damage);
                 cout << "player id : " << (int)client.GetID() << "HP : " << player.GetHealth() << endl;
                 //플레이어 사망 판정
-                if (player.GetHealth() <= 0)
+                if ((int)player.GetHealth() <= 0)
                 {
                     player.StateLock();
                     player.SetState(STATE::TYPE::DEAD);
